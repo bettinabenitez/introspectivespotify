@@ -1,0 +1,154 @@
+﻿Team: DEWBED
+    Members: Bettina, Devika, Emily, William
+    Project: 1C - Requirement Analysis
+	Product proposal: http://bit.ly/dewbed-proposal
+	Primary Authors: Bettina and William
+
+
+Initial Requirements
+
+
+Synchronous Listening
+
+
+* Description: Play music synchronously for multiple users through their linked Spotify account. Users can play, skip, and queue songs for the group on Discord. 
+* Value: High
+* Value Justification: Users from elicitation emphasized the importance of connecting with others and is one of our main goals for the software.
+* Confidence: High
+* Difficulty: Hard
+* Difficulty Justification: Need to figure out how to connect Spotify accounts to Discord accounts and how to skip, play, and queue songs through Discord. 
+* Priority: Must-have
+* Include in 1.0 Release: Yes
+* Release Justification: This was the feature one of the panelists said they would use the most.
+
+
+Music Theory Analytics
+
+
+* Description: Analyzes users’ music tastes and gives them new song suggestions based on frequently listened to songs and suggestions for new genres that differ from current music tastes.
+* Value: High
+* Value Justification: Users from the panel stated that they would like to have more insight on their music taste and listening habits.
+* Confidence: High
+* Difficulty: Hard
+* Difficulty Justification: Need to research music theory concepts. Need to look into Spotify API to figure out how we can view the analytics of users’ recently played music
+* Priority: Must-have
+* Include in 1.0 Release: Yes
+* Release Justification: This would be the most used feature of 2 of our panelists.
+
+
+Playlist Cover Art
+
+
+* Description: Creates playlist cover art based on the average music statistics of the playlist. 
+* Value: Low
+* Value Justification: Not included in original goals of the software but something that would be nice to have as an addition. 
+* Confidence: High
+* Difficulty: Easy
+* Difficulty Justification: This component will pull information from the Music Analytics component and will create an image based on the data. 
+* Priority: Nice-to-have
+* Include in 1.0 Release: No
+* Release Justification: Relies on the Music Analytics component which we have listed as a “Hard” difficulty. Will be an easy feature to include in future releases.
+
+
+New Requirements
+
+
+Check-In Feature
+
+
+* Description: Notification sent to the user to remind the user to add songs to collaborative playlists; analyzes songs of friends and notifies users to check-in on friends if they are listening to certain songs.
+* Value: Medium
+* Value Justification: This feature definitely helps create a sense of community between friends and helps connect with one another. Was not included in the original goals of the software, but if added, would be a wonderful addition as users from panel were enthusia
+* Confidence: Medium
+* Difficulty: Easy
+* Difficulty Justification: Can easily check if a user recently added songs to collaborative playlists to push a message. Also, can check for specific genres within a user’s personal analysis and if that genre is something of concern, you can push a notification out. 
+* Priority: Nice-to-have
+* Include in 1.0 Release: No
+* Release Justification:  Not a necessary feature for initial release as core features do not depend on it. More of an added bonus alongside the product. 
+
+
+Music History Analytics
+
+
+* Description: Analyzes historically frequently listened songs and groups them into sections throughout the year; users can view their most listened to songs based on specific time frames.
+* Value: High
+* Value Justification: An additional way to analyze users musical preferences and also create more playlists for users to listen to. Even though it was not on the original software idea, it expands the idea of music theory analysis 
+* Confidence: High
+* Difficulty: High 
+* Difficulty Justification: We would have to be able to divide and create specific playlists based on different themes. We would also have to perform computation on specific analytics depending on the user selected era to produce the correct output.
+* Priority: Must-have
+* Include in 1.0 Release: Yes
+* Release Justification: This feature combines well with Music Theory analysis and is the backbone for many other features such as, Spotify Wrapped with Friends and Nostalgia Feature. Would excite many new users to delve into their past musical tastes as well. 
+Spotify Wrapped with friends
+* Description: Subsection of Music History Analytics; uses descriptive statistics to compare music listened by users and their friends. Shows how “compatible” users’ music tastes are based on Music History Analytics and Music Theory Analytics. 
+* Value: High
+* Value Justification: Aligns with our goals of connecting with friends in isolation and users in the panel expressed interest in being able to compare music tastes with other friends.
+* Confidence: High
+* Difficulty: Medium
+* Difficulty Justification: Will pull information from the Music History Analytics component. Requires additional computation to determine users’ compatibility with one another. 
+* Priority: Must-have
+* Include in 1.0 Release: Yes
+* Release Justification: This feature resolves the issue of friends wanting to connect during isolation as it provides them with an activity to bond over. That issue was one of the primary motivations behind Introspective Spotify. 
+
+
+Nostalgia Feature
+
+
+* Description: Feature creates a playlist that revisits songs that used to be played frequently but haven’t been played recently. 
+* Value: Low
+* Value Justification: A user from the panel mentioned this feature but it is something that can be added later on after more important features are implemented. This feature could be done easier after Music History Analytics has been finished.
+* Confidence: Medium
+* Difficulty: Easy
+* Difficulty Justification: This feature would pull information from Music History Analytics and create a simple playlist. Would also have a specific constant time frame to grab music from, rather than a user picked frame of time. 
+* Priority: Should-have
+* Include in 1.0 Release: No
+* Release Justification: Not a necessary feature for initial release as core features do not depend on it. More of an added bonus alongside the product. 
+
+
+
+
+Conflict Analysis
+
+
+We’ve discussed that our Music Theory Analytics is similar to the Music History Analytics feature suggested by the users. We’ve separated these into separate features since we thought Music Theory Analytics focused more on frequently listened music and provides music insights and suggestions based on recent music, whereas Music History Analytics focuses on the entire music history of the user and summarizes the music listened to by the user in specific time frames. We’ve discussed that Music History Analytics will use some aspects of Music Theory Analytics but we’ve kept them separate based on their focal point.
+
+
+
+
+Priority List
+1. Music Theory Analysis
+   1. Priority: High
+   2. Difficulty: Hard
+   3. Confidence: High
+   4. Source: Initial Requirements
+2. Music History Analytics
+   1. Priority: High
+   2. Difficulty: Hard  
+   3. Confidence: High 
+   4. Source: User Panel Suggestion
+3. Synchronous Listening
+   1. Priority: High
+   2. Difficultly: Hard
+   3. Confidence: High
+   4. Source: Initial Requirements 
+4. Spotify Wrapped with Friends
+   1. Priority: High
+   2. Difficultly: Medium
+   3. Confidence: High
+   4. Source: User Panel Suggestion 
+1.0 Cut-off line here. We decided to include the features that had both high priority and high confidence in the 1.0 Release.
+5. Nostalgia Feature
+   1. Priority: Medium
+   2. Difficultly: Easy
+   3. Confidence: Medium
+   4. Source: User Panel Suggestion
+6. Playlist cover art 
+   1. Priority: Low
+   2. Difficultly: Easy
+   3. Confidence: High 
+   4. Source: Initial Requirements 
+7. Check-In Feature
+   1. Priority: Low
+   2. Difficultly: Easy
+   3. Confidence: Medium
+   4. Source: User Panel Suggestion

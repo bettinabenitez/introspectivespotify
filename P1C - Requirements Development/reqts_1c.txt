@@ -1,0 +1,34 @@
+﻿Team: DEWBED
+    Members: Bettina, Devika, Emily, William
+    Project: 1C - Preliminary Requirements
+        Product proposal: http://bit.ly/dewbed-proposal
+	Primary Authors: Bettina and Emily
+
+User Group #1: People who want to connect with their friends during social distancing 
+* Goal: Connect with their friends without being physically together. 
+* Needs: A sense of community with friends through a virtual platform. Have the ability to interact with and listen to music with friends. Bond with their friends over fun and interesting activities.
+* Expectations: Socialize through the application. Bond over music. Get to know how their friends are doing by seeing an analysis of their recently played songs. 
+* Abilities: Users are assumed to be able to use Discord and Spotify. 
+* Requirements our product would need: A feature that would support synchronous music listening. Features that encourage conversations or reactions (ex. emoji reactions) to music. A feature that allows all users to contribute their song requests. A feature that would allow users to share their playlists with other users
+* Use Cases: 
+   * Use Discord Bot to queue songs for a Discord channel
+   * Use Discord Bot to pause songs for a Discord channel
+   * Invite friends to Discord channel and invite Discord Bot to channel
+
+User Group #2: People who want to learn more about music theory
+* Goals: Discover insight about their musical tastes that they might not be able to obtain without extensive research. Yet, easy to understand the analysis that does not require previous music theory learning. Help paint an overall picture of one's music taste to help explore more.  
+* Needs/Expectations: A way to visualize their music analysis that is readable and easy to access. Definitions and explanations of their user specific analysis that are concise but thorough. A way to explore new artists who fall within the user’s taste, but also are out of their comfort zone. Easily shareable to different social media platforms as well.
+* Requirements our product would need: A feature that accurately breaks down a specific user's taste through an algorithm that understands what different sounds/tempos/beats mean. A visualizer to help display the data in a sleek UI that can be shared in different formats (Instagram, Snapchat, Text, Facebook…). Another algorithm that helps suggest music that is similar/different in taste. 
+* Abilities:  Users are assumed to be able to play and access Spotify. Users are also presumed to know how to share specific images in different social media. 
+* Use Cases: 
+   * Use Discord Bot to give users an analysis of their recently played songs
+   * Use Discord Bot to give users an analysis of their playlists
+
+User Group #3: Playlist makers 
+* Goals: Create collaborative and unique playlists to share with friends through the Discord Bot. 
+* Needs/ Expectations: An ability to combine playlists from other user Spotify playlists to create a unique mix of everyone’s tastes. An ability to share these playlists on Spotify and play through the Discord bot. Skip, remove, add to a queue/playlist for the Discord Bot. The ability to rate specific songs for feedback.
+* Abilities: Users are presumed to know how to create Spotify playlists and have the ability to create collaborative playlists. Users are also presumed to understand our Discord Bot and interact with the Discord service itself. Users are also presumed to understand how to rate music/skip/delete. 
+* Requirements our product would need: A connection to the Spotify and Discord API to communicate and share playlist information. A way to analyze music tastes from different users to create a “Combined Mix” (Similar to the Family Playlist when multiple users are on a Family Premium Account). A way to tell the Discord bot to play that specific song and connect to a voice chat. The ability for the Discord bot to understand emojis as feedback regarding the music and/or skipping/deleting/ adding. 
+* Use Cases: 
+   * Use discord to remember the songs 
+   * Use discord to share playlists with other users on the server

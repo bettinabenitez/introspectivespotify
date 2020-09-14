@@ -1,0 +1,78 @@
+﻿Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 1C - Meeting Minutes
+       Product proposal: http://bit.ly/dewbed-proposal
+       Primary Author: Devika
+
+
+Meeting Minutes
+____________________________________________________________________________
+
+
+09/05/2020 
+        Time: 9:00-12:00 AM PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Draft user requirements.
+Agenda: 
+* Create user groups for the user panel.
+* Decide on who to contact for the user panel.
+* Fill out specific users and their requirements.
+* Assign offline tasks for each member.
+   * Finish user requirements document.
+   * Set up a user panel meeting. 
+* Plan for next meeting.
+
+
+09/10/2020 
+        Time: 9:30-12:00 AM PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Finalize user requirements and draft user panel presentation.
+Agenda: 
+* Check in on the user requirements document and finalize it. 
+* Compile questions for the user panel. 
+* Complete first draft of user panel presentation. 
+* Divide up roles for the user panel. 
+* Plan for next meeting.
+
+
+09/11/2020 
+        Time: 12:45-2:00 PM PST
+        Attendees: William, Emily, and Devika
+
+
+Meeting Objective: Go over the user panel presentation with Professor. 
+Agenda: 
+* Obtain feedback regarding the user panel presentation. 
+* Edit presentation to feedback. 
+* Ensure all members are clear regarding tasks ,roles, and questions for the panel. 
+
+
+09/12/2020 
+        Time: 3:00 - 4:00 PM  PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Conduct user panel.
+Agenda: 
+* Conduct the user panel over Zoom for 35 minutes. 
+* Debrief with the Professor 
+* Debrief with group members. 
+* Finalize submissions for project 1C. 
+* Plan for the next meeting. 
+
+09/13/2020 
+        Time: 4:00 - 5:30 PM  PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Finish user panel analysis and report.
+Agenda: 
+* Team snack time. 
+* Go over analysis and report drafts completed.
+* Edit user panel analysis submission.
+* Finalize all submissions for project 1C. 
+* Plan for the next meeting and next project phase.

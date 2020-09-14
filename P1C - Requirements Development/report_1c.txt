@@ -1,0 +1,68 @@
+﻿Team: DEWBED
+    Members: Bettina, Devika, Emily, William
+    Project: 1C - Elicitation Report
+        Product proposal: http://bit.ly/dewbed-proposal
+	Primary Authors: Devika
+
+When: Saturday, 9/12 @ 3pm 
+Location: Zoom
+Attendees
+Professor: Mark Kampe
+Students: Devika Chipalkatti (Scribe), Emily Lu, William La, Bettina Benitez
+Panel: Vicky Lu, Amadeo Cantu-Trevino, Kristen Mason
+
+Interesting information gained during the open-ended information gathering.
+* Everyone uses spotify as their music streaming platform because they claimed that it was the cheapest option (with deals), can be used on different operating systems (iOS, android, OSX, etc), and has a very user friendly interface.
+* Everyone enjoys Spotify's creation of a new playlist called “For you” every week that recommends music specifically for the user because it is a very personal feature.
+* Only 1 out of 3 users in our panel uses Discord. This is partly due to the association of Discord with gaming. However, people have only heard good things about Discord and would be open to using it to access our product. 
+* Everyone in the panel liked “Spotify wrapped”, a Spotify feature which summarizes the user’s listening history and trends over the course of the year.
+
+
+Clear statements of significant new requirements that were suggested, along with an assessment of how important each is and why.
+
+
+Check-in Notification:
+* One user mentioned that they liked the spotify aspect that showed what their friends are currently listening to. 
+* The user mentioned a notification that asks the user if they want to check in on a friend if they are playing a certain song, i.e. if they are listening to “Exile by Taylor Swift“ on repeat then maybe they should check if they are okay
+* Another user requested that the check-in notification could be to remind them to share new music with other people in their collaborative playlists.
+* We should be cautious of the frequency of the notifications—avoid spamming discord channels
+
+
+Music History Analytics:
+
+
+* Users liked the Spotify wrapped concept but would like more options for their wrapped
+* Let the user “wrap up” their month, week, season, etc. rather than just at the end of the year.
+   * This could be done using a drop down menu or a scroll bar
+* Have a horizontal scroll bar that shows you the type of music you listened to throughout the year.
+   * Have an animated man “walk through” the year and the atmosphere around the man changes depending to the predominant music being played during that time period
+
+
+Musical Nostalgia feature: 
+
+
+* A user mentioned that the playlist he makes shows the progression of his music choices throughout the years but often forgets to look back at them.
+* Combine music that represents a time period that will allow them to go back into that time and listen to the songs from before. 
+* Creates a playlist of music that the users enjoyed but haven’t listened to in a while which allows the users to go back and not forget songs.
+* Additionally, send a notification to a user that they haven’t listened to a particular artist in x number of weeks.
+
+
+Spotify Wrapped with friends:
+
+
+* One user mentioned that they liked how Spotify shows you how much of a fan you are of an artist by showing how much you listened to an artist in comparison to other Spotify users.
+* User suggested she would like a feature that let users compare music statistics with her friends.
+
+
+Significant input on previously gathered requirements, affirming, refuting, or changing them.
+
+
+* Synchronously listening to music with friends was affirmed
+* Song analysis and music recommendation affirmed with emphasis on producing song recommendations.
+
+
+Any other useful results gained from the meeting.
+
+
+* Two out of three users prioritized the insights feature. They would like to learn more about their music tastes and preferences freely throughout the year instead of just being at the end of the year. One user claimed that they would like to see that feature since she’s been using online applications to find her midyear music analysis.
+* One user prioritized listening to music synchronously with friends. She would like to listen to the same music as friends even if they are doing different things in different places.
