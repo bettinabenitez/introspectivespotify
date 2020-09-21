@@ -8,6 +8,9 @@ Post Mortem Analysis:
 https://github.com/bettinabenitez/introspectivespotify/blob/
 master/P1D%20-%20Final%20Proposal%20and%20Post%20Mortem/post
 mortem_1.txt
+Management Plan:
+https://docs.google.com/spreadsheets/d/1NOwYZ-Hm_TwGMoWZkNK8
+RzD0wEYT4pgcUB9dGtcFQhk/edit?usp=sharing
 Status Meeting Minutes: 
 https://github.com/bettinabenitez/introspectivespotify/blob/
 master/P1D%20-%20Final%20Proposal%20and%20Post%20Mortem/
