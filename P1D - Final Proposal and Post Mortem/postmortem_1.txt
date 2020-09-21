@@ -5,10 +5,13 @@ Final Project Proposal:
 https://docs.google.com/document/d/1MuT_178EinAgA7VY1x_eecsa
 YtD2ZPpPKDiQtQ1LRS4/edit?usp=sharing
 Post Mortem Analysis: 
+https://github.com/bettinabenitez/introspectivespotify/blob/
+master/P1D%20-%20Final%20Proposal%20and%20Post%20Mortem/post
+mortem_1.txt
 Status Meeting Minutes: 
 https://github.com/bettinabenitez/introspectivespotify/blob/
-master/P1D%20-%20P1D%20-%20Final%20Proposal%20and%20Post%20M
-ortem/minutes_1d.txt
+master/P1D%20-%20Final%20Proposal%20and%20Post%20Mortem/
+minutes_1d.txt
 Primary Author: Bettina 
 
 When we first started this project, we came in with diverse 
