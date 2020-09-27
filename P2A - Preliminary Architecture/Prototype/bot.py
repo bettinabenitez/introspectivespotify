@@ -3,7 +3,7 @@ import os
 import random
 from dotenv import load_dotenv
 from discord.ext import commands
-# Load Bot
+# Load Bot for discord.
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!')
