@@ -1,0 +1,72 @@
+﻿Team: Dewbed
+    Members: Bettina, Emily, Devika, and William
+    Project: 2B - Architecture Review
+Architecture Review: 
+https://docs.google.com/document/d/1BiptJGzDskPNvifCq3DH9WmEXPdlwSeCesi6U5C7nXQ/edit?usp=sharing
+    Primary Author: Bettina
+When: Saturday, 10/04 @ 12-1 PM
+Location: Zoom
+Attendees
+Professor: Mark Kampe
+Reviewers: Devika Chipalkatti, Emily Lu, William La, Bettina Benitez, 
+Project Owners: Dana Teves, Kevin Ayala, Max Mingst, Swamik Lamichhane
+DISPOSITION FOR ENTIRE PROJECT: Approved with required changes
+Further deficits raised after the review session.
+FURTHER QUESTIONS:
+* Will dice rolling be its own class or a simple function? It was stated in the architecture that 
+either option is viable; however, since dice rolling will be included in the 1.0 release a decision 
+regarding its architecture should be made.
+FURTHER ISSUES:
+* Web scraper priority
+   * Should prioritize web scraper enough to include it in 1.0 release and research more about its 
+functionality. Within the submitted architecture proposal, the web scraper is brought up frequently 
+despite being considered as a component for the 2.0 release. Moreover, during the architecture 
+review, when asked about the priority of the web scraper user panelists expressed how important the 
+web scraping feature was as everyone in their requirements elicitation panel expressed enthusiasm 
+about it. There was also a comment on how more experienced DnD players will almost always play DnD 
+with the additional content that the web scraper is meant to retrieve information on. From these 
+observations, we believe that the priority of the web scraper should be increased and more research 
+should be done on how the “beautifulsoup” Python library will effectively retrieve and return the 
+information requested.
+SUMMARY OF ISSUES RAISED
+MUST-FIX ISSUES:
+* UML Diagram
+   * The UML components diagram was not clear. During the review meeting, the project owners 
+acknowledged that the arrows needed to be changed. This issue should be prioritized to ensure that 
+all components are structured well and have clear connections to inputs and outputs.
+* Searching capability 
+   * During the review session, it seemed there were varying opinions on how to search up old 
+commands. Three different options were presented: (1) a Discord channel only for command storing 
+(2) using the Discord search feature (3) the comment that searching would not be needed for the 
+bot. Regardless, it may be important to have a consensus on the bot’s searching capabilities and 
+whether searching is useful.
+SHOULD-FIX ISSUES:
+* Separate class for emoji feature
+   * The emoji as buttons feature is described under outstanding issues due to its potential to 
+clog up processes. Because it is an area of higher risk, we suggest isolating it in its own class. 
+* The Bot not understanding commands
+   * It was mentioned that there would be an algorithm to suggest words that a user might have 
+misspelled while giving a command. While this feature does not seem to be a vital part of your 
+project, it was unclear if this feature would be supported in the 1.0 or 2.0 release. If released 
+with 1.0, it would be good to narrow down on an algorithm or research any libraries that can 
+support this feature.
+* Go over how Discord caches CSVs
+   * More research should be done on how Discord will cache the player macro and initiative 
+tracking CSV files. Since these are the main data objects the bot will be interacting with, those 
+interactions should be included in the architecture. When the game ends (if it ends), there should 
+be details of how the bot will handle these files.
+COMMENTS: 
+* Saving Q&A from compendium 
+   * We suggest saving the questions and responses from the compendium lookup. Web scraping may 
+take longer than searching the API, so saving the responses could help shorten runtime. Even if web 
+scraping was not included in 1.0 release, it would be wise to keep this suggestion in mind for 
+scalability.
+* Web Scraper and HTML Tags:
+   * It was mentioned in the architecture review that you will be using the web scraper to get the 
+HTML tags to help players with the game. We suggest including these details in the architecture 
+proposal if the web scraper will play a bigger role in the implementation of the 1.0 release.
+* Helping new players
+   * Throughout the review session, it was brought up that newer players may be slightly confused 
+on commands, functionality, and D&D in general. During the review, it was brought up that a new 
+player only needs to know how to roll the dice as a prerequisite, but it may be a good idea to have 
+helpful descriptions next to commands explaining in simple terms what they mean.
