@@ -1,0 +1,46 @@
+﻿Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 2B - Meeting Minutes
+Meeting Minutes: https://docs.google.com/document/d/1QWwRk0vbYpuzVm-FWIv8Vwocil74LKSemrh22Mapstw/edit?usp=sharing
+       Primary Author: Devika
+
+
+Meeting Minutes
+____________________________________________________________________________
+
+
+10/01/2020 
+        Time: 9:00-12:00 AM PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Review architecture grade and revise the architecture plan before sharing.
+Agenda: 
+* Go over any errors marked by the professor on initial architecture.
+* Add edits to the architecture to ensure readability. 
+* Create a UML diagram to go along with architecture. 
+* Send our revised architecture to the reviewing team.
+
+
+10/04/2020 
+        Time: 12-2:00 PM PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Review the architecture for another team and have our architecture reviewed.
+Agenda: 
+* Go through questions raised after reviewing other team’s architecture. 
+* Conduct architecture review and have our architecture review. 
+
+
+10/04/2020 
+        Time: 9:00-11:00 PM PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Create an architecture report for the reviewing team.
+Agenda: 
+* Go over meeting minutes made by scribe during architecture review. 
+* Format document to display issues raised, must-haves, suggestions, and comments.
+* Format all documents for submission. 
+* Update Github and Discord channel.
