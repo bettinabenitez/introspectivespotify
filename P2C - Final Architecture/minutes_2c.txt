@@ -1,0 +1,21 @@
+Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 2C - Meeting Minutes
+Meeting Minutes: 
+https://docs.google.com/document/d/1UJQNPZd6LGZw7esP4pDIbmNfbsjZHM9djF75R1RJH-8/edit?usp=sharing
+       Primary Author: Devika
+
+Meeting Minutes
+____________________________________________________________________________
+
+10/08/2020 
+	Time: 9:00-1:30 AM PST
+	Attendees: William, Emily, Bettina, and Devika
+
+Meeting Objective: Review architecture report, delegate tasks, and have discussions. 
+Agenda: 
+Go over all must-haves, issues, and comments in the report.
+Discuss delegating tasks and address concerns about the midterm.
+Have fun relaxing meeting to celebrate our hard work!
+Ensuring that we will spend the weekend working on different parts of the project.
+
