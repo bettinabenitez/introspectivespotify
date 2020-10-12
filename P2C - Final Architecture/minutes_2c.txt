@@ -12,10 +12,23 @@ ____________________________________________________________________________
 	Time: 9:00-1:30 AM PST
 	Attendees: William, Emily, Bettina, and Devika
 
-Meeting Objective: Review architecture report, delegate tasks, and have discussions. 
+Meeting Objective: Review architecture report and debrief. 
 Agenda: 
 Go over all must-haves, issues, and comments in the report.
 Discuss delegating tasks and address concerns about the midterm.
-Have fun relaxing meeting to celebrate our hard work!
-Ensuring that we will spend the weekend working on different parts of the project.
+Have fun relaxing meeting to celebrate our hard work while debriefing.
+Plan for a 2nd meeting before submitting 
+
+10/11/2020 
+	Time: 3:00-5:00 PM PST
+	Attendees: William, Emily, Bettina, and Devika
+
+Meeting Objective: Review individual work done and go over concerns.
+Agenda:
+Go over individual work and perform peer-edits. 
+Address any confusion about revised changes.
+Finish and finalize architecture and post-mortem. 
+Style all assignments for submission, upload to Github and Discord channel.
+Look ahead to Project 3.
+
 
