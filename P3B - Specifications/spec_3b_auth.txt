@@ -1,0 +1,47 @@
+﻿Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 3B - Specifications
+Specifications:
+https://docs.google.com/document/d/1qfpLcsfCcicGpR4D5KbfRTYH58GHw1X3OdHyggeiNBA/edit?usp=sharing
+    Primary Author: William
+Overview of Functionality, Requirements, and Role:
+The functionality of the Spotify Authentication component is straightforward, but the steps to 
+achieve that functionality are very intricate. Spotify Authentication will be responsible for the 
+“!login” and “!logout” commands, which allow users to log into Introspective Spotify via 
+their Spotify accounts and provide Introspective Spotify with the necessary permissions for its 
+core functionality. Once users are logged in, the component must store the user session information 
+in the “Login” database. Storing users’ session information is vital to the component’s 
+functionality and role within the architecture because it prevents users from having to re-login 
+every time they want to use Introspective Spotify and enables the other components to communicate 
+with the Spotify Web API. The Spotify Authentication component will be responsible for providing 
+the other components with users’ access keys. 
+To achieve the functionality of the “!login” command, the Spotify Authentication component is 
+required to interact with both the OAuth2.0 and Spotify Web APIs. The component must authenticate 
+users and retrieve the users’ API access tokens, which are necessary for future calls to the 
+Spotify Web API. Because the users’ access tokens need to be shared with the other components, 
+the Spotify Authentication component is required to update and maintain the “Login” relational 
+database. Specifically, it will store the users’ Discord ID, Spotify ID, and Spotify Web API 
+access tokens all as one entry within a table in the database. This component must also cover the 
+functionality of refreshing users’ access tokens. When users are login for a prolonged period of 
+time, users’ access tokens will eventually expire. If a user with an expired access token 
+attempts to use any of Introspective Spotify’s commands, this component will have to refresh the 
+token through the Spotify Web API.
+
+
+External Interfaces:
+        The following methods will be called by different components of the architecture. All of 
+the methods take in discord_username as a parameter. This is simply the username of the user who 
+issued the command and can be easily retrieved from Discord’s API.
+* login(discord_username): This method will send users a private message with a link to log into 
+Introspective Spotify externally via their own Spotify account. It will retrieve the user’s 
+Spotify username and access tokens from the Spotify Web API and store that information in addition 
+to the user’s discord username in the “Login” database. This method will be called by the 
+InputClass component and will not return anything.
+* logout(discord_username): The logout method will disconnect Introspective Spotify from the 
+user’s Spotify account and delete the respective information stored in the “Login” database. 
+This method will be called by the InputClass component and not return anything.
+* getAccessToken(discord_username): This method will use the discord_username parameter to retrieve 
+the user’s entry in the “Login” database. It will then extract the user’s Spotify Web API 
+access token from that entry and return it. This method will be called by the MusicTheory, 
+MusicHistory, SpotifyWrapped, and SpotifyListen components as they all interact with Spotify’s 
+Web API.
