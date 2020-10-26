@@ -1,0 +1,73 @@
+Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 3B - Specifications
+       Specifications: https://docs.google.com/document/d/1WOqBAfYwHT1GEKj7aSax1Hzd6TlBoBpVknKdsp5RAws/edit?pli=1#
+       Primary Author: Bettina
+Overview
+Spotify Listens allows users on a server to listen to Spotify songs synchronously through their Spotify accounts creating a listening party between users on a Discord server.
+
+Requirements
+Spotify Listen allows users to call different commands (listed below) to join, leave, and control their synchronous listening experience. There is no cool-down for these commands, because we did not want to limit how quickly users can queue or change songs. 
+
+Limitations:
+* Music will be played on each user’s Premium Spotify account since ads are played randomly on non-premium users, which disrupts the synchronization of music listening. 
+* A user must be logged in to complete these commands the Bot will prompt any unlogged users to please use the logging-in commands. 
+* There is no capability to remove a song from a queue due to Spotify API’s limitations. 
+
+Functionality
+In order for to provide users with synchronous listening, Spotify Listens will let users do the following actions:
+
+* Join: Adds user to the listening party
+   * Discord command: !join
+   * If there is no current listening party, start a listening party session by connecting to Spotify Connect Web API and add the user to the listening party. 
+   * If a listening party is already in session, this command simply adds the user listening party. 
+Once users are in the listening party, they will be able to use any of the following commands. The bot will reply in the channel reminding users that they can only queue from Discord functionality and not from Spotify. 
+
+* Leave: Removes users from the listening party
+   * Discord command: !leave  
+   * If the user is the last person in the listening party, we close the listening party by disconnecting from the Connect Web API service.
+   * Removes any songs placed on their Spotify queue.
+
+* Music Control:
+   * Play: Plays the playback for all users in the listening party
+   	* Discord command: !play
+   	* Pause: Pauses the playback for all users in the listening party.
+   	* Discord command: !pause
+   * Skip: Skips current song
+   	* Discord command: !skip
+   * Rewind: Plays previous song 
+   	* Discord command: !rewind
+   * Shuffle: Shuffles the songs on users’ Spotify queues.
+   	* Discord command: !shuffle
+   	* Spotify shuffle cannot be used since order of songs for all users should be the same. 
+   	* Shuffles the locally stored queue and adds using Spotify queue endpoint when played
+   * Adding Songs to Queue: Adds songs to the locally stored queue.
+   	* Discord command: !add [song]
+   	* When the search query for the track is performed, we will retrieve the top result from the query, which is the most popular of the resulting tracks. 
+   	* Will store the current listen party’s played songs in the Songs database until the listen party is over.
+   * Remove Songs from Queue: Remove songs from the locally stored queue
+   	* Discord command: !remove [song]
+   	* Removes song from local queue based on name given 
+   * Displaying Queue: Displays songs added in the listening party’s queue with the current song as the first item of the list. 
+   	* Discord command: !queue [song name] 
+
+* Personalization:
+   * Creating a Playlist
+        * Discord command: !createplaylist
+        * Creates a playlist of all the played and queued songs for the current listen party. 
+        * The playlist will be made at the end of the listening session.
+
+External Interfaces
+Spotify Listen accessor methods which can be accessed by other components in the system.
+
+Spotify Listen Public Accessor Methods:
+      * getCurrentSong(): returns the track id of the name of the song the listening party is currently listening to
+      * getQueue(): returns a list of songs currently on the listening party’s queue
+
+Additionally, Spotify Listen will need to access other components in the system.
+
+OAuth 
+      * getAccessToken(discord user id): retrieves the OAuth token specific to the user with the necessary access.
+
+Input Class
+      * The Input Class will call the replying methods in the Spotify Listen Class. 
