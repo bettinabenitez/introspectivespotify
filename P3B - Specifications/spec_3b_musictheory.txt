@@ -1,0 +1,92 @@
+﻿Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 3A - Plan
+       Specification: 
+https://docs.google.com/document/d/1xZaTTUnue7fe64b5nlsbtKneX45sc0gkaMogmm0EPw0/edit?usp=sharing
+       Primary Author: Devika
+Overview:
+Music Theory Commands provides the user with music theory analysis about a specific song they 
+request. The bot will take input using a Discord command, and the responses will be a bot reply in 
+a Discord server.
+Functionality: 
+A user could call the music theory commands to learn about specific theoretical facts of their 
+requested song. The user will call these commands in the discord using our “!” command prefix, the 
+specific theory, and the song. For example !key In My Head Ariana Grande, would make our Discord 
+Bot reply with the specific key for that Ariana Grande song. Each music theory attribute will act 
+this way. 
+Requirements
+ The Music Theory component will be able to analyze specific music theory features of a specific 
+song and give insights regarding the key, tempo, time signature, mode, mood, danceability, energy, 
+acoustics, and instrumentals. Limitations include ensuring the user has a song that is in the 
+Spotify library. 
+External Interfaces 
+There are four external interfaces the Music Theory class interacts with. 
+1. Between Music Theory and Music History, Music History will be able to access the Music Theory 
+getter methods. These are the public methods. 
+Music Theory Getter Methods 
+   * getKey(song), getTempo(song), getTimeSignature(song), getMode(song), getMood(song), 
+getDanceability(song), getAccousticness(song), getEnergy(song), getInstrumentalness(song).
+      * Input: (String) song, which is grabbed from the input class. 
+      * Output: floats representing the value of each. 
+
+
+2. Between Synchronous Listening and Music Theory, Music Theory will be able to access the 
+Synchronous public getCurrentSong() method. 
+Synchronous Listening Get Song Method:
+   * getCurrrentSong()
+      * Input: None.
+      * Output: String which represents the current song. 
+
+
+3. Between Spotify Auth Class and Music Theory, Music theory will be able to access all 
+authentication methods to generate keys to access the Spotify API. 
+Spotify Auth Class Methods
+   * getAccessToken(secretkey): 
+      * Input: (String) access key that represents the Spotify access key associated with the 
+username from the database
+      * Output: Returns an OAuth token specific to the user with the necessary access.
+4. Between the Input Class and the Music Theory class, Music Theory will be able to call the ALL 
+replying methods in the Music Theory Class. 
+
+
+
+
+Methods
+There are two different methods.
+1. Music Theory Computing (External, Public)
+2. Music Theory Ouptting (Internal, Private) 
+Computing Methods (External) 
+* !musictheory [song]: Uses “Audio Features” API to get the estimated key, temp, time signature, 
+mode, moe, danceability, acousticness, energy, and instrumentalness of the track. Will call the 
+getAllMusicTheory() method which will access the getTimeSignature(), getMode(), getMood(), 
+getDanceability(), getAcousticness(), getEnergy(), and getInstrumentalness() methods which each 
+return specific floats. Then, the internal method will format the text to output in one clean 
+response. 
+* !key [song]: Use “Audio Features” API to get the estimated key of the track.Will call the 
+getKey() method and returned as a float.
+* !tempo [song]: Use “Audio Features” API to get the estimated tempo (beats per minute) of the 
+track.Will call the getTempo() method and returned as a float.
+* !timesignature [song]: Use “Audio Features” API to get the estimated time signature of the track. 
+Will call the getTimeSignature() method and returned as a float. 
+* !mode [song]: Use “Audio Features” API to get the estimated mode (major or minor) of the track. 
+Will call the getMode() method and returned as a float.
+* !mood [song]: Use “Audio Features” API to get the estimated mood (happy, sad, etc.) of the 
+track.Will call the getMood() method and returned as a float.
+* !danceability [song]: Use “Audio Features” API to get the estimated danceability (high, medium, 
+low) of the track.Will call the getDanceability() method and returned as a float. 
+* !acousticness [song]: Use “Audio Features” API to get the estimated acousticness (high, medium, 
+low) of the track.Will call the getAcousticness() method and returned as a float. 
+* !energy [song]: Use “Audio Features” API to get the estimated mode energy (high, medium low) of 
+the track. Will call the getEnergy() method and returned as a float. 
+* !instrumentalness [song]: Use “Audio Features” API to get the estimated instrumental (high, 
+medium, low) such as “Oohs” and “Aahs” in a track. Will call the getInstrumentalness() method and 
+returned as a float. 
+Computing Methods (Internal)
+* formatReply(String command, String song): will call the specific getter for the parameter, 
+command and send the song as a parameter for the specific getter command as well. It will output a 
+string that is formatted to be visually easy to read, such as “In My Head is in the key F!”. 
+* !musictheoryhelp: This command gives a description of key, tempo, time signature, mode, mood, 
+danceability, acousticness, energy, and instrumentalness for users that do not have familiarity 
+with these terms. We will type these descriptions ourselves and then send a private message to the 
+requested user explaining what each theory term means. It will also grab the user’s Discord ID to 
+make sure it replies to correct use.
