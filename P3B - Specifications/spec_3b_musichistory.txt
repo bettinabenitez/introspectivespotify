@@ -1,0 +1,111 @@
+Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 3B - Specifications
+https://docs.google.com/document/d/1p6esXMu_JAe978rtKJ9a839IrEt-w1sP1UwhoikN0PY/edit#
+    Primary Author: Emily
+Table of Contents
+Overview
+Requirements
+External Interfaces Description
+Functionality
+
+
+Overview
+Music History Commands provide music theory analysis over a span of time that they listened to 
+music on Spotify. The response will be a bot message with the requested information. 
+
+
+Requirements to be imposed on Music History Component
+The Music History component will analyze a user’s music history on Spotify by giving insights on 
+their top genre, artists, top songs, and music theory analytics on their top songs. 
+
+
+External Interfaces
+The Music History Class interacts with 3 other components:
+1. Music Theory Class
+A method from the Music History Class will call methods from the Music Theory class to do 
+computations. The Music Theory class will provide public computing methods that will serve as 
+getters for the Music History class. 
+
+2. Spotify Auth Class 
+The Spotify Auth Class provides the getAccessToken(discord username) method that computing methods 
+in the Music History Class will call.
+
+3. Input Class
+The Input Class will call the replying methods in the Music History Class. 
+
+
+When we eventually implement the Spotify Friends Class, that class will call the external methods 
+in Spotify History Class. 
+
+
+Functionality
+Combined, the methods detailed below should be able to tell users
+* their most listened to genre(s) over a given set of time 
+* their most listened to artist(s) over a given set of time 
+* their most listened to song(s) over a given set of time 
+* music theory insights on their most listened to song(s)
+Overview of Methods: The methods fall into 2 main categories: 1) Computing Methods 2) Replying 
+Methods. Computing methods are external. Replying methods are internal. 
+
+
+1. Computing methods (EXTERNAL) 
+The computing methods will connect to the Spotify API, Music Theory Class, and Spotify Auth Class 
+to get the requested data. 
+* compute_genre (time_range, limit, discord username): tells users their most listened to genre of 
+music during a time range. To obtain the genre, this command will get the top 20 artists using 
+Spotify Web API’s audio feature which returns an object that contains the associated genre of an 
+artist. The command will then analyze the genres given and tell the user what genre is the most 
+common genre in the user’s top 20 artists. If there a tie between multiple genres in terms of 
+number of occurrences, the method will rank the the genre the corresponds with the artist that was 
+listened to more frequently. Returns a list of strings corresponding to the name of the top genres 
+in the order of most listened to least listened to.
+   * time_range: this parameter indicates the time range of the user’s history to retrieve data. 
+long_term (several years of data and including all new data as it becomes available), medium_term 
+(last 6 months), short_term (last 4 weeks). Default: medium_term. Taken from Get a User's Top 
+Artists and Tracks.
+   * limit: this parameter refers to the number of top genres the user wants to get with a minimum 
+of 1 and a maximum of 5. If omitted, will default to the top 3 genres.
+   * discord username: this parameter will be used to get the Spotify access key needed to access 
+the Spotify API via a getter method in the SpotifyAuth class. 
+* compute_top_songs (time_range, limit, discord_username): tells user what their most listened to 
+songs are by calling the Spotify API with the accesstoken. Returns a dictionary where the keys are 
+Spotify ID tracks and values are the name of the song that the ID corresponds to.
+   * time_range: same as time_range in compute_genre 
+   * limit: this parameter refers to the number of top tracks the user wants to get with a minimum 
+of 1 and a maximum of 10. If omitted, will default to the top 5 tracks.
+   * discord username: same discord username in compute_genre 
+* compute_top_artists(time_range, limit, discord_username): tells the user what their most listened 
+to artists are by calling the Spotify API with the accesstoken. Returns a list of strings 
+corresponding to the name of the top artists.
+   * time_range: same as time_range in compute_genre 
+   * limit: this parameter refers to the number of top artists the user wants to get with a minimum 
+of 1 and a maximum of 10. If omitted, will default to the top 5 artists.
+   * discord username: same discord username in compute_genre 
+* compute_top_so[a]ngs_theory(top_songs_ID):  After giving the users their top tracks, the Bot can 
+ask the users if they want a more detailed analysis of their top tracks. Users will react to the 
+bot’s analyze message if they want to learn more. Discord Bot API for interpreting reactions. The 
+Spotify track IDs will be given as parameters to methods from the Music Theory class which will use 
+Spotify Web API’s get audio feature for several tracks. The tracks will be analyzed individually. 
+The data from the music theory methods will be averaged and returned as a dictionary. 
+   * top songs: The top songs will be passed in the from compute_top_songs(time_range, limit, 
+discord_username) method.
+
+
+
+
+2. Replying methods (INTERNAL)
+Replying methods will call computing methods and reply in the Discord chat. The Input Class would 
+call these methods with the necessary parameters. 
+* reply_genre(time_range, limit, discord_username): calls compute_genre method uses the Discord API 
+to reply in the chat.
+* reply_top_song(time_range, limit, discord_username): calls compute_top_songs method and uses the 
+Discord API to reply in the chat.
+* reply_top_artists(time_range, limit, discord_username): calls compute_top_artists method and uses 
+the Discord API to reply in the chat.
+* reply_top_songs_theory(time_range, limit, discord_username): calls compute_top_songs_theory 
+method and uses the Discord API to reply in the chat.
+[a]and given as an object whose key is audio_features and whose value is an array of audio features 
+objects pertaining to the tracks in JSON objects. Based on the array of features given, this 
+command will take the most prevalent key, tempo, time signature, mode, danceability, acousticness, 
+energy, and instrumentalness of all tracks.
