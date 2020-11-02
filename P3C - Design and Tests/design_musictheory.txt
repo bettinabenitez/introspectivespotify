@@ -1,0 +1,229 @@
+Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 3B - Design
+       Specification: 
+https://docs.google.com/document/d/1gWNSTvuUR3bdy_MatsYPydIbnJpiV_EJQftiY0wo3Aw/edit
+       Primary Author: Devika
+
+
+About Introspective Spotify’s MusicTheory Class
+
+
+Music Theory Commands provides the user with music theory analysis about a specific song they 
+request. The bot will take input using our Input Class which will call the specific reply method. 
+Within each reply method, there is a specific getter method that interacts with both the Spotify 
+API and the Spotipy Library which will be defined as an object to interact with within the class. 
+Each reply method will use the public instance variable “reply” to concatenate a string that is 
+well-formatted for the Input class to use. For the help command, the Input class will call the 
+specific method, which will return a formatted string that explains all of the music theory 
+descriptions and what they mean.
+ A user could call the music theory commands to learn about specific theoretical facts of their 
+requested song. The user will call these commands in the discord using our “!” command prefix, the 
+specific theory, and the song. For example !key In My Head Ariana Grande would make our Discord Bot 
+reply with the specific key for that Ariana Grande song. Each music theory attribute will act this 
+way. The Music Theory component will be able to analyze specific music theory features of a 
+specific song and give insights regarding the key, tempo, time signature, mode, mood, danceability, 
+energy, acoustics, and instrumentals. Limitations include ensuring the user has a song that is in 
+the Spotify library. 
+MusicTheory Called Libraries 
+The MusicTheory class will interact with the Spotipy Library which uses Python to interact with the 
+Spotify Web_API. The MusicTheory class will create a Spotipy object to which it can call the 
+audio_features method within the library to return a JSON object which stores all the 
+audio_featres. 
+Spotipy Documentation 
+MusicTheory Public Methods and Variables 
+Variables 
+> String reply 
+This instance variable takes the form of a String and is used to store the specific reply for my 
+specific reply public methods. 
+Methods  * All methods will at least have the parameter “self” which is built into Python * 
+
+
+1. Getter Methods
+* def get_all_music_theory(self, song)
+   * Parameters: String song
+   * Desc: get_all_music_theory will return a json object storing all the audio_features listed 
+below. This function will interact with the Spotipy Library which interacts Spotify  Web API. Using 
+the search function from the Spotify Web Api which returns a JSON object, which can retrieve  
+track_id from the returned JSON Object which will use the Spotipy Library audio_features(track_id) 
+to return another JSON dictionary-like object which stores all audio_features.
+   * Returns:  A JSON Dictionary object with all audio_features.
+*  def get_tempo(self, song)
+   * Parameters: String song
+   * Desc: get_tempo will return a string representing a value from 0 - 300 BPM of a specified 
+song. This function will interact with the Spotipy Library which interacts Spotify  Web API. Using 
+the search function from the Spotify Web Api which returns a JSON object, which can retrieve  
+track_id from the returned JSON Object which will use the Spotipy Library audio_features(track_id) 
+to return another dictionary-like object which stores all audio_features, where one can just call 
+JSON_Object[tempo] to retrieve the tempo. 
+   * Returns: A string representing the tempo (0 - 300 BPM).
+* def  get_key(self, song)
+   * Parameters: String song
+   * Desc: get_key will return a string representing an integer value of a key using universal 
+pitch class notation, e.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is 
+-1.” This function will interact with the Spotipy Library which interacts Spotify  Web API. Using 
+the search function from the Spotify Web Api which returns a JSON object, which can retrieve  
+track_id from the returned JSON Object which will use the Spotipy Library audio_features(track_id) 
+to return another dictionary-like object which stores all audio_features, where one can just call 
+JSON_Object[key] to retrieve the tempo. 
+   * Returns: A string representing the key ( e.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key 
+was detected, the value is -1).
+
+
+* def get_time_signature(self, song)
+   * Parameters: String song
+   * Desc: get_time_signature will return a string representing an integer which is the estimated 
+overall time signature of a specified song. This function will interact with the Spotipy Library 
+which interacts Spotify  Web API. Using the search function from the Spotify Web Api which returns 
+a JSON object, which can retrieve  track_id from the returned JSON Object which will use the 
+Spotipy Library audio_features(track_id) to return another dictionary-like object which stores all 
+audio_features, where one can just call JSON_Object[time_signature] to retrieve the time_signature. 
+   * Returns: A string representing the time signature. 
+* def get_mode(self, song)
+   * Parameters: String song
+   * Desc: get_mode will return a string representing an integer of either 0 or 1 to represent the 
+modality of the song. Major is represented by 1 and minor is represented by 0. This function will 
+interact with the Spotipy Library which interacts Spotify  Web API. Using the search function from 
+the Spotify Web Api which returns a JSON object, which can retrieve  track_id from the returned 
+JSON Object which will use the Spotipy Library audio_features(track_id) to return another 
+dictionary-like object which stores all audio_features, where one can just call JSON_Object[mode] 
+to retrieve the tempo. 
+   * Returns: A string representing the mode (1 for Major, 0 for Minor).
+* def get_mood(self, song)
+   * Parameters: String song
+   * Desc: get_mood will return a string representing the valence of a specified track using a 
+float. Valence is a measure from 0.0 to 1.0, where a high valence is a happy track, while a low 
+valence is a sad track. Anything below 0.5 would be classified as “sad, depressed, angry” while 
+anything above and including 0.5 would be classified as “happy, cheerful, euphoric”. This function 
+will interact with the Spotipy Library which interacts Spotify  Web API. Using the search function 
+from the Spotify Web Api which returns a JSON object, which can retrieve  track_id from the 
+returned JSON Object which will use the Spotipy Library audio_features(track_id) to return another 
+dictionary-like object which stores all audio_features, where one can just call 
+JSON_Object[valence] to retrieve the tempo. 
+   * Returns: A string representing the valence from 0.0 to 1.0.
+* def get_danceability(self, song)
+   * Parameters: String song
+   * Desc: get_ danceability will return a string representing a float value from 0 - 1.0 for 
+danceability for a specified song. Where a value of 0.0 is not danceable while 1.0 is very 
+danceable. This function will interact with the Spotipy Library which interacts Spotify  Web API. 
+Using the search function from the Spotify Web Api which returns a JSON object, which can retrieve  
+track_id from the returned JSON Object which will use the Spotipy Library audio_features(track_id) 
+to return another dictionary-like object which stores all audio_features, where one can just call 
+JSON_Object[danceability] to retrieve the tempo. 
+   * Returns: A string representing the danceability from 0.0 - 1.0.
+
+
+* def get_acousticness(self, song)
+   * Parameters: String song
+   * Desc: get_acousticness will return a string representing a float value from 0 - 1.0 for the 
+acoustics of a specified song. Where 0.0 has no acoustics and 1.0 represents high confidence that 
+the track is acoustic. This function will interact with the Spotipy Library which interacts Spotify 
+ Web API. Using the search function from the Spotify Web Api which returns a JSON object, which can 
+retrieve  track_id from the returned JSON Object which will use the Spotipy Library 
+audio_features(track_id) to return another dictionary-like object which stores all audio_features, 
+where one can just call JSON_Object[acousticness] to retrieve the tempo. 
+   * Returns: A string representing the acoustics from 0.0 - 1.0.
+* def get_energy(self, song)
+   * Parameters: String song
+   * Desc: get_energy will return a string representing a float value from 0 - 1.0 of specific 
+energy for the song.  Where 0.0 represents low energy and 1.0 represents max energy.  This function 
+will interact with the Spotipy Library which interacts Spotify  Web API. Using the search function 
+from the Spotify Web Api which returns a JSON object, which can retrieve  track_id from the 
+returned JSON Object which will use the Spotipy Library audio_features(track_id) to return another 
+dictionary-like object which stores all audio_features, where one can just call JSON_Object[energy] 
+to retrieve the tempo. 
+   * Returns: A string representing the energy from 0.0 - 1.0
+* def get_instrumentalness(self, song)
+   * Parameters: String song
+   * Desc: get_instrumentalness will return a string representing the number of no vocals (Oohs and 
+Aahs) in a specific track from 0.0 to 1.0. If a track has 1.0 value, there is more than likely no 
+vocal content, while tracks closer to 0.0 have high vocal content. This function will interact with 
+the Spotipy Library which interacts Spotify  Web API. Using the search function from the Spotify 
+Web Api which returns a JSON object, which can retrieve  track_id from the returned JSON Object 
+which will use the Spotipy Library audio_features(track_id) to return another dictionary-like 
+object which stores all audio_features, where one can just call JSON_Object[tempo] to retrieve the 
+tempo. 
+   * Returns: A string representing the Instrumentalness from 0.0 - 1.0
+2. Reply Methods
+
+
+* def reply_all_music_theory(self, song)
+   * Parameters: String song
+   * Desc: reply_all_music_theory will call the get_all_music_theory(song) class which returns a 
+JSON object representing all of the audio_features from the Spotipy library. Using a for: each loop 
+to parse through the object, the method will use the instance variable “reply” to concatenate a 
+reply containing all of the audio_features to return back to the calling input class. 
+   * Returns: A string that has all the values and formatted English sentences for the input class.
+* def reply_get_tempo(self, song)
+   * Parameters: String song
+   * Desc: reply_get_tempo will call the get_tempo(song) class which returns a string representing 
+the tempo from 0 - 300 BPM.  This method will use the instance variable “reply” to concatenate a 
+response for the input class which is easy for a bot reply. 
+   * Returns: A string that has the value for tempo and formatted English sentences for the input 
+class.
+* def reply_get_key(self, song)
+   * Parameters: String song
+   * Desc: reply_get_key will call the get_key(song) class which returns a string representing the 
+key ( e.g. 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1). This 
+method will use the instance variable “reply” to concatenate a response for the input class which 
+is easy for a bot reply. 
+   * Returns: A string that has the value for the key and formatted English sentences for the input 
+class.
+* def reply_get_time_signature(self, song)
+   * Parameters: String song
+   * Desc: reply_get_time_signature will call the get_time_signature(song) class which returns a 
+string representing the time signature. This method will use the instance variable “reply” to 
+concatenate a response for the input class which is easy for a bot reply. 
+   * Returns: A string that has the value for the time signature and formatted English sentences 
+for the input class.
+* def reply_get_mode(self, song)
+   * Parameters: String song
+   * Desc: reply_get_mode will call the get_mode(song) class which returns a string rA string 
+representing the mode (1 for Major, 0 for Minor). This method will use the instance variable 
+“reply” to concatenate a response for the input class which is easy for a bot reply. 
+   * Returns: A string that has the value for the mode and formatted English sentences for the 
+input class.
+* def reply_get_mood(self, song)
+   * Parameters: String song
+   * Desc: reply_get_mood will call the get_mood(song) class which returns a string representing 
+the valence from 0.0 to 1.0. This method will use the instance variable “reply” to concatenate a 
+response for the input class which is easy for a bot reply. 
+   * Returns: A string that has all the value for mood and formatted English sentences for the 
+input class.
+* def reply_get_danceability(self, song)
+   * Parameters: String song
+   * Desc: reply_get_danceability will call the get_danceability(song) class which returns a string 
+representing the danceability from 0.0 - 1.0. This method will use the instance variable “reply” to 
+concatenate a response for the input class which is easy for a bot reply. 
+   * Returns: A string that has all the value for danceability and formatted English sentences for 
+the input class.
+* def reply_get_acousticness(self, song)
+   * Parameters: String song
+   * Desc: reply_get_acousticness will call the get_acousticness(song) class which returns a  
+string representing the acoustics from 0.0 - 1.0. This method will use the instance variable 
+“reply” to concatenate a response for the input class which is easy for a bot reply. 
+   * Returns: A string that has all the value for the acoustics and formatted English sentences for 
+the input class.
+* def reply_get_energy(self,song)
+   * Parameters: String song
+   * Desc: reply_get_energy will call the get_energy(song) class which returns a string 
+representing the energy from 0.0 - 1.0 This method will use the instance variable “reply” to 
+concatenate a response for the input class which is easy for a bot reply. 
+   * Returns: A string that has all the value for energy and formatted English sentences for the 
+input class.
+* def reply_get_instrumentalness(self, song)
+   * Parameters: String song
+   * Desc: reply_get_instrumentalness will call the get_instrumentalness(song) class which returns 
+a string representing the Instrumentalness from 0.0 - 1.0 This method will use the instance 
+variable “reply” to concatenate a response for the input class which is easy for a bot reply. 
+   * Returns: A string that has all the value for Instrumentalness and formatted English sentences 
+for the input class.
+3. Help Methods
+* def pm_music_theory_help(self)
+   * Parameters: None 
+   * Desc: Called from the input class, this method will return a pre-formatted message explaining 
+all of the methods and their descriptions as taken from the Audio Features page from the Spotify 
+API to return as a message for the Discord Bot Client called in the input class. Interacts with the 
+public instance variable, reply, to return. 
+   * Returns: A string with descriptions for each audio feature in the Music Theory class formatted 
+for a Bot PM to a specific user.
