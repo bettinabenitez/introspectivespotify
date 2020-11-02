@@ -1,0 +1,272 @@
+Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 3B - Design
+       Specification: 
+https://docs.google.com/document/d/12OK-q1uNPSiBjsDjTrUOKbQ68INhgXH2P8O72gA1Gsc/edit#
+       Primary Author: Devika
+Overview: 
+
+
+The cases that need to be verified for Music Theory are quite simple, but also require computation 
+confirmation. Looking back on the specification for Music Theory, a user must be able to request 
+specific theoretical analyses of their requested song and see a reply back from the input class. 
+Another aspect of the Music Theory class is to retrieve a DM from the bot which explains all of the 
+theory behind music, in general. The only limitations with the Music Theory class are based on what 
+songs are in the Spotify Audio library in general. Of course, a simple test case is the correct 
+input, but that should be handled in the input class as it solely deals with handling input. 
+Therefore, I will also be checking to ensure each command returns the correct analysis of a 
+specific theory when assumed correctly from the input class. My general approach will be to ensure 
+that the Music Theory class only takes in good inputs, calls the correct methods, and returns the 
+correct information by comparing against the Spotify Web API tutorials which return web API. To 
+maintain simplicity, I will be using two songs- one pop and slow and another rap and fast to 
+compare check data. 
+
+
+Platform to test: 
+
+
+To test this class, I will do all of my testing in my Python file itself as many of these tests are 
+computational based. The only test that relies on Discord will be the help method, to which I will 
+receive a DM from the bot itself. 
+
+
+ For my black-box test, initially, I will first start with basic assertions in my Python file where 
+I check that calling get...(track_id) returns the correct tempo. I will retrieve the correct tempos 
+from the Spotify Web API website which lists all of the audio features. By creating around 10 
+assertions for my 2 songs, ( 20 assertions overall), I will ensure that the Music Theory class not 
+only returns the correct data but also can return different outputs based on different sons. 
+
+
+For my white-box tests, I will be ensuring that my getters and reply methods are computing the 
+correct data within the code. I will first check to make sure that all the getter methods are 
+returning the correct JSON object containing the correct track ID and that the Spotipy Library is 
+also returning the correct data for the Audio_Features by comparing it with the Spotify Web API 
+class. Finally, I will also ensure that my for:each loop logic and my string concatenation logic is 
+performing as it should.   I will do this with one song, as the contents exactly don’t matter, but 
+the performance and execution does. 
+
+
+Test Index: 
+
+
+Slow Song: If I Could Fly - One Direction (Track ID: 5CRVwXGikmqzoRO6q7FeAg)
+Fast Song: King Kunta - Kendrick Lamar (Track ID: 0N3W5peJUQtI4eyR6GJT5O)
+
+
+
+
+1. Black Box Tests
+
+
+* Music Theory Help Check
+   * Summary: In this test, I won’t be able to use an assertion, as this isn’t a computation based 
+method, but rather a functionality of Music Theory. Therefore, I will create a method that calls 
+the Music Theory Help method directly to my specific Discord User ID to demonstrate that you can 
+create a predefined string message to any user. 
+   * Justification: This assertion will help demonstrate that my method will be able to send a 
+predefined message to a specific user and will also give me the grounds to start playing with the 
+format of the string for further implementation.
+   * Special Set-Up: I will need to obtain my Discord User ID from the Discord Web API. 
+   * Situation: I will create a run-time method that will execute the help function where my 
+discord user ID is hardcoded.  This run-time method will call everything in my help function.(N.B 
+Usually, the input class will send the specific user ID, but as that class has not been designed 
+yet, I cannot test users calling the method specifically to test that the Discord ID was correct) 
+   * Correctness: To ensure correctness, I will receive a PM from our own Discord Bot which first 
+ensures that you can PM a specific user. Then, I will ensure that the string sent was exactly how I 
+formatted it in code too.  
+   * Clean-up: I will need to remove this testing method from the code after testing as I do not 
+want my Discord User ID hardcoded into anything. 
+
+
+* Song Tests: 
+To save Prof Kampe reading time and ensuring my document is not too long, all of these song tests 
+will be performed on the slow song and the fast song where I will gather all the hardcoded values 
+for each song from the Spotify Web API and compare them against my computed values. I decided to 
+pick different songs to ensure that there would be differences in the values for some of the theory 
+commands. There will be 20 asserts in total for black-box testing regarding songs.  These may seem 
+redundant as I am testing different methods the same way, but because this component is heavily 
+reliable on correctness of theory, I must test each method in different ways. 
+
+
+   * Tempo Check
+      * Summary: In this test, I will be checking to ensure that the tempo the MusicTheory class 
+computes is the same as what the Spotify API computes on its own. Because we want to ensure that 
+each command is computing the correct value.
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_tempo() class is returning the correct value as compared to the Spotify Web API. This will 
+also ensure that the Spotipy Library is also computing the correct audio_features 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_key() return is compared with a 
+hardcoded value for tempo. For now, I cannot test by calling the commands as our Input Class has 
+not been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code. 
+   * Key Check
+      * Summary: In this test, I will be checking to ensure that the key the MusicTheory class 
+computes is the same as what the Spotify API computes on its own. 
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_key() class is returning the correct value as compared to the Spotify Web API. 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_key() return is compared with a 
+hardcoded value for key. For now, I cannot test by calling the commands as our Input Class has not 
+been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code. 
+   * Time Signature Check
+      * Summary: In this test, I will be checking to ensure that the time signature the MusicTheory 
+class computes is the same as what the Spotify API computes on its own. 
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_time_signature() class is returning the correct value as compared to the Spotify Web API. 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_time_signature() return is 
+compared with a hardcoded value for time signature. For now, I cannot test by calling the commands 
+as our Input Class has not been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code. 
+   * Mode Check
+      * Summary: In this test, I will be checking to ensure that the mode the MusicTheory class 
+computes is the same as what the Spotify API computes on its own. 
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_mode() class is returning the correct value as compared to the Spotify Web API. 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_mode() return is compared with a 
+hardcoded value for mode. For now, I cannot test by calling the commands as our Input Class has not 
+been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code. 
+   * Mood Check
+      * Summary: In this test, I will be checking to ensure that the mood the MusicTheory class 
+computes is the same as what the Spotify API computes on its own. 
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_mood() class is returning the correct value as compared to the Spotify Web API. 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_mood() return is compared with a 
+hardcoded value for mood. For now, I cannot test by calling the commands as our Input Class has not 
+been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code. 
+   * Danceability Check
+      * Summary: In this test, I will be checking to ensure that the danceability the MusicTheory 
+class computes is the same as what the Spotify API computes on its own. 
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_danceability() class is returning the correct value as compared to the Spotify Web API. 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_danceability() return is compared 
+with a hardcoded value for danceability. For now, I cannot test by calling the commands as our 
+Input Class has not been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code. 
+   * Acoustics Check 
+      * Summary: In this test, I will be checking to ensure that the acoustics the MusicTheory 
+class computes is the same as what the Spotify API computes on its own. 
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_acoustics() class is returning the correct value as compared to the Spotify Web API. 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_acoustics() return is compared 
+with a hardcoded value for acoustics. For now, I cannot test by calling the commands as our Input 
+Class has not been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code. 
+   * Energy Check
+      * Summary: In this test, I will be checking to ensure that the energy the MusicTheory class 
+computes is the same as what the Spotify API computes on its own. 
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_energy() class is returning the correct value as compared to the Spotify Web API. 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_enegry() return is compared with 
+a hardcoded value for energy. For now, I cannot test by calling the commands as our Input Class has 
+not been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code. 
+   * Instrumentalness Check 
+      * Summary: In this test, I will be checking to ensure that the instrumentals the MusicTheory 
+class computes is the same as what the Spotify API computes on its own. 
+      * Justification: This assertion will ensure the correct functionality is happening and that 
+my get_instrumentalness() class is returning the correct value as compared to the Spotify Web API. 
+      * Special Set-Up: There is no special set up needed. 
+      * Situation: I will write run-time asserts in which the get_instrumentalness() return is 
+compared with a hardcoded value for instrumentals. For now, I cannot test by calling the commands 
+as our Input Class has not been developed. 
+      * Correctness: If the assertion passes as the two values match correctly, meaning that the 
+Spotipy Library is grabbing the correct information. 
+      * Clean-Up: None is needed! Just need to remove the assertions before pushing any final code.
+
+
+2. White Box Tests:
+*  reply_all_music_theory(self, song) loop test 
+      * Summary: In the reply_all_music_theory() class, I use a for : each loop to parse through a 
+JSON like object of audio_features. Therefore, I will create a test that checks that I iterate 
+through each key in the object correctly (Counter) and that each key in the JSON object is in the 
+correct order (Tempo, Key…). 
+      * Justification: I want to ensure that I am looping correctly and also using the correct CS 
+loop as well. I do not want to forget any of the audio features, nor return the wrong object for 
+other classes as two classes depend on this feature. 
+      * Special Set-Up: I will need to first run the audio features Spotify Web API test on one of 
+my songs to gather the length and the specific order of the audio features so I can hard code it. 
+      * Situation: I will write run-time asserts in which the I will call the 
+reply_all_music_theory class on a specific song (either the fast or slow song - it doesn’t quite 
+matter which one)  and compare it to another class where I have the hard coded total length and the 
+correct order of each audio feature.
+      * Correctness: If the assertion passes as the total number of audio features and their order 
+is correct, this means I am iterating correctly and I am not missing any items from my iteration. 
+      * Clean-Up: Remove the assertion and the hardcoded values from any final pushed code. 
+
+
+   * Audio features JSON checks
+      * Summary: In every get…() and reply…() method, I call upon a JSON object from the Spotipy 
+Library using track ID. I will check each JSON object in every get…() and reply…() method against a 
+hard coded comparison of the official Spotify Web API object (using either my slow or fast song, it 
+doesn’t quite matter).
+      * Justification:  I want to ensure that the Spotipy Library is creating the correct Spotify 
+Web API audio feature. If it is not, then I might need to reconsider using Spotipy. But if it is, I 
+have assurance that everything can be computed correctly. 
+      * Special Set-Up: I will need to first run the audio features Spotify Web API test on one of 
+my songs to gather the length and the specific order of the audio features so I can hard code it. I 
+also need to create a test method that ONLY creates the JSON object and does not return anything 
+else. 
+      * Situation: I will write run-time asserts in which I will call a testing method for each 
+reply…() and get..() method where I compare their Spotipy Web API calls against the official hard 
+coded JSON object. Each object should be exactly the same as they access the same song. 
+      * Correctness: If the assertion passes as the two objects have the same contents, this means 
+the Spotipy library is reliable and has the correct information for me to use. 
+      * Clean-Up: Remove the assertion and the hardcoded values from any final pushed code. 
+   * Track ID Checks
+      * Summary: In every get…() and reply…() method, I call upon a JSON object from the Spotipy 
+Library by searching for a song. I will check each track_id object in every get…() and reply…() 
+method against a hard coded comparison of the official Spotify Web API track_id  (using either my 
+slow or fast song, it doesn’t quite matter).
+      * Justification:  I want to ensure that my internal call to the  Spotify Web API is creating 
+the correct official Spotify Web API track_id. If it is not, then the correct song is not being 
+analyzed which is a major feature of this class.
+      * Special Set-Up: I will need to find the official track ids of my fast and slow song (which 
+I already have) so I can hard code it. 
+      * Situation: I will write run-time asserts in which I will call a testing method for each 
+reply…() and get..() method where I compare their Spotipy Web API calls against the official hard 
+coded track_id object. The numbers must equal each other. 
+      * Correctness: If the assertion passes as the two objects have the same contents, this means 
+the calls I am making to the Spotify Web API are correct. 
+      * Clean-Up: Remove the assertion and the hardcoded values from any final pushed code. 
+   * String Concatenation Checks
+      * Summary: In every reply() method, I concatenate a string to help return to the input class. 
+I will call each reply method and compare the string with a hardcoded string that has the hardcoded 
+correct values and ensure that the string is concatenating correctly. 
+      * Justification:  As my black box tests will check for the fact that the computation is 
+correct, I want to ensure that my concatenation is correct and is not producing any errors, 
+unnecessary white space, and just making sure my english is correct!
+      * Special Set-Up: I will need to first run the Spotiy Web API audio features on a specific 
+song (either my slow or fast, doesn’t matter once again) and write the strings for each audio 
+features to compare against my reply calls.
+      * Situation: I will write run-time asserts in which I will call a testing method for each 
+reply…() method where I compare my concatenation logic against what it should actually output, to 
+ensure that I am not missing any white spaces or making spelling errors.
+      * Correctness: If the assertion passes as the two objects have the same contents, this means 
+that I am concatenating correctly 
+      * Clean-Up: Remove the assertion and the hardcoded values from any final pushed code.
