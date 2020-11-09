@@ -1,0 +1,57 @@
+﻿
+Team: Dewbed
+Members: William, Bettina, Emily, and Devika
+          Project: 3D - Review Notes
+Notes: https://docs.google.com/document/d/1y_UNDhBsd7EVhqqtKx9q3a3ZwMRa4Q-xU4IqCbkG-Y4/edit
+Primary Author: Emily
+Review Notes for Spotify Listen Class 
+
+
+Specifications
+* Which methods in Spotify Listen will the Input Class call? Should your listening party commands 
+by public/external so they’re accessible by the Input Class?
+* The document mentions getAccessToken(discord_user_id) will “retrieve the OAuth token specific to 
+the user with the necessary access.” Could you clarify what “necessary access” mean? 
+* Which Spotify account does !createplaylist make the playlist on? Will there be an Introspective 
+Spotify account? Will it make a playlist for all or some of the listening party attendants? Will 
+the playlist default to “public” or “secret”? 
+
+
+Design 
+* Libraries
+   * Which methods will use the Psycopg2 library? 
+* Accessor Methods
+   * Why are get_listening party and get_user_list are public? Could they be written as private 
+instead?
+* Reply Methods
+   * What will the format of the message send look like? Perhaps elaborate on how displayqueue() 
+will send that message.
+* Media control
+   * What happens if the user calls the play method before anything is in the queue? Would it be 
+possible to play a song without adding it to the queue first? Or have that song play before 
+everything on the queue? This functionality may not be necessary for 1.0 release but it could 
+something to keep in mind! 
+   * Skip will “[select] the song on the queue from the database”. How will this be done? What 
+commands will your methods use to “select” from the database? (Note: these questions also apply to 
+other methods that require “selecting” from the database)
+   * For add, why is name in brackets? Is it a song name or artist name? How do you distinguish the 
+name of the song and the name of the artist?
+   * For remove, what will happen if you remove a song that is not in the queue? What if the song 
+is in the queue twice? Will the remove() remove both occurrences or just one? How will remove() 
+search for the song in the database? 
+* Private Methods
+   * How will queueManagement() keep track of the positions of songs after they are shuffled? 
+Should positions be updated when you shuffled? 
+   * Why does listeningParty(self) run the skip command? 
+
+Tests
+* Black box:
+   * What should happen if a user tries to join the listening party but does not a Spotify premium 
+account? Should this return an error? Should there be a test for this scenario? 
+* White box:
+   * It could be helpful to add tests to cover the scenario where we want to add multiple users to 
+the listening party.
+   * For queue management, should there be a test to handle when all the songs have a status of 2? 
+Should there be a test to check the queue when a song is removed? 
+   * Could it be helpful to have white-box tests that test music control functions when there is 
+only 1 person in the listening party vs when there are multiple people in the listening party?
