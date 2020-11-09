@@ -1,0 +1,69 @@
+﻿Team: Dewbed
+Members: Bettina, Devika, Emily, and William
+          Project: 3D - Report
+review_3d: https://docs.google.com/document/d/1uQDdO41KK7-VcntZbmIkwzH5LGTFypH1dr1oyqqlzbQ/edit
+Primary Author: Emily
+Time: Saturday 11/7/20 9:30 PM - 11:30 PM 
+Place: Zoom
+Component Reviewed: Spotify Listen Component 
+Attendees:
+Reviewer: Emily
+Component Author: Bettina
+Observers: William, Devika
+Disposition for Specifications, Design, and Tests: Approved with Required Changes 
+
+
+SUMMARY OF ISSUES RAISED
+Must-fix Issues:
+* Specifications
+   * External vs Internal: The specifications should clearly state which methods in Spotify Listen 
+will be called by the Input Class. Additionally, we discussed that listening party commands should 
+be changed from private/internal to public/external so they would be accessible by the Input Class. 
+* Design
+   * Accessor Methods: get_listening party and get_user_list methods should be changed from public 
+to private to minimize scope. These methods will not be used in other classes. 
+   * Media control: For the add method, it was suggested that the variable “song” should store the 
+track name from the Spotify API instead of the direct quote from the discord user. This would allow 
+naming to be more consistent. 
+   * Media control: All media control methods should check that the queue is non-empty before 
+running the command. For instance, the play method should not be able to play a song if there are 
+no more songs in the queue. 
+   * Private Methods: We discussed how the queue would be managed when shuffle is called. Shuffle 
+should get the position numbers on the database by shuffling between the position numbers of the 
+songs that still need to be played. Then, the list should be sorted by position number. This 
+algorithm should be included in the document. 
+
+
+Should-fix Issues: 
+* Specifications
+   * Interaction with Spotify Auth Class: The document mentions getAccessToken(discord_user_id) 
+will be used from the Spotify Auth Class. Additional details, such as the return type, should be 
+specified here.
+* Design 
+   * Reply Methods: The format of the reply message should be specified. The document also should 
+explicitly state that displayqueue() returns a string.
+   * Media Control: Multiple methods, such as skip, involve “selecting” a song from the queue. The 
+design document should mention that “selecting” from the database will require setting a connection 
+to the database, creating a cursor, and passing SQL queries. 
+* Tests
+   * White box: It could be helpful to add more test cases to cover the following additional 
+scenarios:
+      * the scenario where we want to add multiple users to the listening party.
+      * the scenario when a song is listed twice in a queue and we call the method remove on that 
+song.
+   * White box: It would be helpful to have white-box tests that test music control functions when 
+there is only 1 person in the listening party & when there are multiple people in the listening 
+party. 
+   * Black Box: Additional Black Box tests could be added to check that Spotify agrees on the 
+current song. 
+
+
+Comments: 
+* Design 
+   * Libraries: To increase clarity, the design could specify which methods will use the Psycopg2 
+library. 
+* Overall
+   * This component was very well designed! However, its high complexity is a concern. It could be 
+beneficial to break the component into sub-components. For phase 4, focusing on a couple of key 
+features, such as queue management, instead of implementing the entire component could increase 
+feasibility.
