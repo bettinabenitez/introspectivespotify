@@ -13,7 +13,6 @@ MusicTheory Test Driven Dev. Plan.
             each successive phase is successful. 
 Tests: 
     > __audio_features_help JSON test 
-    > __audio_features_help track_id test
     > __audio_features_help() failure error branch
 Code: 
     > Write __audio_features_help method. 
