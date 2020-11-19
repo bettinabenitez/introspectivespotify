@@ -1,0 +1,95 @@
+Team: Dewbed
+Members: Bettina, Devika, Emily, William
+  	Project: 4B.3 - Test Driven Development Plan
+Primary Author: Devika
+
+---------------------------------------------------
+MusicTheory Test Driven Dev. Plan. 
+---------------------------------------------------
+* Phase One - __audio_featres_help:
+             __audio_features_help is the main source
+            for every single method in MusicTheory. 
+            Therefore, it must be developed first to ensure
+            each successive phase is successful. 
+Tests: 
+    > __audio_features_help JSON test 
+    > __audio_features_help track_id test
+    > __audio_features_help() failure error branch
+Code: 
+    > Write __audio_features_help method. 
+
+* Phase Two - getter methods: 
+              all get_...() methods depends on __audio_features_help
+             but also is required for the MusicHistory class which 
+             is doing the Code Review development. Therefore, it 
+             will be smart to build this as the second phase. 
+Tests:
+    > Attribute get_…() checks.
+Code: 
+    > Write all get...() methods. 
+
+* Phase Three - reply methods: 
+               all reply_...() methods depends on __audio_features_help
+               and get...() methods to create internal computation checks
+               and return a formal string to the InputClass. As it 
+               requires the two other phases, it makes sense to have it
+               as the third phase. THIS EXCLUDES THE REPLY METHOD FOR 
+               COMPARE AND SUGGGEST. 
+Tests:
+    > Attitude reply…() output check.
+    > reply_all_music_theory test
+    > reply_get_key() branches 
+    > reply_get_mode() branches 
+    > reply_get_mood() branches 
+    > reply_get_danceability() branches 
+    > reply_get_acousticness() branches 
+    > reply_get_energy() branches 
+    > reply_get_instrumentalness
+Code: 
+    > Write all reply...() methods. 
+
+* Phase Four - Compare Theory: 
+                compare_theory() and reply_compare_theory()depends 
+                on all inital two phases to be complete for functionality. 
+                Yet, I decided to build this after all the reply methods 
+                as it may be easier to create the logic for the internal 
+                computation after the experience of the initial reply methods. 
+Tests:
+    > Compare_theory() functionality check
+    > compare_theory() failure branch 
+    > compare_theory() success branch 
+Code: 
+    > Write compare_theory()
+    > Write reply_compare_theory() 
+
+* Phase Five - Suggest Theory: 
+                suggest_theory() and reply_suggest_theory()depends 
+                on all inital two phases to be complete for functionality. 
+                Yet, this is by far the most complex method out of all 
+                methods in MusicTheory and would benefit from the learning 
+                from all the intial phases before attempting. Therefore, I
+                have left this as the last phase to complete as it requires
+                learning from other phases and also feels like the hardest 
+                and does not depend on much other than the inital two phases. 
+Tests:
+    > Suggest_theory() functionality check #1
+    > Suggest_theory() functionality check #2
+    > suggest_theory() failure branch 
+    > suggest_theory() success branch 
+Code: 
+    > Write suggest_theory()
+    > Write reply_suggest_theory() 
+
+* Overall, my first phase is the most important phase to complete as it is 
+the foundation for my whole component. Secondly, all of my get() methods 
+are dependant on my private helper method (which is the first phase) and 
+MusicHistory also depends on these methods, which makes sense for slotting
+it as the second phase. For my third phase, I decided to attempt all the 
+audio_attribute reply methods as they require low internal complexity as
+compared to the rest of the component. Experience testing and coding with
+these methods may make the transition to my fourth phase, compare_theory
+easier. As compare_theory has a medium level of complexity while 
+suggest_theory has the hardest, I decided to follow a similar pattern of
+attempting the easier first to gain experience before tackling the more
+daunting componenet. All in all, MusicTheory is a very stackable 
+component and will benefit from Test Drive Development. 
