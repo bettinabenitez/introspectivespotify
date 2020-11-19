@@ -1,0 +1,41 @@
+﻿Team: Dewbed
+    Members: William, Bettina, Emily, and Devika
+    Project: 1A - Meeting Minutes
+       Primary Author: Devika
+Meeting Minutes
+____________________________________________________________________________
+
+
+08/25/2020 
+        Time: 6:30-7:30 PM PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Get to know each other and brainstorm ideas together.
+Agenda: 
+* Introduce each other (Name, pronouns, college, hobbies)
+* Learn about similarities and interests
+* Go over initial ideas
+* Plan next meeting time.
+08/27/2020 
+        Time: 9:00-11:00 PM PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Finalize an idea and produce an initial plan concept.  
+Agenda: 
+* Pick a finalized idea through a poll 
+* Go over components and ideate new features 
+* Create a draft of a concept plan for the lab. 
+* Plan next meeting time.
+08/29/2020 
+        Time: 9:00-11:00 PM PST
+        Attendees: William, Emily, Bettina, and Devika
+
+
+Meeting Objective: Finish initial concept and management timeline. 
+Agenda: 
+* Finalize initial concept and finish draft.
+* Create a timeline through Google Sheets.
+* Assign tasks and timelines for each team member.
+* Plan next meeting time.
