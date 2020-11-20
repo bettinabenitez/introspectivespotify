@@ -14,7 +14,8 @@ scope = "user-read-recently-played, user-top-read, user-read-playback-position, 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
 def spotify_login(user):
-    pass
+    results = sp.current_user_top_artists(limit=5, time_range="long_term")
+    return results
 
 def spotify_logout(user):
     pass
