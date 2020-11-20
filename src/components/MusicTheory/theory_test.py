@@ -5,8 +5,8 @@ class MusicTheoryTest(unittest.TestCase):
     #####################
     ## Phase One Tests ##
     ####################
-    def audio_features_json(self)
-            hardCodedAF = {
+    def test_audio_features_json(self):
+        hardCodedAF = {
                             "danceability": 0.527,
                             "energy": 0.134,
                             "key": 4,
@@ -25,13 +25,13 @@ class MusicTheoryTest(unittest.TestCase):
                             "analysis_url": "https://api.spotify.com/v1/audio-analysis/64yJ0tpcSveze3KJAdZGKe",
                             "duration_ms": 224107,
                             "time_signature": 4
-                            }
+        }
         self.assertEqual(MusicTheory.__audio_features_help("Thank You For The Music"), hardCodedAF)
 
-    def audio_features_error(self):
+    def test_audio_features_error(self):
         errorMessage = "Sorry! That track does not exist"
         self.assertFalse(MusicTheory.__audio_features_help("Foo Bar Bash Bops"), errorMessage)
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestStringMethods)
+    suite = unittest.TestLoader().loadTestsFromTestCase(MusicTheoryTest)
     unittest.TextTestRunner(verbosity=2).run(suite)

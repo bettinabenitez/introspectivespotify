@@ -12,7 +12,7 @@ scope = "user-read-recently-played, user-top-read, user-read-playback-position, 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
 
-def __audio_features_help(self, song):
+def __audio_features_help(song):
     """
     _audio_features_help will return a JSON object storing all the audio_features listed below.
     This function will interact with the Spotipy Library which interacts with the Spotify  Web API. 
@@ -26,3 +26,17 @@ def __audio_features_help(self, song):
     Returns:  A JSON Dictionary object with all audio_features.
               An empty list if there are no songs. 
     """
+    results = sp.search(q= song, type="track", limit=1)
+    
+    for  item in results['tracks']['items']:      
+        trackID = item['id']
+        if trackID != " ":
+            audioFeatures = sp.audio_features(trackID)
+            return audioFeatures
+    return "Sorry! That track does not exist"
+
+test = __audio_features_help("Thank you for the music")
+print(test)
+
+test1 = __audio_features_help("Foo bar Bash Songs")
+print(test1)
