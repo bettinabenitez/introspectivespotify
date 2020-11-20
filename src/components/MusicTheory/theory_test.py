@@ -1,7 +1,10 @@
 import unittest 
+import MusicTheory
 
-class TestStringMethods(unittest.TestCase):
-
+class MusicTheoryTest(unittest.TestCase):
+    #####################
+    ## Phase One Tests ##
+    ####################
     def audio_features_json(self)
             hardCodedAF = {
                             "danceability": 0.527,
@@ -26,11 +29,6 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(MusicTheory.__audio_features_help("Thank You For The Music"), hardCodedAF)
 
     def audio_features_error(self):
-        # Q! , so if there is nothing in here, it'll just have an 
-        # empty list. So how do I instead tell this inner private method 
-        # to just talk right back to the input class and say hey there is 
-        # nothing here and print this error instead of going back to my getter
-        # then back to the reply and back to Input !!! 
         errorMessage = "Sorry! That track does not exist"
         self.assertFalse(MusicTheory.__audio_features_help("Foo Bar Bash Bops"), errorMessage)
 
