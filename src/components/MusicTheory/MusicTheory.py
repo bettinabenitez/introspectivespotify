@@ -13,4 +13,16 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
 
 
 def __audio_features_help(self, song):
+    """
+    _audio_features_help will return a JSON object storing all the audio_features listed below.
+    This function will interact with the Spotipy Library which interacts with the Spotify  Web API. 
+    Using the search function from the Spotify Web Api which returns a JSON object, which can 
+    retrieve  track_id from the returned JSON Object which will use the Spotipy Library 
+    audio_features(track_id) for the rest of MusicTheory to use. When searching, if there are no
+    items in the Spotify Search, aka the items list in the JSON file is empty, it return an empty list.
+
+    Param: String song: The requested song from the user.
     
+    Returns:  A JSON Dictionary object with all audio_features.
+              An empty list if there are no songs. 
+    """
