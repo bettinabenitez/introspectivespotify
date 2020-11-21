@@ -296,8 +296,10 @@ def reply_top_songs_theory(time_range, limit):
     :rtype: string
     :return: a string that describes what a user's theory data on top songs
     """
-    song_ids = compute_top_songs(time_range, limit).keys()
-    print(song_ids)
+    # song_ids = compute_top_songs(time_range, limit).keys()
+    # print(song_ids)
+    song_ID = '1ApN1loxlt0rzRFc8iETw7'
+    get_all_music_theory(song_ID)
     # Add try and except block
     # calls compute_top_songs and passes the output to compute_top_songs_theory 
     # stores the output of compute_top_songs_theory in a dictionary
