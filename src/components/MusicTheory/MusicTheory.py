@@ -57,7 +57,12 @@ def get_tempo(song):
     Returns: A string representing the tempo (0 - 300 BPM).
 
     """
-
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        tempo = feature['tempo']
+        return str(tempo)
 
 def get_key(song):
     """
@@ -75,6 +80,12 @@ def get_key(song):
                 and so on. If no key was detected, the value is -1).
 
     """
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        key = feature['key']
+        return str(key)
 
 
 def get_time_signature(song):
@@ -91,6 +102,12 @@ def get_time_signature(song):
 
     Returns: A string representing the time signature. (0-12).
     """
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        timeSig = feature['time_signature']
+        return str(timeSig)
 
 
 def get_mode(song):
@@ -107,6 +124,12 @@ def get_mode(song):
 
     Returns: A string representing the mode (1 for Major, 0 for Minor).
     """
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        mode = feature['mode']
+        return str(mode)
 
 
 def get_mood(song):
@@ -125,6 +148,12 @@ def get_mood(song):
 
     Returns: A string representing the valence from (0.0-1.0)
     """
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        mood = feature['mood']
+        return str(mood)
 
 
 def get_danceability(song):
@@ -142,6 +171,12 @@ def get_danceability(song):
 
     Returns: A string representing the danceability from (0.0 -1.0).
     """
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        danceability = feature['danceability']
+        return str(danceability)
 
 
 def get_acousticness(song):
@@ -160,6 +195,12 @@ def get_acousticness(song):
     Returns: A string representing the acoustics from (0.0 - 1.0).
 
     """
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        acous = feature['acousticness']
+        return str(acous)
 
 
 def get_energy(song):
@@ -177,6 +218,12 @@ def get_energy(song):
     Returns: A string representing the energy from (0.0-1.0)
 
     """
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        energy = feature['energy']
+        return str(energy)
 
 
 def get_instrumentalness(song):
@@ -195,6 +242,12 @@ def get_instrumentalness(song):
     Returns: A string representing the Instrumental-ness from (0.0 - 1.0)
 
     """
+    audioFeatures = audio_features_help(song)
+    if audioFeatures == "None":
+        return audioFeatures
+    for feature in audioFeatures:
+        instrumental = feature['instrumentalness']
+        return str(instrumental)
 
 
 def get_all_musictheory(song):
@@ -207,4 +260,5 @@ def get_all_musictheory(song):
     Returns:  A JSON Dictionary object with all audio_features.
             An empty list if there are no songs.         
     """
+    return audio_features_help(song)
 
