@@ -255,18 +255,3 @@ def get_instrumentalness(song):
         return str(instrumental)
 
 
-def get_all_music_theory(song):
-    """
-    This function will call the helper method audio_features_helpself,song) to compute a 
-    JSON dictionary object to be returned for the MusicHistory class to use.
-
-    Param: String song: The requested song from the user.
-
-    Returns:  A JSON Dictionary object with all audio_features.
-            An empty list if there are no songs.
-
-    TDD: Forgot underscore in function name.         
-    """
-    return audio_features_help(song)
-
-
