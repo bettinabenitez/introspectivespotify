@@ -15,6 +15,48 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
                             redirect_uri=REDIRECT_URI,
                             scope=scope, cache_path=".oAuthCache"))
 
+                
+######################################
+##### COMPUTATION HELPER METHODS #####
+######################################
+def compute_genre_helper(genre_dictionary, limit):
+    """Returns theory data on a user's top songs over a given time range 
+    :param genre_dictionary: keys = genre name, values = a list of ints representing the ranking of artist
+    :type genre_dictionary: dictionary 
+
+    :param limit: indicate how many artists to compute, defaults to 5. Minimum of 1, maximum of 10. 
+    :type limit: int 
+
+    :rtype: list
+    :return: a queue of top genres sorted from most listened to genre to least listened to 
+    """
+    top_genre_queue = []
+    genre_dictionary = sorted(genre_dictionary, key=lambda k: len(genre_dictionary[k]), reverse=True)
+    count = 0
+    for genre in genre_dictionary:
+        if count < limit:
+            top_genre_queue.append(genre)
+            count += 1
+        else:
+            break
+    
+    return top_genre_queue
+
+def compute_top_songs_theory_helper(self, theory_dictionary):
+    """Returns theory data on a user's top songs over a given time range 
+    :param theory_dictionary: 
+    :type theory_dictionary: dictionary 
+
+    :rtype: dictionary
+    :return: a sorted dictionary with both the song IDs (key) and song names (value)
+    """
+    # We will loop through the values (lists) in our output dictionary.
+    # For values of tempo, mode, danceability, acousticness, energy, and instrumentalness,
+    # we will find the average of the list and reset the list to a list containing only the average value.
+    # For values of key and time_signature, then we will reset the list as a list
+    # containing the element with the most occurrences (the mode). If there are ties, then the new list will include all the tied elements.
+    # Returns a dictionary
+
 ###############################
 ##### COMPUTATION METHODS #####
 ###############################
@@ -45,11 +87,10 @@ def compute_genre(time_range, limit):
                 top_genres_dict[genre] = [index]
             else:
                 top_genres_dict[genre].append(index)
-        
-    # TO DO: Calls and returns compute_genre_helper method with genre_dictionary and limit as the parameter 
-    return top_genres_dict
     
-print(compute_genre(time_range = "medium_term", limit = 5))
+    return (compute_genre_helper(top_genres_dict, limit))
+    
+print(compute_genre("medium_term", 5))
 
 def compute_top_songs(time_range, limit):
     """Returns a user's top songs(s) over a given time range 
@@ -141,47 +182,6 @@ def compute_top_songs_theory(self, top_songIDs, discord_user):
         # instrumentalness
     # loop through top_songIDs dictionary’s keys and calls get_all_music_theory method from the MusicTheory Class on each song ID. Get_all_music_theory returns a dictionary that we will parse through and append data into the values of our theory dictionary. 
     # Call and return compute_top_songs_theory_helper with theory dictionary as a parameter 
-
-
-######################################
-##### COMPUTATION HELPER METHODS #####
-######################################
-def compute_genre_helper(self, genre_dictionary, limit):
-    """Returns theory data on a user's top songs over a given time range 
-    :param genre_dictionary: 
-    :type genre_dictionary: dictionary 
-
-    :param limit: indicate how many artists to compute, defaults to 5. Minimum of 1, maximum of 10. 
-    :type limit: int 
-
-    :rtype: list
-    :return: a queue of top genres sorted from most listened to genre to least listened to 
-    """
-    # output_genres = {}
-    # count = 0
-    # for key in genre_dictionary:
-
-
-    # Create a queue that will store top genres
-    # Loops through the keys of genres_dictionary and pushes the top genre (based on order of highest occurrence or mode) into queue. Continues to loop until the queue reaches the length limit. 
-    # ties are broken based what genre is associated with the artist(s) that is listened to more
-    # Returns a queue
-
-
-def compute_top_songs_theory_helper(self, theory_dictionary):
-    """Returns theory data on a user's top songs over a given time range 
-    :param theory_dictionary: 
-    :type theory_dictionary: dictionary 
-
-    :rtype: dictionary
-    :return: a sorted dictionary with both the song IDs (key) and song names (value)
-    """
-    # We will loop through the values (lists) in our output dictionary.
-    # For values of tempo, mode, danceability, acousticness, energy, and instrumentalness,
-    # we will find the average of the list and reset the list to a list containing only the average value.
-    # For values of key and time_signature, then we will reset the list as a list
-    # containing the element with the most occurrences (the mode). If there are ties, then the new list will include all the tied elements.
-    # Returns a dictionary
 
 
 #########################
