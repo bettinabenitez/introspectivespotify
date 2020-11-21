@@ -265,6 +265,11 @@ def reply_get_tempo(song):
 
     Returns: A string that has the value for tempo and formatted English sentences for the input class.
     """
+    tempo = get_tempo(song)
+    if tempo == "None":
+        return "Sorry! This song does not exist."
+    else: 
+        return song + " has a tempo of" + " " + tempo + "!"
 
 def reply_get_key(song):
     """
@@ -280,6 +285,34 @@ def reply_get_key(song):
     Returns: A string that has the value for key and formatted English sentences for the input class.  
 
     """
+    key = get_key(song)
+    if key == "None" or key == "-1":
+        return "Sorry! This song does not exist."
+    elif key == "0": 
+        return song + " has a key of C!"
+    elif key == "1": 
+        return song + " has a key of C#!"
+    elif key == "2": 
+        return song + " has a key of D!"
+    elif key == "3": 
+        return song + " has a key of D#!"
+    elif key == "4": 
+        return song + " has a key of E!"
+    elif key == "5": 
+        return song + " has a key of F!"
+    elif key == "6": 
+        return song + " has a key of F#!"
+    elif key == "7": 
+        return song + " has a key of G!"
+    elif key == "8": 
+        return song + " has a key of G#!"
+    elif key == "9": 
+        return song + " has a key of A!"
+    elif key == "10": 
+        return song + " has a key of A#!"
+    elif key == "11": 
+        return song + " has a key of B!"
+    
 
 def reply_get_time_signature(song):
     """
@@ -292,6 +325,11 @@ def reply_get_time_signature(song):
 
     Returns: A string that has the value for the time signature and formatted English sentences for the input class.
     """
+    timeSig = get_time_signature(song)
+    if timeSig == "None":
+        return "Sorry! This song does not exist."
+    else: 
+        return song + " has a time signature of" + " " + tempo + " beats per bar!"
 
 def reply_get_mode(song):
     """
@@ -305,6 +343,13 @@ def reply_get_mode(song):
     Returns: A string that has the value for the mode and formatted English sentences for the input class.
 
     """
+    mode = get_mode(song)
+    if mode == "None":
+        return "Sorry! This song does not exist."
+    elif mode == "1": 
+        return song + " is in the Major modality!"
+    else:
+        return song + " is in the Minor modality!"
 
 def reply_get_mood(song):
     """
@@ -321,6 +366,13 @@ def reply_get_mood(song):
     Returns: A string that has the value for the mood and formatted English sentences for the input class.
 
     """
+    mood = get_mood(song)
+    if mood == "None":
+        return "Sorry! This song does not exist."
+    elif float(mood) >= 0.0 and float(mood) < 0.5: 
+        return song + " is generally sad, depressed, or angry :("
+    else:
+        return song + " is generally happy, cheerful, euphoric :)"
 
 def reply_get_danceability(song):
     """
@@ -335,6 +387,15 @@ def reply_get_danceability(song):
 
     Returns: A string that has the value for the danceability and formatted English sentences for the input class.
     """
+    dance = get_danceability(song)
+    if dance == "None":
+        return "Sorry! This song does not exist."
+    elif float(dance) >= 0.0 and float(dance) < 0.4: 
+        return song + " has low danceability!"
+    elif float(dance) >= 0.4 and float(dance) < 0.6: 
+        return song + " has medium danceability!"
+    else:
+        return song + " has high danceability!"
 
 def reply_get_acousticness(song):
     """
@@ -349,6 +410,15 @@ def reply_get_acousticness(song):
     Returns: A string that has the value for the acoustics and formatted English sentences for the input class.
 
     """
+    acoustics = get_acousticness(song)
+    if acoustics == "None":
+        return "Sorry! This song does not exist."
+    elif float(acoustics) >= 0.0 and float(acoustics) < 0.4: 
+        return song + " has low acoustics!"
+    elif float(acoustics) >= 0.4 and float(acoustics) < 0.6: 
+        return song + " has medium acoustics!"
+    else:
+        return song + " has high acoustics!"
 
 def reply_get_energy(song):
     """
@@ -362,6 +432,15 @@ def reply_get_energy(song):
 
     Returns: A string that has the value for the energy and formatted English sentences for the input class. 
     """
+    energy = get_energy(song)
+    if energy == "None":
+        return "Sorry! This song does not exist."
+    elif float(energy) >= 0.0 and float(energy) < 0.4: 
+        return song + " has low energy!"
+    elif float(energy) >= 0.4 and float(energy) < 0.6: 
+        return song + " has medium energy!"
+    else:
+        return song + " has high energy!"
 
 def reply_get_instrumentalness(song):
     """
@@ -376,5 +455,31 @@ def reply_get_instrumentalness(song):
 
     Returns: A string that has the value for the instrumentalness and formatted English sentences for the input class. 
     """
+    instrumentals = get_instrumentalness(song)
+    if energy == "None":
+        return "Sorry! This song does not exist."
+    elif float(instrumentals) >= 0.0 and float(instrumentals) < 0.4: 
+        return song + " has low instrumentals!"
+    elif float(instrumentals) >= 0.4 and float(instrumentals) < 0.6: 
+        return song + " has medium instrumentals!"
+    else:
+        return song + " has high instrumentals!"
 
+def reply_all_musictheory(song):
+    """
+     reply_all_music_theory will call the get_all_music_theory which holds a 
+     JSON object representing all of the audio_features from the Spotipy library. 
+     Using a for: each loop to parse through the object, the method will create a 
+     reply containing all of the audio_features to return back to the calling input class. 
 
+    Param: String song: The requested song from the user.   
+
+    Returns: A string that has the value for the instrumentalness and formatted English sentences for the input class.
+    """
+    allTheory = get_all_music_theory(song)
+    if allTheory == "None":
+        return "Sorry! This song does not exist."
+    else: 
+        return (reply_get_tempo(song) + " \n" + reply_get_key(song) + " \n" + reply_get_time_signature(song) + " \n" +
+        reply_get_mode(song) + " \n" + reply_get_mood(song) + " \n" + reply_get_danceability(song) + " \n" + reply_get_acousticness(song) + " \n" +
+        reply_get_energy(song) + " \n" + reply_get_instrumentalness(song))

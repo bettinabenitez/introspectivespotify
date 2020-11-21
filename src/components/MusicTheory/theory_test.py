@@ -133,18 +133,18 @@ class MusicTheoryTest(unittest.TestCase):
         hardcodedInstru = "Thank You For The Music has low instrumentals!"
         self.assertEqual(MusicTheory.reply_get_instrumentalness("Thank You For The Music"), hardcodedInstru)
     
-
-    def test_get_reply_musictheory(self):
-        hardcodedDict = ("Thank You For The Music has a tempo of 98.879 BPM,\n" 
-                         "a key of E,\n" 
-                         "a time signature of 4 beats per bar,\n"
-                         "is in the Major modality,\n"
-                         "is generally sad, depressed, or angry :( ,\n"
-                         "has medium danceability,\n"
-                         "has high acoustics,\n"
-                         "has low energy,\n"
-                         "and has low instrumentals!")
-        self.assertEqual(MusicTheory.reply_get_all_music_theory("Thank You For The Music"), hardcodedDict)
+    # Changed test strings due to inconsistency with original plan, my mistake.
+    def test_reply_all_musictheory(self):
+        hardcodedDict = ("Thank You For The Music has a tempo of 98.879 BPM \n" 
+                         "Thank You For The Music has a key of E! \n" 
+                         "Thank You For The Music has a time signature of 4 beats per bar! \n"
+                         "Thank You For The Music is in the Major modality! \n"
+                         "Thank You For The Music is generally sad, depressed, or angry :( \n"
+                         "Thank You For The Music has medium danceability! \n"
+                         "Thank You For The Music has high acoustics! \n"
+                         "Thank You For The Music has low energy! \n"
+                         "Thank You For The Music has low instrumentals! ")
+        self.assertEqual(MusicTheory.reply_all_music_theory("Thank You For The Music"), hardcodedDict)
 
     ## Key Tests
     def test_reply_key_C(self):
