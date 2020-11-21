@@ -185,7 +185,7 @@ def compute_top_songs_theory(self, top_songIDs, discord_user):
 #########################
 ##### REPLY METHODS #####
 #########################
-def reply_genre(self, time_range, limit, discord_user):
+def reply_top_genres(time_range, limit):
     """Returns a string with a user's top genres that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -199,11 +199,20 @@ def reply_genre(self, time_range, limit, discord_user):
     :rtype: string
     :return: a string that describes what a user's top genres are
     """
-    # Add try and except block
-    # calls compute_genre 
-    # stores the output of compute_genre in a queue
-    # loop through the queue and format a string ("Your top genres are ___")
-    # Return string 
+    if limit < 0:
+        return "Please try a limit greater than 0! :)"
+
+    try:
+        top_genres_queue = compute_genre(time_range, limit)
+        if limit == 1:
+            return "Your top genre is " + top_genres_queue[0] + ". Happy listening!"
+        else: 
+            output = "Your top genres are"
+            for index, genre in enumerate(top_genres_queue):
+                output += " (" + str(index + 1) + ") " + genre 
+            return output + ". Happy listening!"
+    except:
+        print("An exception occurred. Something went wrong. :( uh oh")
     
 def reply_top_songs(time_range, limit):
     """Returns a string with a user's top songs that the Discord Bot will reply to the chat 
@@ -223,19 +232,20 @@ def reply_top_songs(time_range, limit):
         return "Please try a limit greater than 0! :)"
 
     try:
-        top_genres_queue = compute_genre(time_range, limit)
+        top_songs_dict = compute_top_songs(time_range, limit)
         if limit == 1:
-            return "Your top genre is " + top_genres_queue[0] + ". Happy listening!"
+            print(top_songs_dict)
+            return "Your top song is " + list(top_songs_dict.values())[0] + ". Nice bops!"
         else: 
-            output = "Your top genres are"
-            for index, genre in enumerate(top_genres_queue):
-                output += " (" + str(index + 1) + ") " + genre 
-            return output + ". Happy listening!"
+            output = "Your top songs are"
+            for index, song in enumerate(top_songs_dict.values()):
+                output += " (" + str(index + 1) + ") " + song 
+            return output + ". Nice bops!"
     except:
         print("An exception occurred. Something went wrong. :( uh oh")
 
 
-def reply_top_artists(self, time_range, limit, discord_user):
+def reply_top_artists(time_range, limit):
     """Returns a string with a user's top artists that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -249,11 +259,20 @@ def reply_top_artists(self, time_range, limit, discord_user):
     :rtype: string
     :return: a string that describes what a user's top artists are
     """
-    # Add try and except block
-    # calls compute_top_arists using the same parameters 
-    # stores the output of compute_top_artists in a queue
-    # loop through the queue and format a string ("Your top artists are ... ")
-    # Return string 
+    if limit < 0:
+        return "Please try a limit greater than 0! :)"
+
+    try:
+        top_artists_queue = compute_top_artists(time_range, limit)
+        if limit == 1:
+            return "Your top artist is " + top_artists_queue[0] + ". You have great taste!"
+        else: 
+            output = "Your top artists are"
+            for index, artist in enumerate(top_artists_queue):
+                output += " (" + str(index + 1) + ") " + artist
+            return output + ". You have great taste!"
+    except:
+        print("An exception occurred. Something went wrong. :( uh oh")
 
 def reply_top_songs_theory(self, top_songIDs, discord_user):
     """Returns a string with a user's theory data on their top songs over a given time range that
