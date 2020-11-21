@@ -41,7 +41,7 @@ def compute_genre(self, time_range, limit, discord_user):
     # parses through JSON to get the genres of the top 20 artists and stores in a dictionary (key = string representing genre name, value = int representing the “ranking” of the artist the genre is associated with)
     # Calls and returns compute_genre_helper method with genre_dictionary and limit as the parameter 
 
-async def compute_top_songs(self, time_range, limit, discord_user):
+def compute_top_songs(self, time_range, limit, discord_user):
     """Returns a user's top songs(s) over a given time range 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -64,9 +64,21 @@ async def compute_top_songs(self, time_range, limit, discord_user):
     # uses accessToken and Spotipy object and get user's top artists songs in JSON (uses limit parameter)
     # parses through JSON to get the top song’s name and ID. Adds top song’s name and ID to the dictionary
     # return the dictionary 
- 
+        # check is limit is out of bounds 
+    if limit > 10:
+        limit = 10
+    
+    # Make Spotify API call 
+    results = sp.current_user_top_songs(time_range=time_range, limit=limit)
 
-async def compute_top_artists(self, time_range, limit, discord_user):
+    # loop through JSON to get the artists' names
+    top_artists_queue = []
+    for artist in results['items']:
+        top_artists_queue.append(artist['name'])
+
+    return top_artists_queue
+
+def compute_top_artists(time_range, limit):
     """Returns a user's top artists(s) over a given time range 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -80,6 +92,20 @@ async def compute_top_artists(self, time_range, limit, discord_user):
     :rtype: list
     :return: dictionary with both the IDs and name 
     """
+    # check is limit is out of bounds 
+    if limit > 10:
+        limit = 10
+    
+    # Make Spotify API call 
+    results = sp.current_user_top_artists(time_range=time_range, limit=limit)
+
+    # loop through JSON to get the artists' names
+    top_artists_queue = []
+    for artist in results['items']:
+        top_artists_queue.append(artist['name'])
+
+    return top_artists_queue
+
     # Check that if limit is less than or equal to 10. Else, set limit equal to 10.
     # creates a queue that will store the top artists 
     # calls getAccessToken(discord username) from Spotify Auth class 
@@ -87,7 +113,7 @@ async def compute_top_artists(self, time_range, limit, discord_user):
     # parses through JSON to get the top artist’s name (string). Pushes top artist’s name into the queue. 
     # return the queue 
 
-async def compute_top_songs_theory(self, top_songIDs, discord_user):
+def compute_top_songs_theory(self, top_songIDs, discord_user):
     """Returns theory data on a user's top songs over a given time range 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -128,9 +154,9 @@ def compute_genre_helper(self, genre_dictionary, limit):
     :rtype: list
     :return: a queue of top genres sorted from most listened to genre to least listened to 
     """
-    output_genres = {}
-    count = 0
-    for key in genre_dictionary:
+    # output_genres = {}
+    # count = 0
+    # for key in genre_dictionary:
 
 
     # Create a queue that will store top genres
