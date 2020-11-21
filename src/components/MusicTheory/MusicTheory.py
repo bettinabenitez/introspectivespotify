@@ -253,5 +253,128 @@ def get_instrumentalness(song):
     for feature in audioFeatures:
         instrumental = feature['instrumentalness']
         return str(instrumental)
+        
+def reply_get_tempo(song):
+    """
+    reply_get_tempo will call the get_tempo(song) class which either returns a string or "none", 
+    if "none" then return "Sorry! This song does not exist." representing the tempo from 0 - 300 BPM. 
+    This method will concatenate a response for the input class which is easy for a bot reply. 
+    The string will include the Song name and the correct tempo.
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for tempo and formatted English sentences for the input class.
+    """
+
+def reply_get_key(song):
+    """
+    reply_get_key will call the get_key(song) class which either returns a string or "none", if "none" 
+    then return "Sorry! This song does not exist." representing the key ( e.g. 0 = C, 1 = C♯/D♭, 2 = D, 
+    and so on. If no key was detected, the value is -1). Inside this method, I will convert the numeric 
+    value to the musical representation of a key. Such that, if get_key(song) returned 0, then my string
+    will reply back with “C”. This method will concatenate a response for the input class which is easy 
+    for a bot reply. The string will include the Song name and the correct key. 
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for key and formatted English sentences for the input class.  
+
+    """
+
+def reply_get_time_signature(song):
+    """
+    reply_get_time_signature will call the get_time_signature(song) class which either returns a string or "none", 
+    if "none" then return "Sorry! This song does not exist." representing the time signature. This method will 
+    concatenate a response for the input class which is easy for a bot reply. The string will include the Song 
+    name and the correct time signature value.
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for the time signature and formatted English sentences for the input class.
+    """
+
+def reply_get_mode(song):
+    """
+    reply_get_mode will call the get_mode(song) class which returns a  string representing the mode 
+    (1 for Major, 0 for Minor). Inside this method, I will convert the numeric representation of mode 
+    to the musical representation (either major or minor). This method will concatenate a response for 
+    the input class which is easy for a bot reply. The string will include the Song name and the correct mode. 
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for the mode and formatted English sentences for the input class.
+
+    """
+
+def reply_get_mood(song):
+    """
+    reply_get_mood will call the get_mood(song) class which either returns a string or "none", if "none" 
+    then return "Sorry! This song does not exist." representing the valence as numeric representation.
+    I will create conditionals which check if anything below 0.5 would be classified as “sad, depressed, angry” 
+    while anything above and including 0.5 would be classified as “happy, cheerful, euphoric”. 
+    This method will concatenate a response for the input class which is easy for a bot reply. 
+    The string will include the Song name and the correct mood of either “sad, depressed, angry” or 
+    “happy, cheerful euphoric”. 
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for the mood and formatted English sentences for the input class.
+
+    """
+
+def reply_get_danceability(song):
+    """
+    reply_get_danceability will call the get_danceability(song) class which either returns a string or "none",
+    if "none" then return "Sorry! This song does not exist." representing the danceability from 0.0 to 1.0. 
+    Inside this method, I will convert the values to a more musical representation. Anything from 0.0 - 0.4 
+    would be “Low”, 0.4 -0.6 would be “Medium” and 0.6-1.0 would be “High”.  This method will concatenate a 
+    response for the input class which is easy for a bot reply. The string will include the Song name and 
+    the correct danceability. 
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for the danceability and formatted English sentences for the input class.
+    """
+
+def reply_get_acousticness(song):
+    """
+    reply_get_acousticness will call the get_acousticness(song) class which returns a  string representing the 
+    acoustics from 0.0 to 1.0 Inside this method, I will convert the values to a more musical representation. 
+    Anything from 0.0 - 0.4 would be “Low”, 0.4 -0.6 would be “Medium” and 0.6-1.0 would be “High”. 
+    This method will concatenate a response for the input class which is easy for a bot reply. 
+    The string will include the Song name and the correct acoustics. 
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for the acoustics and formatted English sentences for the input class.
+
+    """
+
+def reply_get_energy(song):
+    """
+    reply_get_energy will call the get_energy(song) class which either returns a string or "none", if "none" then 
+    return "Sorry! This song does not exist." representing the energy from 0.0-1.0. Inside this method, 
+    I will convert the values to a more musical representation. Anything from 0.0 - 0.4 would be “Low”, 
+    0.4 -0.6 would be “Medium” and 0.6-1.0 would be “High”. This method will concatenate a response for 
+    the input class which is easy for a bot reply. The string will include the Song name and the correct energy.
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for the energy and formatted English sentences for the input class. 
+    """
+
+def reply_get_instrumentalness(song):
+    """
+    reply_get_instrumentalness will call the get_instrumentalness(song) class which either returns a string or "none",
+    if "none" then return "Sorry! This song does not exist." representing the Instrumentalness from 0.0-1.0. 
+    Inside this method, I will convert the values to a more musical representation. Anything from 0.0 - 0.4 
+    would be “Low”, 0.4 -0.6 would be “Medium” and 0.6-1.0 would be “High”. This method will concatenate a 
+    response for the input class which is easy for a bot reply. The string will include the Song name and 
+    the correct instrumentalness. 
+
+    Param: String song: The requested song from the user.
+
+    Returns: A string that has the value for the instrumentalness and formatted English sentences for the input class. 
+    """
 
 
