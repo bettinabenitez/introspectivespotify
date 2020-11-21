@@ -89,8 +89,6 @@ def compute_genre(time_range, limit):
                 top_genres_dict[genre].append(index)
     
     return (compute_genre_helper(top_genres_dict, limit))
-    
-print(compute_genre("medium_term", 5))
 
 def compute_top_songs(time_range, limit):
     """Returns a user's top songs(s) over a given time range 
@@ -207,7 +205,7 @@ def reply_genre(self, time_range, limit, discord_user):
     # loop through the queue and format a string ("Your top genres are ___")
     # Return string 
     
-def reply_top_songs(self, time_range, limit, discord_user):
+def reply_top_songs(time_range, limit):
     """Returns a string with a user's top songs that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -221,11 +219,21 @@ def reply_top_songs(self, time_range, limit, discord_user):
     :rtype: string
     :return: a string that describes what a user's top songs are
     """
-    # Add try and except block
-    # calls compute_top_songs using the same parameters
-    # stores the output of compute_top_songs in a dictionary
-    # loop through the values of the dictionary and format a string ("Your top songs are ... ")
-    # Return string 
+    if limit < 0:
+        return "Please try a limit greater than 0! :)"
+
+    try:
+        top_genres_queue = compute_genre(time_range, limit)
+        if limit == 1:
+            return "Your top genre is " + top_genres_queue[0] + ". Happy listening!"
+        else: 
+            output = "Your top genres are"
+            for index, genre in enumerate(top_genres_queue):
+                output += " (" + str(index + 1) + ") " + genre 
+            return output + ". Happy listening!"
+    except:
+        print("An exception occurred. Something went wrong. :( uh oh")
+
 
 def reply_top_artists(self, time_range, limit, discord_user):
     """Returns a string with a user's top artists that the Discord Bot will reply to the chat 
