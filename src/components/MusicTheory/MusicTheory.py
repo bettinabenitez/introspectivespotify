@@ -147,12 +147,14 @@ def get_mood(song):
     Param: String song: The requested song from the user.
 
     Returns: A string representing the valence from (0.0-1.0)
+
+    TDD: Accidentally had 'mood' as the key when it should be 'valence'
     """
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
-        mood = feature['mood']
+        mood = feature['valence']
         return str(mood)
 
 
@@ -170,14 +172,17 @@ def get_danceability(song):
     Param: String song: The requested song from the user.
 
     Returns: A string representing the danceability from (0.0 -1.0).
+
+    TDD: Accidentally had 'valance" as the key for the feature dict.
     """
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
-        danceability = feature['danceability']
-        return str(danceability)
+        dance = feature["danceability"]
+        return str(dance)
 
+#print(get_danceability("Thank you for the music"))
 
 def get_acousticness(song):
     """
@@ -250,7 +255,7 @@ def get_instrumentalness(song):
         return str(instrumental)
 
 
-def get_all_musictheory(song):
+def get_all_music_theory(song):
     """
     This function will call the helper method audio_features_helpself,song) to compute a 
     JSON dictionary object to be returned for the MusicHistory class to use.
@@ -258,7 +263,10 @@ def get_all_musictheory(song):
     Param: String song: The requested song from the user.
 
     Returns:  A JSON Dictionary object with all audio_features.
-            An empty list if there are no songs.         
+            An empty list if there are no songs.
+
+    TDD: Forgot underscore in function name.         
     """
     return audio_features_help(song)
+
 

@@ -46,42 +46,54 @@ class MusicTheoryTest(unittest.TestCase):
     #####################
     ## Phase Two Tests ##
     #####################
+
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_tempo(self):
         hardcodedTempo = "98.879"
         self.assertEqual(MusicTheory.get_tempo("Thank You For The Music"), hardcodedTempo)
     
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_key(self):
         hardcodedKey = "4"
         self.assertEqual(MusicTheory.get_key("Thank You For The Music"), hardcodedKey)
 
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_time_signature(self):
         hardcodedTS = "4"
         self.assertEqual(MusicTheory.get_time_signature("Thank You For The Music"), hardcodedTS)
 
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_mode(self):
         hardcodedMode = "1"
         self.assertEqual(MusicTheory.get_mode("Thank You For The Music"), hardcodedMode)
 
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_mood(self):
         hardcodedMood = "0.479"
         self.assertEqual(MusicTheory.get_mood("Thank You For The Music"), hardcodedMood)
 
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_danceability(self):
         hardcodedDance = "0.527"
         self.assertEqual(MusicTheory.get_danceability("Thank You For The Music"), hardcodedDance)
 
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_acousticness(self):
         hardcodedAcous = "0.932"
         self.assertEqual(MusicTheory.get_acousticness("Thank You For The Music"), hardcodedAcous) 
 
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_energy(self):
         hardcodedEnergy = "0.134"
         self.assertEqual(MusicTheory.get_energy("Thank You For The Music"), hardcodedEnergy) 
 
+    # TESTS PASSED ON 20th Nov, 2020
     def test_get_instrumentalness(self):
         hardcodedInstru = "0"
         self.assertEqual(MusicTheory.get_instrumentalness("Thank You For The Music"), hardcodedInstru)
     
+    # Test failed due to spelling error in assert.
+    # TESTS PASSED ON 20th Nov, 2020 
     def test_get_all_musictheory(self):
         hardcodedDict = [{
                             "danceability": 0.527,
@@ -103,7 +115,7 @@ class MusicTheoryTest(unittest.TestCase):
                             "duration_ms": 224107,
                             "time_signature": 4
         }]
-        self.assertEqual(MusicTheory.get_all_music_theory("Thank You For The Music"), hardCodedDict)
+        self.assertEqual(MusicTheory.get_all_music_theory("Thank You For The Music"), hardcodedDict)
 
 
 if __name__ == '__main__':
