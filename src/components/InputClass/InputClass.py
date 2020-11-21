@@ -5,6 +5,7 @@ from discord.ext import commands
 sys.path.append('../')
 
 from SpotifyAuth.SpotifyAuth import spotify_login
+from MusicHistory.MusicHistory import reply_top_songs_theory
 
 # import MusicHistory
 
@@ -29,6 +30,12 @@ class InputClass(commands.Cog):
     async def genre(self, ctx):
         user = ctx.author
         # return MusicHistory.compute_genre(user)
+
+    @commands.command()
+    async def test(self, ctx):
+        user = ctx.author
+        reply = reply_top_songs_theory('long_term', 5)
+        await user.send(reply)
         
 
 def setup(bot):
