@@ -5,6 +5,11 @@ class MusicTheoryTest(unittest.TestCase):
     #####################
     ## Phase One Tests ##
     ####################
+    # These tests are testing the blackbox and whitebox functionality 
+    # of the inner method, audio_features_help in which every method
+    # depends on. It checks to make sure that a correct JSON object 
+    # is created and an error message is returned if there is no 
+    # song in the library. 
 
     # Changed the hardCodedAF object after coding due to my own
     # forgetfullness of the brackets surrounding the object!
