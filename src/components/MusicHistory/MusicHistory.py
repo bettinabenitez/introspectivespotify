@@ -1,8 +1,12 @@
-#from MusicTheory.py import get_all_musictheory
+import sys
 import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
+
+sys.path.append('../')
+from MusicTheory.MusicTheory import get_all_music_theory
+
 load_dotenv()
 
 # CREATE SPOTIPY OBJECT
@@ -169,15 +173,16 @@ def compute_top_songs_theory(self, top_songIDs, discord_user):
     :rtype: dictionary
     :return: a sorted dictionary with both the song IDs (key) and song names (value)
     """
-    # create a theory dictionary which will have the following keys. Each key will have a list as its value. 
-        # Tempo
-        # Time_signature
-        # Key
-        # Mode
-        # Danceability
-        # Acousticness
-        # Energy
-        # instrumentalness
+    theory_dictionary = {"tempo": [],
+                        "time_signature": [],
+                        "key": [],
+                        "mode": [],
+                        "danceability": [],
+                        "acousticness": [],
+                        "energy": [],
+                        "instrumentalness": []}
+    for song in top_songIDs:
+        song_theory = get_all_music_theory(song)
     # loop through top_songIDs dictionary’s keys and calls get_all_music_theory method from the MusicTheory Class on each song ID. Get_all_music_theory returns a dictionary that we will parse through and append data into the values of our theory dictionary. 
     # Call and return compute_top_songs_theory_helper with theory dictionary as a parameter 
 
@@ -244,7 +249,6 @@ def reply_top_songs(time_range, limit):
     except:
         print("An exception occurred. Something went wrong. :( uh oh")
 
-
 def reply_top_artists(time_range, limit):
     """Returns a string with a user's top artists that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
@@ -274,7 +278,7 @@ def reply_top_artists(time_range, limit):
     except:
         print("An exception occurred. Something went wrong. :( uh oh")
 
-def reply_top_songs_theory(self, top_songIDs, discord_user):
+def reply_top_songs_theory(time_range, limit):
     """Returns a string with a user's theory data on their top songs over a given time range that
     the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
@@ -292,8 +296,11 @@ def reply_top_songs_theory(self, top_songIDs, discord_user):
     :rtype: string
     :return: a string that describes what a user's theory data on top songs
     """
+    song_ids = compute_top_songs(time_range, limit).keys()
+    print(song_ids)
     # Add try and except block
     # calls compute_top_songs and passes the output to compute_top_songs_theory 
     # stores the output of compute_top_songs_theory in a dictionary
     # loop through the dictionary and format a string ("Your top songs have an average tempo of ...,  your most common key(s) is/are … "). Inside the loop, there should an if/else to check if the length of the length of the value is greater than 1 (there was a tie). If there a tie is found, the string should use the “are” word instead of “is.” The noun should also be plural instead of singular. 
     # Return string 
+print()
