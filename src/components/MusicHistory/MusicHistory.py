@@ -1,14 +1,24 @@
 #from MusicTheory.py import get_all_musictheory
+import os
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyOAuth
+from dotenv import load_dotenv
+load_dotenv()
 
-
-# TO DO create spotipy object here 
+# CREATE SPOTIPY OBJECT
+CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
+scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
+                            client_secret=CLIENT_SECRET,
+                            redirect_uri=REDIRECT_URI,
+                            scope=scope, cache_path=".oAuthCache"))
 
 ###############################
 ##### COMPUTATION METHODS #####
 ###############################
-async def compute_genre(self, time_range, limit, discord_user):
+def compute_genre(self, time_range, limit, discord_user):
     """Returns a user's top genre(s) over a given time range 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -22,6 +32,8 @@ async def compute_genre(self, time_range, limit, discord_user):
     :rtype: list
     :return: a queue in the order of most listened to genre to least listened to
     """
+    genre_dict = {}
+
     # Create a genre_dictionary to store the potential top genres 
     # Check that if limit is less than or equal to 5. Else, set limit equal to 5.
     # Calls getAccessToken(discord username) from Spotify Auth class 
@@ -105,7 +117,7 @@ async def compute_top_songs_theory(self, top_songIDs, discord_user):
 ######################################
 ##### COMPUTATION HELPER METHODS #####
 ######################################
-async def compute_genre_helper(self, genre_dictionary, limit):
+def compute_genre_helper(self, genre_dictionary, limit):
     """Returns theory data on a user's top songs over a given time range 
     :param genre_dictionary: 
     :type genre_dictionary: dictionary 
@@ -116,13 +128,18 @@ async def compute_genre_helper(self, genre_dictionary, limit):
     :rtype: list
     :return: a queue of top genres sorted from most listened to genre to least listened to 
     """
+    output_genres = {}
+    count = 0
+    for key in genre_dictionary:
+
+
     # Create a queue that will store top genres
     # Loops through the keys of genres_dictionary and pushes the top genre (based on order of highest occurrence or mode) into queue. Continues to loop until the queue reaches the length limit. 
     # ties are broken based what genre is associated with the artist(s) that is listened to more
     # Returns a queue
 
 
-async def compute_top_songs_theory_helper(self, theory_dictionary):
+def compute_top_songs_theory_helper(self, theory_dictionary):
     """Returns theory data on a user's top songs over a given time range 
     :param theory_dictionary: 
     :type theory_dictionary: dictionary 
@@ -141,7 +158,7 @@ async def compute_top_songs_theory_helper(self, theory_dictionary):
 #########################
 ##### REPLY METHODS #####
 #########################
-async def reply_genre(self, time_range, limit, discord_user):
+def reply_genre(self, time_range, limit, discord_user):
     """Returns a string with a user's top genres that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -161,7 +178,7 @@ async def reply_genre(self, time_range, limit, discord_user):
     # loop through the queue and format a string ("Your top genres are ___")
     # Return string 
     
-async def reply_top_songs(self, time_range, limit, discord_user):
+def reply_top_songs(self, time_range, limit, discord_user):
     """Returns a string with a user's top songs that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -181,7 +198,7 @@ async def reply_top_songs(self, time_range, limit, discord_user):
     # loop through the values of the dictionary and format a string ("Your top songs are ... ")
     # Return string 
 
-async def reply_top_artists(self, time_range, limit, discord_user):
+def reply_top_artists(self, time_range, limit, discord_user):
     """Returns a string with a user's top artists that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -201,7 +218,7 @@ async def reply_top_artists(self, time_range, limit, discord_user):
     # loop through the queue and format a string ("Your top artists are ... ")
     # Return string 
 
-async def reply_top_songs_theory(self, top_songIDs, discord_user):
+def reply_top_songs_theory(self, top_songIDs, discord_user):
     """Returns a string with a user's theory data on their top songs over a given time range that
     the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
@@ -218,7 +235,6 @@ async def reply_top_songs_theory(self, top_songIDs, discord_user):
 
     :rtype: string
     :return: a string that describes what a user's theory data on top songs
-
     """
     # Add try and except block
     # calls compute_top_songs and passes the output to compute_top_songs_theory 
