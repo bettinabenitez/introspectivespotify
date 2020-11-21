@@ -18,7 +18,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
 ###############################
 ##### COMPUTATION METHODS #####
 ###############################
-def compute_genre(self, time_range, limit, discord_user):
+def compute_genre(time_range, limit):
     """Returns a user's top genre(s) over a given time range 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -32,14 +32,24 @@ def compute_genre(self, time_range, limit, discord_user):
     :rtype: list
     :return: a queue in the order of most listened to genre to least listened to
     """
-    genre_dict = {}
+    # TO DO: Calls getAccessToken(discord username) from Spotify Auth class 
 
-    # Create a genre_dictionary to store the potential top genres 
-    # Check that if limit is less than or equal to 5. Else, set limit equal to 5.
-    # Calls getAccessToken(discord username) from Spotify Auth class 
-    # uses accessToken and Spotipy object and get user's top 20 artists in JSON 
-    # parses through JSON to get the genres of the top 20 artists and stores in a dictionary (key = string representing genre name, value = int representing the “ranking” of the artist the genre is associated with)
-    # Calls and returns compute_genre_helper method with genre_dictionary and limit as the parameter 
+    # Make Spotify API call to get user's top artists
+    results = sp.current_user_top_artists(time_range=time_range, limit=20)
+
+    # key = genre name, value = "rankings" of the artist(s) associated with the genre 
+    top_genres_dict = {}
+    for index, artist in enumerate(results['items']):
+        for genre in artist['genres']: 
+            if top_genres_dict.get(genre) == None: 
+                top_genres_dict[genre] = [index]
+            else:
+                top_genres_dict[genre].append(index)
+        
+    # TO DO: Calls and returns compute_genre_helper method with genre_dictionary and limit as the parameter 
+    return top_genres_dict
+    
+print(compute_genre(time_range = "medium_term", limit = 5))
 
 def compute_top_songs(time_range, limit):
     """Returns a user's top songs(s) over a given time range 
