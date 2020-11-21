@@ -40,7 +40,7 @@ class MusicTheoryTest(unittest.TestCase):
     # Changed the type of assert as I wrote the wrong one! Otherwise all my tests passed.
     # TESTS PASSED ON 20th Nov, 2020
     def test_audio_features_error(self):
-        errorMessage = "Sorry! That track does not exist"
+        errorMessage = "None"
         self.assertEqual(MusicTheory.audio_features_help("Foo Bar Bash Bops"), errorMessage)
 
     #####################
@@ -50,7 +50,7 @@ class MusicTheoryTest(unittest.TestCase):
         hardcodedTempo = "98.879"
         self.assertEqual(MusicTheory.get_tempo("Thank You For The Music", hardcodedTempo)) 
     
-    def test_get_tempo(self):
+    def test_get_key(self):
         hardcodedKey = "4"
         self.assertEqual(MusicTheory.get_key("Thank You For The Music", hardcodedKey))
 
