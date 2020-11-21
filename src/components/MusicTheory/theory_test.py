@@ -38,6 +38,46 @@ class MusicTheoryTest(unittest.TestCase):
         errorMessage = "Sorry! That track does not exist"
         self.assertEqual(MusicTheory.audio_features_help("Foo Bar Bash Bops"), errorMessage)
 
+    #####################
+    ## Phase Two Tests ##
+    #####################
+    def test_get_tempo(self):
+        hardcodedTempo = "98.879"
+        self.assertEqual(MusicTheory.get_tempo("Thank You For The Music", hardcodedTempo)) 
+    
+    def test_get_tempo(self):
+        hardcodedKey = "4"
+        self.assertEqual(MusicTheory.get_key("Thank You For The Music", hardcodedKey))
+
+    def test_get_time_signature(self):
+        hardcodedTS = "4"
+        self.assertEqual(MusicTheory.get_time_signature("Thank You For The Music", hardcodedTS))
+
+    def test_get_mode(self):
+        hardcodedMode = "1"
+        self.assertEqual(MusicTheory.get_mode("Thank You For The Music", hardcodedMode))  
+
+    def test_get_mood(self):
+        hardcodedMood = "0.479"
+        self.assertEqual(MusicTheory.get_mood("Thank You For The Music", hardcodedMood)) 
+
+    def test_get_danceability(self):
+        hardcodedDance = "0.527"
+        self.assertEqual(MusicTheory.get_danceability("Thank You For The Music", hardcodedDance)) 
+
+    def test_get_acousticness(self):
+        hardcodedAcous = "0.932"
+        self.assertEqual(MusicTheory.get_acousticness("Thank You For The Music", hardcodedAcous)) 
+
+    def test_get_energy(self):
+        hardcodedEnergy = "0.134"
+        self.assertEqual(MusicTheory.get_energy("Thank You For The Music", hardcodedEnergy)) 
+
+    def test_get_instrumentalness(self):
+        hardcodedInstru = "0"
+        self.assertEqual(MusicTheory.get_instrumentalness("Thank You For The Music", hardcodedInstru)) 
+
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MusicTheoryTest)
     unittest.TextTestRunner(verbosity=2).run(suite)
