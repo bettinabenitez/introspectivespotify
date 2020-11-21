@@ -80,7 +80,30 @@ class MusicTheoryTest(unittest.TestCase):
 
     def test_get_instrumentalness(self):
         hardcodedInstru = "0"
-        self.assertEqual(MusicTheory.get_instrumentalness("Thank You For The Music", hardcodedInstru)) 
+        self.assertEqual(MusicTheory.get_instrumentalness("Thank You For The Music", hardcodedInstru))
+    
+    def test_get_all_musictheory(self):
+        hardcodedDict = [{
+                            "danceability": 0.527,
+                            "energy": 0.134,
+                            "key": 4,
+                            "loudness": -11.264,
+                            "mode": 1,
+                            "speechiness": 0.0348,
+                            "acousticness": 0.932,
+                            "instrumentalness": 0,
+                            "liveness": 0.103,
+                            "valence": 0.479,
+                            "tempo": 98.879,
+                            "type": "audio_features",
+                            "id": "64yJ0tpcSveze3KJAdZGKe",
+                            "uri": "spotify:track:64yJ0tpcSveze3KJAdZGKe",
+                            "track_href": "https://api.spotify.com/v1/tracks/64yJ0tpcSveze3KJAdZGKe",
+                            "analysis_url": "https://api.spotify.com/v1/audio-analysis/64yJ0tpcSveze3KJAdZGKe",
+                            "duration_ms": 224107,
+                            "time_signature": 4
+        }]
+        self.assertEqual(MusicTheory.get_all_music_theory("Thank You For The Music"), hardCodedDict)
 
 
 if __name__ == '__main__':
