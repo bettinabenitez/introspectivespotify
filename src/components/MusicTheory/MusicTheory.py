@@ -496,3 +496,39 @@ def reply_all_musictheory(song):
         return (reply_get_tempo(song) + "\n" + reply_get_key(song) + "\n" + reply_get_time_signature(song) + "\n" +
         reply_get_mode(song) + "\n" + reply_get_mood(song) + "\n" + reply_get_danceability(song) + "\n" + reply_get_acousticness(song) + "\n" +
         reply_get_energy(song) + "\n" + reply_get_instrumentalness(song))
+    
+    ######################
+    ## Phase Four Code  ##
+    ######################
+
+def compare_theory(song, song_compare):
+    """
+    This method will use the helper function, audio_features_help to compare for similarities with another song, song_compare. 
+    By using the help method, I will create two calls to the helper function for both song and song_compare and store them in 
+    different variables within the method. Then, by looping through both objects, I will look for values that are either equal 
+    or +/- 0.1  off from their initial floating values. If the values are similar, I will store that into a list with all the 
+    correlating audio_features between the songs for the reply_compare_theory(self, song, song_compare) to use. If there are no 
+    audio features that are similar, I will return an empty list for the reply method to use as well.
+
+    Param: String song: One of the requested songs from the user. 
+    Param: String song_comapre: The other song to compare with Param song. 
+
+    Returns: A list with all audio_features that are similar between song and song_compare. 
+    """
+
+def reply_compare_theory(song, song_compare):
+    """
+    reply_compare_theory(song, song_compare) will call compare_theory(song, song_compare) to compute the similarities between two 
+    songs and store it into a new list which holds the similar audio_features. If the returned list is empty, that means that there 
+    were no computed similarities and the method will return a string containing  “Sorry! There were no similarities between these 
+    songs.”. If the returned list has values, then it will return a string which contains all of the similar audio features and the 
+    two songs as well for easy readability. 
+
+    Param: String song: One of the requested songs from the user. 
+    Param: String song_comapre: The other song to compare with Param song. 
+
+    Returns: A string that either reads “Sorry! There were no similarities between these songs.” if the returned list from 
+             compare_theory(song, song_compare) was empty or a string that contains all the similar audio_features between 
+             two songs for the InputClass to use. 
+    """
+
