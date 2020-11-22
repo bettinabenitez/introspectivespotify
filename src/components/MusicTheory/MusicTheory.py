@@ -508,13 +508,37 @@ def compare_theory(song, song_compare):
     different variables within the method. Then, by looping through both objects, I will look for values that are either equal 
     or +/- 0.1  off from their initial floating values. If the values are similar, I will store that into a list with all the 
     correlating audio_features between the songs for the reply_compare_theory(self, song, song_compare) to use. If there are no 
-    audio features that are similar, I will return an empty list for the reply method to use as well.
+    audio features that are similar, I will return an empty list for the reply method to use as well. 
 
     Param: String song: One of the requested songs from the user. 
     Param: String song_comapre: The other song to compare with Param song. 
 
     Returns: A list with all audio_features that are similar between song and song_compare. 
     """
+    similaritiesList = []
+    songA_features = audio_features_help(song)[0]
+    songB_features = audio_features_help(song_compare)[0]
+
+    if songA_features == "None" or songB_features == "None":
+        return similaritiesList
+    for (featureA,valueA), (featureB,valueB) in zip(songA_features.items(), songB_features.items()):
+        if (featureA == "loudness" or featureA == "speechiness" or featureA == "liveness" or featureA == "type"
+        or featureA == "id" or featureA == "uri" or featureA == "track_href" or featureA == "analysis_url" or
+        featureA == "duration_ms"):
+            continue
+        else:
+            if featureA == "tempo":
+                if valueA - 1 <= valueB <= valueA + 1:
+                    similaritiesList.append(featureA)
+            elif featureA == "mode":
+                if valueA == valueB:
+                    similaritiesList.append(featureA)
+            elif featureA == "instrumentalness":
+                if valueA - 0.01 <= valueB <= valueA + 0.01:
+                    similaritiesList.append(featureA)
+            elif valueA - 0.1 <= valueB <= valueA + 0.1:
+                    similaritiesList.append(featureA)  
+    return similaritiesList
 
 def reply_compare_theory(song, song_compare):
     """
@@ -531,4 +555,19 @@ def reply_compare_theory(song, song_compare):
              compare_theory(song, song_compare) was empty or a string that contains all the similar audio_features between 
              two songs for the InputClass to use. 
     """
+    similaritiesList = compare_theory(song,song_compare)
+    similaritiesString = song + " and " + song_compare + " are similar in: \n"
+    if similaritiesList == []:
+        return "Sorry! There were no similarties between these songs."
+    else:
+        for feature in similaritiesList:
+            if feature == "valence":
+                similaritiesString += "mood \n"
+            elif feature == "time_signature":
+                similaritiesString += "time signature \n" 
+            else:
+                similaritiesString +=  feature + " \n"
+    return similaritiesString
+
+
 

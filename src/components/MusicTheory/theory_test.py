@@ -257,10 +257,18 @@ class MusicTheoryTest(unittest.TestCase):
 
     def test_compare_theory_functionality(self):
         self.assertEqual(MusicTheory.reply_compare_theory("POV", "POV"),("POV and POV are similar in: \n"
-        "danceability, energy, key, mode, acousticness, instrumentalness, mood, and tempo!"))
+        "danceability \n"
+        "energy \n "
+        "key \n"
+        "mode \n"
+        "acousticness \n"
+        "instrumentalness \n"
+        "mood \n"
+        "tempo \n"
+        "time signature"))
     
     def test_compare_theory_nomatch(self):
-        self.assertEqual(MusicTheory.reply_compare_theory("Swan Lake", "King Kunta"),("Sorry! There were no similarties between these songs."))
+        self.assertEqual(MusicTheory.reply_compare_theory("Far More Blue", "THAT BITCH"),("Sorry! There were no similarties between these songs."))
 
     # I got rid of my second whitebox test for compare_theory as my first blackbox test technically checks the successful branch.
 if __name__ == '__main__':
