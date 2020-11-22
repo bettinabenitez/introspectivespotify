@@ -253,7 +253,11 @@ def get_instrumentalness(song):
     for feature in audioFeatures:
         instrumental = feature['instrumentalness']
         return str(instrumental)
-        
+
+    ######################
+    ## Phase Three Code ##
+    ######################
+    
 def reply_get_tempo(song):
     """
     reply_get_tempo will call the get_tempo(song) class which either returns a string or "none", 
