@@ -477,7 +477,7 @@ def reply_get_instrumentalness(song):
 
 def reply_all_musictheory(song):
     """
-     reply_all_music_theory will call the get_all_music_theory which holds a 
+     reply_all_music_theory will call the helper which holds a 
      JSON object representing all of the audio_features from the Spotipy library. 
      Using a for: each loop to parse through the object, the method will create a 
      reply containing all of the audio_features to return back to the calling input class. 

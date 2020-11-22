@@ -37,12 +37,11 @@ class InputClass(commands.Cog):
         user = ctx.author
         reply = reply_top_songs_theory('long_term', 5)
         await user.send(reply)
-        
+
     @commands.command()
     async def musictheory(self, ctx, song):
-        user = ctx.author
         reply = reply_all_musictheory(song)
-        await user.send(reply)
+        await ctx.send(reply)
         
 
 def setup(bot):
