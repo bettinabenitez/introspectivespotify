@@ -134,33 +134,41 @@ class MusicTheoryTest(unittest.TestCase):
         self.assertEqual(MusicTheory.reply_get_instrumentalness("Thank You For The Music"), hardcodedInstru)
     
     # Changed test strings due to inconsistency with original plan, my mistake.
+    # added extra underscore in method name and had extra spaces due to \N. 
+    # forgot the ! at the end of BPM too :)
     def test_reply_all_musictheory(self):
-        hardcodedDict = ("Thank You For The Music has a tempo of 98.879 BPM \n" 
-                         "Thank You For The Music has a key of E! \n" 
-                         "Thank You For The Music has a time signature of 4 beats per bar! \n"
-                         "Thank You For The Music is in the Major modality! \n"
-                         "Thank You For The Music is generally sad, depressed, or angry :( \n"
-                         "Thank You For The Music has medium danceability! \n"
-                         "Thank You For The Music has high acoustics! \n"
-                         "Thank You For The Music has low energy! \n"
-                         "Thank You For The Music has low instrumentals! ")
-        self.assertEqual(MusicTheory.reply_all_music_theory("Thank You For The Music"), hardcodedDict)
+        hardcodedDict = ("Thank You For The Music has a tempo of 98.879 BPM!\n" 
+                         "Thank You For The Music has a key of E!\n" 
+                         "Thank You For The Music has a time signature of 4 beats per bar!\n"
+                         "Thank You For The Music is in the Major modality!\n"
+                         "Thank You For The Music is generally sad, depressed, or angry :(\n"
+                         "Thank You For The Music has medium danceability!\n"
+                         "Thank You For The Music has high acoustics!\n"
+                         "Thank You For The Music has low energy!\n"
+                         "Thank You For The Music has low instrumentals!")
+        self.assertEqual(MusicTheory.reply_all_musictheory("Thank You For The Music"), hardcodedDict)
 
     ## Key Tests
+    # Original song was not in the key of C, Google Lied ;(
     def test_reply_key_C(self):
-        self.assertEqual(MusicTheory.reply_get_key("Stay"), "Stay has a key of C!")
+        self.assertEqual(MusicTheory.reply_get_key("Chained To The Rhythm"), "Chained To The Rhythm has a key of C!")
 
+    # Original song was not in the key of C#, Google Lied ;(
+    # Same for second song
     def test_reply_key_CS(self):
-        self.assertEqual(MusicTheory.reply_get_key("I See Fire"), "I See Fire has a key of C#!")
+        self.assertEqual(MusicTheory.reply_get_key("Bounce Back"), "Bounce Back has a key of C#!")
 
     def test_reply_key_D(self):
         self.assertEqual(MusicTheory.reply_get_key("Love Story"), "Love Story has a key of D!")
 
+    # Original song was not in the key of D#, Google Lied ;(
+    # Same with second song...
     def test_reply_key_DS(self):
-        self.assertEqual(MusicTheory.reply_get_key("Psycho"), "Psycho has a key of D#!")
+        self.assertEqual(MusicTheory.reply_get_key("Harajuku Girls"), "Harajuku Girls has a key of D#!")
 
+    # Original song was not in the key of E, Google Lied ;(
     def test_reply_key_E(self):
-        self.assertEqual(MusicTheory.reply_get_key("Pumped Up Kicks"), "Pumped Up Kicks has a key of E!")
+        self.assertEqual(MusicTheory.reply_get_key("Happy Now"), "Happy Now has a key of E!")
 
     def test_reply_key_F(self):
         self.assertEqual(MusicTheory.reply_get_key("This Is America"), "This Is America has a key of F!")
@@ -168,24 +176,27 @@ class MusicTheoryTest(unittest.TestCase):
     def test_reply_key_FS(self):
         self.assertEqual(MusicTheory.reply_get_key("Lucid Dreams"), "Lucid Dreams has a key of F#!")
 
+    # Original song was not in the key of G, Google Lied ;(
     def test_reply_key_G(self):
-        self.assertEqual(MusicTheory.reply_get_key("Rockstar"), "Rockstar has a key of G!")
+        self.assertEqual(MusicTheory.reply_get_key("Still Got Time"), "Still Got Time has a key of G!")
 
     def test_reply_key_GS(self):
         self.assertEqual(MusicTheory.reply_get_key("Don't Cry"), "Don't Cry has a key of G#!")
 
     def test_reply_key_A(self):
         self.assertEqual(MusicTheory.reply_get_key("No Tears Left To Cry"), "No Tears Left To Cry has a key of A!")
-    
-    def test_reply_key_AS(self):
-        self.assertEqual(MusicTheory.reply_get_key("Sicko Mode"), "Sicko Mode has a key of A#!")
 
+    # Original song was not in the key of C#, Google Lied ;(
+    def test_reply_key_AS(self):
+        self.assertEqual(MusicTheory.reply_get_key("Hollaback Girl"), "Hollaback Girl has a key of A#!")
+
+    # Forgot exclamation point at the end of test also mispelled Pijama. 
     def test_reply_key_B(self):
-        self.assertEqual(MusicTheory.reply_get_key("Sin Pijama"), "Sin Pajama has a key of B")
+        self.assertEqual(MusicTheory.reply_get_key("Sin Pijama"), "Sin Pijama has a key of B!")
     
 # Mode Tests
     def test_get_mode_0(self):
-        self.assertEqual(MusicTheory.reply_get_mode("Wrecking Ball"), "Wrecking Ball is in the Minor modality!")
+        self.assertEqual(MusicTheory.reply_get_mode("LIKE I WOULD"), "LIKE I WOULD is in the Minor modality!")
     
     def test_get_mode_1(self):
         self.assertEqual(MusicTheory.reply_get_mode("Someone Like You"), "Someone Like You is in the Major modality!")
@@ -198,14 +209,15 @@ class MusicTheoryTest(unittest.TestCase):
         self.assertEqual(MusicTheory.reply_get_mood("If I Could Fly"), "If I Could Fly is generally sad, depressed, or angry :(")
 
 # Danceability Tests 
+# All of these tests had the wrong information- I was looking at the wrong audio_feature! Oops.
     def test_get_dance_M(self):
-        self.assertEqual(MusicTheory.reply_get_danceability("If I Could Fly"), "If I Could Fly has medium danceability!")
+        self.assertEqual(MusicTheory.reply_get_danceability("Dusk Till Dawn"), "Dusk Till Dawn has low danceability!")
 
     def test_get_dance_L(self):
-        self.assertEqual(MusicTheory.reply_get_danceability("I Have A Dream"), "I Have A Dream has low danceability!")
+        self.assertEqual(MusicTheory.reply_get_danceability("Mamma Mia"), "Mamma Mia has high danceability!")
 
     def test_get_dance_H(self):
-        self.assertEqual(MusicTheory.reply_get_danceability("Honey, Honey"), "Honey, Honey has high danceability!")
+        self.assertEqual(MusicTheory.reply_get_danceability("Honey, Honey"), "Honey, Honey has medium danceability!")
 
 # acoustics tests
     def test_get_acoust_H(self):
@@ -223,19 +235,21 @@ class MusicTheoryTest(unittest.TestCase):
 
     def test_get_energy_L(self):
         self.assertEqual(MusicTheory.reply_get_energy("Goodnight N Go"), "Goodnight N Go has medium energy!!")
-
+    
+    # Picked the incorrect song. 
     def test_get_energy_L(self):
-        self.assertEqual(MusicTheory.reply_get_energy("Heaven"), "Heaven has low energy!")
+        self.assertEqual(MusicTheory.reply_get_energy("Intermission:Flower"), "Intermission:Flower has low energy!")
 
 # instrumental tests 
     def test_get_instrumental_H(self):
         self.assertEqual(MusicTheory.reply_get_instrumentalness("King Kunta"), "King Kunta has low instrumentals!")
 
+    # Had the wrong song harcoded!
     def test_get_instrumental_M(self):
-        self.assertEqual(MusicTheory.reply_get_instrumentalness("I'm Closing My Eye"), "Goodnight N Go has medium instrumentals!")
-
+        self.assertEqual(MusicTheory.reply_get_instrumentalness("I'm Closing My Eye"), "I'm Closing My Eye has medium instrumentals!")
+    # Had the wrong song harcoded!
     def test_get_instrumental_L(self):
-        self.assertEqual(MusicTheory.reply_get_instrumentalness("Swan Lake"), "Heaven has high instrumentals!")
+        self.assertEqual(MusicTheory.reply_get_instrumentalness("Swan Lake"), "Swan Lake has high instrumentals!")
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MusicTheoryTest)

@@ -264,12 +264,14 @@ def reply_get_tempo(song):
     Param: String song: The requested song from the user.
 
     Returns: A string that has the value for tempo and formatted English sentences for the input class.
+
+    TDD: Forgot BPM at the end of the reply string.
     """
     tempo = get_tempo(song)
     if tempo == "None":
         return "Sorry! This song does not exist."
     else: 
-        return song + " has a tempo of" + " " + tempo + "!"
+        return song + " has a tempo of" + " " + tempo + " BPM!"
 
 def reply_get_key(song):
     """
@@ -324,12 +326,14 @@ def reply_get_time_signature(song):
     Param: String song: The requested song from the user.
 
     Returns: A string that has the value for the time signature and formatted English sentences for the input class.
+
+    TDD: Forgot to change variable name to "timeSig" from tempo.
     """
     timeSig = get_time_signature(song)
     if timeSig == "None":
         return "Sorry! This song does not exist."
     else: 
-        return song + " has a time signature of" + " " + tempo + " beats per bar!"
+        return song + " has a time signature of" + " " + timeSig + " beats per bar!"
 
 def reply_get_mode(song):
     """
@@ -453,10 +457,12 @@ def reply_get_instrumentalness(song):
 
     Param: String song: The requested song from the user.
 
-    Returns: A string that has the value for the instrumentalness and formatted English sentences for the input class. 
+    Returns: A string that has the value for the instrumentalness and formatted English sentences for the input class.
+    
+    TDD: Accidentally did not change the variable from energy to instrumentals
     """
     instrumentals = get_instrumentalness(song)
-    if energy == "None":
+    if instrumentals == "None":
         return "Sorry! This song does not exist."
     elif float(instrumentals) >= 0.0 and float(instrumentals) < 0.4: 
         return song + " has low instrumentals!"
@@ -475,11 +481,14 @@ def reply_all_musictheory(song):
     Param: String song: The requested song from the user.   
 
     Returns: A string that has the value for the instrumentalness and formatted English sentences for the input class.
+
+    TDD: I had deleted the get_all_musictheory(song) method due to it being not needed and forgotten to change 
+        the method here to call audio_features_help instead!
     """
-    allTheory = get_all_music_theory(song)
+    allTheory = audio_features_help(song)
     if allTheory == "None":
         return "Sorry! This song does not exist."
     else: 
-        return (reply_get_tempo(song) + " \n" + reply_get_key(song) + " \n" + reply_get_time_signature(song) + " \n" +
-        reply_get_mode(song) + " \n" + reply_get_mood(song) + " \n" + reply_get_danceability(song) + " \n" + reply_get_acousticness(song) + " \n" +
-        reply_get_energy(song) + " \n" + reply_get_instrumentalness(song))
+        return (reply_get_tempo(song) + "\n" + reply_get_key(song) + "\n" + reply_get_time_signature(song) + "\n" +
+        reply_get_mode(song) + "\n" + reply_get_mood(song) + "\n" + reply_get_danceability(song) + "\n" + reply_get_acousticness(song) + "\n" +
+        reply_get_energy(song) + "\n" + reply_get_instrumentalness(song))
