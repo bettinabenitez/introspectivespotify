@@ -251,6 +251,18 @@ class MusicTheoryTest(unittest.TestCase):
     def test_get_instrumental_L(self):
         self.assertEqual(MusicTheory.reply_get_instrumentalness("Swan Lake"), "Swan Lake has high instrumentals!")
 
+    #######################
+    ## Phase Four Tests  ##
+    #######################
+
+    def test_compare_theory_functionality(self):
+        self.assertEqual(MusicTheory.reply_compare_theory("POV", "POV"),("POV and POV are similar in: \n"
+        "danceability, energy, key, mode, acousticness, instrumentalness, mood, and tempo!"))
+    
+    def test_compare_theory_nomatch(self):
+        self.assertEqual(MusicTheory.reply_compare_theory("Swan Lake", "King Kunta"),("Sorry! There were no similarties between these songs."))
+
+    # I got rid of my second whitebox test for compare_theory as my first blackbox test technically checks the successful branch.
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MusicTheoryTest)
     unittest.TextTestRunner(verbosity=2).run(suite)
