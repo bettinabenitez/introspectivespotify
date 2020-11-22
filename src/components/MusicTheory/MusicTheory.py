@@ -514,6 +514,9 @@ def compare_theory(song, song_compare):
     Param: String song_comapre: The other song to compare with Param song. 
 
     Returns: A list with all audio_features that are similar between song and song_compare. 
+
+    TDD: I realized that mode will always have a difference that puts it in similarities, despite 
+         if it is different, so I added it as it's own branch of comparision too. 
     """
     similaritiesList = []
     songA_features = audio_features_help(song)[0]
@@ -553,7 +556,10 @@ def reply_compare_theory(song, song_compare):
 
     Returns: A string that either reads “Sorry! There were no similarities between these songs.” if the returned list from 
              compare_theory(song, song_compare) was empty or a string that contains all the similar audio_features between 
-             two songs for the InputClass to use. 
+             two songs for the InputClass to use.
+    
+    TDD: I did have some extra spaces due to my string concatention issue to which I fixed. I also did not realize that 
+         time signature will usually AWLAYS match, so I changed my testing songs to ensure I get 2 100% different songs. 
     """
     similaritiesList = compare_theory(song,song_compare)
     similaritiesString = song + " and " + song_compare + " are similar in: \n"
@@ -562,12 +568,9 @@ def reply_compare_theory(song, song_compare):
     else:
         for feature in similaritiesList:
             if feature == "valence":
-                similaritiesString += "mood \n"
+                similaritiesString += "mood\n"
             elif feature == "time_signature":
-                similaritiesString += "time signature \n" 
+                similaritiesString += "time signature\n" 
             else:
-                similaritiesString +=  feature + " \n"
+                similaritiesString +=  feature + "\n"
     return similaritiesString
-
-
-

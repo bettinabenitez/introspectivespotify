@@ -254,18 +254,20 @@ class MusicTheoryTest(unittest.TestCase):
     #######################
     ## Phase Four Tests  ##
     #######################
-
+    
+    # With testing, I realized I had formatted the way the similar methods are shown in the wrong way so I 
+    # fixed that up. I also had spelling mistakes and some spacing errors. 
     def test_compare_theory_functionality(self):
         self.assertEqual(MusicTheory.reply_compare_theory("POV", "POV"),("POV and POV are similar in: \n"
-        "danceability \n"
-        "energy \n "
-        "key \n"
-        "mode \n"
-        "acousticness \n"
-        "instrumentalness \n"
-        "mood \n"
-        "tempo \n"
-        "time signature"))
+        "danceability\n"
+        "energy\n"
+        "key\n"
+        "mode\n"
+        "acousticness\n"
+        "instrumentalness\n"
+        "mood\n"
+        "tempo\n"
+        "time signature\n"))
     
     def test_compare_theory_nomatch(self):
         self.assertEqual(MusicTheory.reply_compare_theory("Far More Blue", "THAT BITCH"),("Sorry! There were no similarties between these songs."))
