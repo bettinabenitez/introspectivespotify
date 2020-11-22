@@ -5,7 +5,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 
 sys.path.append('../')
-from MusicTheory.MusicTheory import get_all_music_theory
+import MusicTheory.MusicTheory 
 
 load_dotenv()
 
@@ -19,7 +19,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
                             redirect_uri=REDIRECT_URI,
                             scope=scope, cache_path=".oAuthCache"))
 
-                
+        
 ######################################
 ##### COMPUTATION HELPER METHODS #####
 ######################################
@@ -46,7 +46,7 @@ def compute_genre_helper(genre_dictionary, limit):
     
     return top_genre_queue
 
-def compute_top_songs_theory_helper(self, theory_dictionary):
+def compute_top_songs_theory_helper(theory_dictionary):
     """Returns theory data on a user's top songs over a given time range 
     :param theory_dictionary: 
     :type theory_dictionary: dictionary 
@@ -123,7 +123,8 @@ def compute_top_songs(time_range, limit):
     top_songs_dict = {}
     for song in results['items']:
         # store in dict. key = id, value = name 
-        top_songs_dict[song['id']]  = song['name'] 
+        # top_songs_dict[song['id']]  = song['name']
+        top_songs_dict[song['id']]  = [song['name'], song['artists'][0]['name']]
 
     return top_songs_dict
 
@@ -159,16 +160,11 @@ def compute_top_artists(time_range, limit):
 
     return top_artists_queue
 
-def compute_top_songs_theory(self, top_songIDs, discord_user):
+def compute_top_songs_theory(top_songs):
     """Returns theory data on a user's top songs over a given time range 
-    :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
-    :type time_range: string 
-
     :param top_songIDs: a dictionary that stores a user's top songs (passed in from compute_top_songs())
     :type top_songIDs: dictionary 
-
-    :param discord_user: Discord username of the person that we want to analyze
-    :type discord_user: string 
+    # TO DO fix param 
 
     :rtype: dictionary
     :return: a sorted dictionary with both the song IDs (key) and song names (value)
@@ -177,14 +173,25 @@ def compute_top_songs_theory(self, top_songIDs, discord_user):
                         "time_signature": [],
                         "key": [],
                         "mode": [],
+                        "mood": [],
                         "danceability": [],
                         "acousticness": [],
                         "energy": [],
                         "instrumentalness": []}
-    for song in top_songIDs:
-        song_theory = get_all_music_theory(song)
-    # loop through top_songIDs dictionary’s keys and calls get_all_music_theory method from the MusicTheory Class on each song ID. Get_all_music_theory returns a dictionary that we will parse through and append data into the values of our theory dictionary. 
-    # Call and return compute_top_songs_theory_helper with theory dictionary as a parameter 
+
+    for song in top_songs:
+        song = str(song[0]) + str(song[1])
+        theory_dictionary["tempo"].append(int(get_tempo(song)))
+        theory_dictionary["key"].append(int(get_key(song)))
+        theory_dictionary["mode"].append(int(get_mode(song)))
+        theory_dictionary["mood"].append(int(get_mood(song)))
+        theory_dictionary["danceability"].append(int(get_danceability(song)))
+        theory_dictionary["acousticness"].append(int(get_acousticness(song)))
+        theory_dictionary["energy"].append(int(get_energy(song)))
+        theory_dictionary["instrumentalness"].append(int(get_instrumentalness(song)))
+    print(theory_dictionary)
+    #return compute_top_songs_theory_helper(theory_dictionary)
+#print(compute_top_songs_theory())
 
 
 #########################
@@ -239,12 +246,12 @@ def reply_top_songs(time_range, limit):
     try:
         top_songs_dict = compute_top_songs(time_range, limit)
         if limit == 1:
-            print(top_songs_dict)
-            return "Your top song is " + list(top_songs_dict.values())[0] + ". Nice bops!"
+            song_details = list(top_songs_dict.values())[0] 
+            return "Your top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bops!"
         else: 
             output = "Your top songs are"
-            for index, song in enumerate(top_songs_dict.values()):
-                output += " (" + str(index + 1) + ") " + song 
+            for index, song_details in enumerate(top_songs_dict.values()):
+                output += " (" + str(index + 1) + ") " + song_details[0] + " by " + song_details[1]
             return output + ". Nice bops!"
     except:
         print("An exception occurred. Something went wrong. :( uh oh")
@@ -291,18 +298,16 @@ def reply_top_songs_theory(time_range, limit):
     :type top_songIDs: dictionary 
 
     :param discord_user: Discord username of the person that we want to analyze
-    :type discord_user: string 
 
     :rtype: string
     :return: a string that describes what a user's theory data on top songs
     """
-    # song_ids = compute_top_songs(time_range, limit).keys()
-    # print(song_ids)
-    song_ID = '1ApN1loxlt0rzRFc8iETw7'
-    get_all_music_theory(song_ID)
+    top_songs = list(compute_top_songs(time_range, limit).values())
+    print(compute_top_songs_theory(top_songs))
     # Add try and except block
     # calls compute_top_songs and passes the output to compute_top_songs_theory 
     # stores the output of compute_top_songs_theory in a dictionary
     # loop through the dictionary and format a string ("Your top songs have an average tempo of ...,  your most common key(s) is/are … "). Inside the loop, there should an if/else to check if the length of the length of the value is greater than 1 (there was a tie). If there a tie is found, the string should use the “are” word instead of “is.” The noun should also be plural instead of singular. 
     # Return string 
-print()
+
+print(reply_top_songs_theory("medium_term", 6))
