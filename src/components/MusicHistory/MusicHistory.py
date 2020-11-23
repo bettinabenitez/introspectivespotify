@@ -33,7 +33,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
 ##### COMPUTATION HELPER METHODS #####
 ######################################
 def compute_genre_helper(genre_dictionary, limit):
-    """Returns theory data on a user's top songs over a given time range 
+    """Returns a user's top genres given a dictionary containing potential top genres and their corresponding rankings
     :param genre_dictionary: keys = genre name, values = a list of ints representing the ranking of artist
     :type genre_dictionary: dictionary 
 
