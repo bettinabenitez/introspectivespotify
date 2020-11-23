@@ -16,6 +16,10 @@ from MusicTheory.MusicTheory import reply_get_danceability
 from MusicTheory.MusicTheory import reply_get_acousticness
 from MusicTheory.MusicTheory import reply_get_energy
 from MusicTheory.MusicTheory import reply_get_instrumentalness 
+from MusicHistory.MusicHistory import reply_top_songs_theory
+from MusicHistory.MusicHistory import reply_top_genres
+from MusicHistory.MusicHistory import reply_top_songs
+from MusicHistory.MusicHistory import reply_top_artists
 
 
 # import MusicHistory
@@ -24,6 +28,7 @@ class InputClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    ##### SPOTIFY AUTH COMMANDS ##### 
     @commands.command()
     async def login(self, ctx):
         user = ctx.author
@@ -37,17 +42,7 @@ class InputClass(commands.Cog):
         user = ctx.author
         # return SpotifyAuth.spotify_login(user)
 
-    @commands.command()
-    async def genre(self, ctx):
-        user = ctx.author
-        # return MusicHistory.compute_genre(user)
-
-    @commands.command()
-    async def test(self, ctx):
-        user = ctx.author
-        reply = reply_top_songs_theory('long_term', 5)
-        await user.send(reply)
-
+    ##### MUSIC THEORY COMMANDS ##### 
     @commands.command()
     async def musictheory(self, ctx, song):
         reply = reply_all_musictheory(song)
@@ -97,6 +92,79 @@ class InputClass(commands.Cog):
     async def instrumentalness(self, ctx, song):
         reply = reply_get_instrumentalness(song)
         await ctx.send(reply)
+
+    ##### MUSIC HISTORY COMMANDS #####
+    @commands.command()
+    async def topgenres(self, ctx, *args):
+        user = ctx.author
+        time_range = "medium_term"
+        limit = 3
+        if len(args) > 0:
+            for arg in args:
+                if arg == "medium" or arg == "medium_term" or arg == "m":
+                    time_range = "medium_term"
+                elif arg == "long" or arg == "long_term" or arg == "l":
+                    time_range = "long_term"
+                elif arg == "short" or arg == "short_term" or arg == "s":
+                    time_range = "short_term"
+                elif arg.isdigit():
+                    limit = int(arg)
+        reply = reply_top_genres(time_range, limit)
+        await user.send(reply)
+
+    @commands.command()
+    async def topsongs(self, ctx, *args):
+        user = ctx.author
+        time_range = "medium_term"
+        limit = 5
+        if len(args) > 0:
+            for arg in args:
+                if arg == "medium" or arg == "medium_term" or arg == "m":
+                    time_range = "medium_term"
+                elif arg == "long" or arg == "long_term" or arg == "l":
+                    time_range = "long_term"
+                elif arg == "short" or arg == "short_term" or arg == "s":
+                    time_range = "short_term"
+                elif arg.isdigit():
+                    limit = int(arg)
+        reply = reply_top_songs(time_range, limit)
+        await user.send(reply)
+
+    @commands.command()
+    async def topartists(self, ctx, *args):
+        user = ctx.author
+        time_range = "medium_term"
+        limit = 5
+        if len(args) > 0:
+            for arg in args:
+                if arg == "medium" or arg == "medium_term" or arg == "m":
+                    time_range = "medium_term"
+                elif arg == "long" or arg == "long_term" or arg == "l":
+                    time_range = "long_term"
+                elif arg == "short" or arg == "short_term" or arg == "s":
+                    time_range = "short_term"
+                elif arg.isdigit():
+                    limit = int(arg)
+        reply = reply_top_artists(time_range, limit)
+        await user.send(reply)
+
+    @commands.command()
+    async def topsongstheory(self, ctx, *args):
+        user = ctx.author
+        time_range = "medium_term"
+        limit = 5
+        if len(args) > 0:
+            for arg in args:
+                if arg == "medium" or arg == "medium_term" or arg == "m":
+                    time_range = "medium_term"
+                elif arg == "long" or arg == "long_term" or arg == "l":
+                    time_range = "long_term"
+                elif arg == "short" or arg == "short_term" or arg == "s":
+                    time_range = "short_term"
+                elif arg.isdigit():
+                    limit = int(arg)
+        reply = reply_top_songs_theory(time_range, limit)
+        await user.send(reply)
         
 
 def setup(bot):
