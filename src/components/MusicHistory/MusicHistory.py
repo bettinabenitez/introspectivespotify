@@ -174,9 +174,8 @@ def compute_top_artists(time_range, limit):
 
 def compute_top_songs_theory(top_songs):
     """Returns theory data on a user's top songs over a given time range 
-    :param top_songIDs: a dictionary that stores a user's top songs (passed in from compute_top_songs())
-    :type top_songIDs: dictionary 
-    # TO DO fix param 
+    :param top_song: a dictionary that stores a user's top songs 
+    :type top_song: dictionary 
 
     :rtype: dictionary
     :return: a sorted dictionary with both the song IDs (key) and song names (value)
