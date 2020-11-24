@@ -574,3 +574,36 @@ def reply_compare_theory(song, song_compare):
             else:
                 similaritiesString +=  feature + "\n"
     return similaritiesString
+
+    ######################
+    ## Phase Five Code  ##
+    ######################
+
+def suggest_theory(song_a, song_b):
+    """
+    This method will call for song_a and song_b spotify search for the specific artist ID, where it will grab the top genres for both 
+    artist_a and artist_b. Then, for song_a and song_b it will call the audio_features_help and grab the track ID for song_b. It will
+    compare the audio features of valence, danceability, tempo, and energy to fill in the filters of max and min for the different features
+    in the Spotify GET suggestions based on seeds. There, I will search for at most 5 songs based on similar artist from artist_a, similar 
+    track from song_b and the two top genres from both artist_a and artist_b. If there are songs, it will return the track ids in a list. If
+    there are no songs, or the search failed, it will return an empty list. 
+    
+    Param: String song_a: One of the requested songs from the user. 
+    Param: String song_b: The other song to compare with Param song. 
+    
+    Returns: A list with up to 5 track_ids if there are matches OR an empty list if things fail or there are no suggestions.
+    """
+
+def reply_suggest_theory(song_a, song_b):
+    """
+    This method will call suggest_theory(song_a, song_b) to grab a list with similar track_ids (up to 5). If there is an empty list
+    return the ending string that lets the user know there are no similartiies. If there are, it will go through each track_id and 
+    get the artist name and format a reply to list each song and it's artist for the user to read easily and for the input class.
+
+    Param: String song_a: One of the requested songs from the user. 
+    Param: String song_b: The other song to compare with Param song. 
+
+    Returns: A string that either reads “Sorry! There were no suggestions between these songs.” if the returned list from 
+             suggest_theory(song_a, song_b) was empty or a string that contains all the similar songs between 
+             two songs for the InputClass to use.
+    """
