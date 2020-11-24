@@ -614,9 +614,16 @@ def suggest_theory(song_a, song_b):
         track_id_A = songAFeatures["id"]
         track_id_B = songBFeatures["id"]
 
-        genre_a = sp.artist(artist_a)['genres'][0]
-        genre_b = sp.artist(artist_b)['genres'][0]
-        combined_genres = genre_a + " "  + genre_b
+        genre_a = sp.artist(artist_a)['genres']
+        genre_b = sp.artist(artist_b)['genres']
+        if (genre_b == [] and genre_a == []):
+            return []
+        elif genre_a == []:
+            combined_genres = genre_b[0]
+        elif genre_b == []:
+            combined_genres = genre_a[0]
+        else:
+            combined_genres = genre_a[0] + " "  + genre_b[0]
 
         max_valence = max(float(get_mood(song_a)), float(get_mood(song_b)))
         min_valence = min(float(get_mood(song_a)), float(get_mood(song_b)))
@@ -650,10 +657,6 @@ def suggest_theory(song_a, song_b):
         else:
             return track_list
         
-        
-
-
-
 def reply_suggest_theory(song_a, song_b):
     """
     This method will call suggest_theory(song_a, song_b) to grab a list with similar track_ids (up to 5). If there is an empty list

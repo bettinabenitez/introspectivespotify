@@ -16,6 +16,8 @@ from MusicTheory.MusicTheory import reply_get_danceability
 from MusicTheory.MusicTheory import reply_get_acousticness
 from MusicTheory.MusicTheory import reply_get_energy
 from MusicTheory.MusicTheory import reply_get_instrumentalness 
+from MusicTheory.MusicTheory import reply_compare_theory
+from MusicTheory.MusicTheory import reply_suggest_theory
 from MusicHistory.MusicHistory import reply_top_songs_theory
 from MusicHistory.MusicHistory import reply_top_genres
 from MusicHistory.MusicHistory import reply_top_songs
@@ -91,6 +93,16 @@ class InputClass(commands.Cog):
     @commands.command()
     async def instrumentalness(self, ctx, song):
         reply = reply_get_instrumentalness(song)
+        await ctx.send(reply)
+    
+    @commands.command()
+    async def compare(self, ctx, song_a, song_b):
+        reply = reply_compare_theory(song_a, song_b)
+        await ctx.send(reply)
+
+    @commands.command()
+    async def suggest(self, ctx, song_a, song_b):
+        reply = reply_suggest_theory(song_a, song_b)
         await ctx.send(reply)
 
     ##### MUSIC HISTORY COMMANDS #####
