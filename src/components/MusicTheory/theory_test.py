@@ -14,6 +14,7 @@ class MusicTheoryTest(unittest.TestCase):
     # Changed the hardCodedAF object after coding due to my own
     # forgetfullness of the brackets surrounding the object!
     # TESTS PASSED ON 20th Nov, 2020
+    # Tests that a JSON Dictionary is created with call. 
     def test_audio_features_json(self):
         hardCodedAF = [{
                             "danceability": 0.527,
@@ -39,6 +40,7 @@ class MusicTheoryTest(unittest.TestCase):
 
     # Changed the type of assert as I wrote the wrong one! Otherwise all my tests passed.
     # TESTS PASSED ON 20th Nov, 2020
+    # Tests that a song that does not live in the SP library fails.
     def test_audio_features_error(self):
         errorMessage = "None"
         self.assertEqual(MusicTheory.audio_features_help("Foo Bar Bash Bops"), errorMessage)
@@ -46,48 +48,50 @@ class MusicTheoryTest(unittest.TestCase):
     #####################
     ## Phase Two Tests ##
     #####################
-
     # TESTS PASSED ON 20th Nov, 2020
+
+
+    # Tests the tempo call.
     def test_get_tempo(self):
         hardcodedTempo = "98.879"
         self.assertEqual(MusicTheory.get_tempo("Thank You For The Music"), hardcodedTempo)
     
-    # TESTS PASSED ON 20th Nov, 2020
+    # Tests the key call.
     def test_get_key(self):
         hardcodedKey = "4"
         self.assertEqual(MusicTheory.get_key("Thank You For The Music"), hardcodedKey)
 
-    # TESTS PASSED ON 20th Nov, 2020
+    # Tests the time signature call.
     def test_get_time_signature(self):
         hardcodedTS = "4"
         self.assertEqual(MusicTheory.get_time_signature("Thank You For The Music"), hardcodedTS)
 
-    # TESTS PASSED ON 20th Nov, 2020
+    # Tests the modality call. 
     def test_get_mode(self):
         hardcodedMode = "1"
         self.assertEqual(MusicTheory.get_mode("Thank You For The Music"), hardcodedMode)
 
-    # TESTS PASSED ON 20th Nov, 2020
+    # Tests the mood call.
     def test_get_mood(self):
         hardcodedMood = "0.479"
         self.assertEqual(MusicTheory.get_mood("Thank You For The Music"), hardcodedMood)
 
-    # TESTS PASSED ON 20th Nov, 2020
+    # Tests the danceability call.
     def test_get_danceability(self):
         hardcodedDance = "0.527"
         self.assertEqual(MusicTheory.get_danceability("Thank You For The Music"), hardcodedDance)
 
-    # TESTS PASSED ON 20th Nov, 2020
+    # Tests the acousticness. 
     def test_get_acousticness(self):
         hardcodedAcous = "0.932"
         self.assertEqual(MusicTheory.get_acousticness("Thank You For The Music"), hardcodedAcous) 
 
-    # TESTS PASSED ON 20th Nov, 2020
+    # Tests the energy call.
     def test_get_energy(self):
         hardcodedEnergy = "0.134"
         self.assertEqual(MusicTheory.get_energy("Thank You For The Music"), hardcodedEnergy) 
 
-    # TESTS PASSED ON 20th Nov, 2020
+    # Tests the instrumentalness call.
     def test_get_instrumentalness(self):
         hardcodedInstru = "0"
         self.assertEqual(MusicTheory.get_instrumentalness("Thank You For The Music"), hardcodedInstru)
@@ -96,39 +100,48 @@ class MusicTheoryTest(unittest.TestCase):
     ## Phase Three Tests ##
     #######################
     # ALL TESTS PASSED 21st of NOVEMBER 2020
+
+    # Tests the tempo reply string.
     def test_reply_tempo(self):
         hardcodedTempo = "Thank You For The Music has a tempo of 98.879 BPM!"
         self.assertEqual(MusicTheory.reply_get_tempo("Thank You For The Music"), hardcodedTempo)
-    
+
+    # Tests the key reply string. 
     def test_reply_key(self):
         hardcodedKey = "Thank You For The Music has a key of E!"
         self.assertEqual(MusicTheory.reply_get_key("Thank You For The Music"), hardcodedKey)
 
+    # Tests the time_sig reply string.
     def test_reply_time_signature(self):
         hardcodedTS = "Thank You For The Music has a time signature of 4 beats per bar!"
         self.assertEqual(MusicTheory.reply_get_time_signature("Thank You For The Music"), hardcodedTS)
 
+    # Tests the mode reply string.
     def test_reply_mode(self):
         hardcodedMode = "Thank You For The Music is in the Major modality!"
         self.assertEqual(MusicTheory.reply_get_mode("Thank You For The Music"), hardcodedMode)
 
+    # Tests the get mood reply string.
     def test_reply_mood(self):
         hardcodedMood = "Thank You For The Music is generally sad, depressed, or angry :("
         self.assertEqual(MusicTheory.reply_get_mood("Thank You For The Music"), hardcodedMood)
 
+    # Tests the danceability reply string.
     def test_reply_danceability(self):
         hardcodedDance = "Thank You For The Music has medium danceability!"
         self.assertEqual(MusicTheory.reply_get_danceability("Thank You For The Music"), hardcodedDance)
 
+    # Tests the acoustics reply string.
     def test_reply_acousticness(self):
         hardcodedAcous = "Thank You For The Music has high acoustics!"
         self.assertEqual(MusicTheory.reply_get_acousticness("Thank You For The Music"), hardcodedAcous) 
 
+    # Tests the energy reply string. 
     def test_reply_energy(self):
         hardcodedEnergy = "Thank You For The Music has low energy!"
         self.assertEqual(MusicTheory.reply_get_energy("Thank You For The Music"), hardcodedEnergy) 
 
-
+    # Tests the instrumentalness reply string. 
     def test_reply_instrumentalness(self):
         hardcodedInstru = "Thank You For The Music has low instrumentals!"
         self.assertEqual(MusicTheory.reply_get_instrumentalness("Thank You For The Music"), hardcodedInstru)
@@ -136,6 +149,7 @@ class MusicTheoryTest(unittest.TestCase):
     # Changed test strings due to inconsistency with original plan, my mistake.
     # added extra underscore in method name and had extra spaces due to \N. 
     # forgot the ! at the end of BPM too :)
+    # Tests the reply all string.
     def test_reply_all_musictheory(self):
         hardcodedDict = ("Thank You For The Music has a tempo of 98.879 BPM!\n" 
                          "Thank You For The Music has a key of E!\n" 
@@ -148,7 +162,8 @@ class MusicTheoryTest(unittest.TestCase):
                          "Thank You For The Music has low instrumentals!")
         self.assertEqual(MusicTheory.reply_all_musictheory("Thank You For The Music"), hardcodedDict)
 
-    ## Key Tests
+    ## Key Tests: Each test here tests that each reply key branch is correct. ##
+
     # Original song was not in the key of C, Google Lied ;(
     def test_reply_key_C(self):
         self.assertEqual(MusicTheory.reply_get_key("Chained To The Rhythm"), "Chained To The Rhythm has a key of C!")
@@ -194,21 +209,21 @@ class MusicTheoryTest(unittest.TestCase):
     def test_reply_key_B(self):
         self.assertEqual(MusicTheory.reply_get_key("Sin Pijama"), "Sin Pijama has a key of B!")
     
-# Mode Tests
+# Mode Tests: Tests each branch of the reply method executes. 
     def test_get_mode_0(self):
         self.assertEqual(MusicTheory.reply_get_mode("LIKE I WOULD"), "LIKE I WOULD is in the Minor modality!")
     
     def test_get_mode_1(self):
         self.assertEqual(MusicTheory.reply_get_mode("Someone Like You"), "Someone Like You is in the Major modality!")
 
-# Mood Tests
+# Mood Tests:  Tests each branch of the reply method executes. 
     def test_get_mood_H(self):
         self.assertEqual(MusicTheory.reply_get_mood("Cut To The Feeling"), "Cut To The Feeling is generally happy, cheerful, euphoric :)")
 
     def test_get_mood_L(self):
         self.assertEqual(MusicTheory.reply_get_mood("If I Could Fly"), "If I Could Fly is generally sad, depressed, or angry :(")
 
-# Danceability Tests 
+# Danceability Tests: Tests each branch of the reply method executes. 
 # All of these tests had the wrong information- I was looking at the wrong audio_feature! Oops.
     def test_get_dance_M(self):
         self.assertEqual(MusicTheory.reply_get_danceability("Dusk Till Dawn"), "Dusk Till Dawn has low danceability!")
@@ -219,7 +234,7 @@ class MusicTheoryTest(unittest.TestCase):
     def test_get_dance_H(self):
         self.assertEqual(MusicTheory.reply_get_danceability("Honey, Honey"), "Honey, Honey has medium danceability!")
 
-# acoustics tests
+# Acoustics Tests: Tests each branch of the reply method executes. 
     def test_get_acoust_H(self):
         self.assertEqual(MusicTheory.reply_get_acousticness("Night Changes"), "Night Changes has high acoustics!")
 
@@ -229,7 +244,7 @@ class MusicTheoryTest(unittest.TestCase):
     def test_get_acoust_L(self):
         self.assertEqual(MusicTheory.reply_get_acousticness("Honey, Honey"), "Honey, Honey has low acoustics!")
 
-# energy tests 
+# Energy Tests: Tests each branch of the reply method executes.
     def test_get_energy_H(self):
         self.assertEqual(MusicTheory.reply_get_energy("Nice To Meet Ya"), "Nice To Meet Ya has high energy!")
 
@@ -240,7 +255,7 @@ class MusicTheoryTest(unittest.TestCase):
     def test_get_energy_L(self):
         self.assertEqual(MusicTheory.reply_get_energy("Intermission:Flower"), "Intermission:Flower has low energy!")
 
-# instrumental tests 
+# Instrumental Tests: Tests each branch of the reply method executes. 
     def test_get_instrumental_H(self):
         self.assertEqual(MusicTheory.reply_get_instrumentalness("King Kunta"), "King Kunta has low instrumentals!")
 
@@ -255,9 +270,11 @@ class MusicTheoryTest(unittest.TestCase):
     ## Phase Four Tests  ##
     #######################
     # ALL TESTS PASSED 22nd OF NOVEMBER 2020
-
+    # I got rid of my second whitebox test for compare_theory as my first blackbox test technically checks the successful branch.
     # With testing, I realized I had formatted the way the similar methods are shown in the wrong way so I 
     # fixed that up. I also had spelling mistakes and some spacing errors. 
+
+    # Tests the functionality of compare_theory with a hardcoded reply and a successful running branch. 
     def test_compare_theory_functionality(self):
         self.assertEqual(MusicTheory.reply_compare_theory("POV", "POV"),("POV and POV are similar in: \n"
         "danceability\n"
@@ -269,11 +286,10 @@ class MusicTheoryTest(unittest.TestCase):
         "mood\n"
         "tempo\n"
         "time signature\n"))
-    
+
+    # Tests the error branch with an incorrect songs that have no similarities. 
     def test_compare_theory_nomatch(self):
         self.assertEqual(MusicTheory.reply_compare_theory("Far More Blue", "THAT BITCH"),("Sorry! There were no similarties between these songs."))
-
-    # I got rid of my second whitebox test for compare_theory as my first blackbox test technically checks the successful branch.
 
     #######################
     ## Phase Five Tests  ##
@@ -287,21 +303,23 @@ class MusicTheoryTest(unittest.TestCase):
     
     # TESTS PASSED 24th of November 2020 :) 
     
+    # Tests a functionality that these two songs will ALWAYS produce this song for ensuring format is correct.
+    # also tests succesful branch.
     def test_suggest_music_one(self):
         self.assertEqual(MusicTheory.reply_suggest_theory("FROOT", "Summertime Sadness"),("I computed these songs that are similar to FROOT and Summertime Sadness: \n"
         "1. 1980s Horror Film II by Wallows\n"))
 
+    # Tests two songs that have no similarities will produce no suggestions, also tests failure branch.
     def test_suggest_music_two(self):
         self.assertEqual(MusicTheory.reply_suggest_theory("Foo Bar Bash Song", "Sheila Ki Jiwani"), "Sorry! There are no suggested songs based on theory from these songs!")
 
+    # Tests that a song cannot suggest itself, also tests the failure branch. 
     def test_suggest_music_three(self):
         self.assertEqual(MusicTheory.reply_suggest_theory("POV", "POV"),("Sorry! There are no suggested songs based on theory from these songs!"))
 
+    # Tests two songs not in the Spotify Library fails.
     def test_suggest_music_four(self):
         self.assertEqual(MusicTheory.reply_suggest_theory("Foo Bar Bash Song", "I am in Art Class"), "Sorry! There are no suggested songs based on theory from these songs!")
-
-
-
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MusicTheoryTest)

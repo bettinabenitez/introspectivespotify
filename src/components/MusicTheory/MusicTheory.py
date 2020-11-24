@@ -30,8 +30,11 @@ def audio_features_help(song):
 
     TDD: No changes were made after running tests as all tests passed initally. 
     """
+    # Get the JSON List of results from Spotipy Object
     results = sp.search(q= song, type="track", limit=1)
     
+    # Iterate through the results specifically for tracks in items and grab
+    # track ID. Call the audio_features function on the track id and return. 
     for  item in results['tracks']['items']:      
         trackID = item['id']
         if trackID != " ":
@@ -57,6 +60,8 @@ def get_tempo(song):
     Returns: A string representing the tempo (0 - 300 BPM).
 
     """
+    # Get the audio features of a specific song, 
+    # key into the tempo and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
@@ -80,6 +85,8 @@ def get_key(song):
                 and so on. If no key was detected, the value is -1).
 
     """
+    # Get the audio features of a specific song, 
+    # key into the key and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
@@ -102,6 +109,8 @@ def get_time_signature(song):
 
     Returns: A string representing the time signature. (0-12).
     """
+    # Get the audio features of a specific song, 
+    # key into the time_sig and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
@@ -124,6 +133,8 @@ def get_mode(song):
 
     Returns: A string representing the mode (1 for Major, 0 for Minor).
     """
+    # Get the audio features of a specific song, 
+    # key into the mode and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
@@ -150,6 +161,8 @@ def get_mood(song):
 
     TDD: Accidentally had 'mood' as the key when it should be 'valence'
     """
+    # Get the audio features of a specific song, 
+    # key into the valence and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
@@ -175,14 +188,14 @@ def get_danceability(song):
 
     TDD: Accidentally had 'valance" as the key for the feature dict.
     """
+    # Get the audio features of a specific song, 
+    # key into the danceability and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         dance = feature["danceability"]
         return str(dance)
-
-#print(get_danceability("Thank you for the music"))
 
 def get_acousticness(song):
     """
@@ -200,6 +213,8 @@ def get_acousticness(song):
     Returns: A string representing the acoustics from (0.0 - 1.0).
 
     """
+    # Get the audio features of a specific song, 
+    # key into the acousticness and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
@@ -223,6 +238,8 @@ def get_energy(song):
     Returns: A string representing the energy from (0.0-1.0)
 
     """
+    # Get the audio features of a specific song, 
+    # key into the energy and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
@@ -247,6 +264,8 @@ def get_instrumentalness(song):
     Returns: A string representing the Instrumental-ness from (0.0 - 1.0)
 
     """
+    # Get the audio features of a specific song, 
+    # key into the instrumentalness and return the tempo.
     audioFeatures = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
@@ -271,6 +290,7 @@ def reply_get_tempo(song):
 
     TDD: Forgot BPM at the end of the reply string.
     """
+    # Get the tempo and return as string.
     tempo = get_tempo(song)
     if tempo == "None":
         return "Sorry! This song does not exist."
@@ -291,6 +311,7 @@ def reply_get_key(song):
     Returns: A string that has the value for key and formatted English sentences for the input class.  
 
     """
+    # Get the key and convert to correct string format. 
     key = get_key(song)
     if key == "None" or key == "-1":
         return "Sorry! This song does not exist."
@@ -333,6 +354,7 @@ def reply_get_time_signature(song):
 
     TDD: Forgot to change variable name to "timeSig" from tempo.
     """
+    # Get the time sig and convert. 
     timeSig = get_time_signature(song)
     if timeSig == "None":
         return "Sorry! This song does not exist."
@@ -351,6 +373,7 @@ def reply_get_mode(song):
     Returns: A string that has the value for the mode and formatted English sentences for the input class.
 
     """
+    # Get the mode and convert, and reply. 
     mode = get_mode(song)
     if mode == "None":
         return "Sorry! This song does not exist."
@@ -374,6 +397,8 @@ def reply_get_mood(song):
     Returns: A string that has the value for the mood and formatted English sentences for the input class.
 
     """
+    # Change into a float to compare values, set correct string for
+    # specific value.
     mood = get_mood(song)
     if mood == "None":
         return "Sorry! This song does not exist."
@@ -395,6 +420,8 @@ def reply_get_danceability(song):
 
     Returns: A string that has the value for the danceability and formatted English sentences for the input class.
     """
+    # Change into a float to compare values, set correct string for
+    # specific value.
     dance = get_danceability(song)
     if dance == "None":
         return "Sorry! This song does not exist."
@@ -418,6 +445,8 @@ def reply_get_acousticness(song):
     Returns: A string that has the value for the acoustics and formatted English sentences for the input class.
 
     """
+    # Change into a float to compare values, set correct string for
+    # specific value.
     acoustics = get_acousticness(song)
     if acoustics == "None":
         return "Sorry! This song does not exist."
@@ -440,6 +469,8 @@ def reply_get_energy(song):
 
     Returns: A string that has the value for the energy and formatted English sentences for the input class. 
     """
+    # Change into a float to compare values, set correct string for
+    # specific value.
     energy = get_energy(song)
     if energy == "None":
         return "Sorry! This song does not exist."
@@ -465,6 +496,8 @@ def reply_get_instrumentalness(song):
     
     TDD: Accidentally did not change the variable from energy to instrumentals
     """
+    # Change into a float to compare values, set correct string for
+    # specific value.
     instrumentals = get_instrumentalness(song)
     if instrumentals == "None":
         return "Sorry! This song does not exist."
@@ -489,6 +522,8 @@ def reply_all_musictheory(song):
     TDD: I had deleted the get_all_musictheory(song) method due to it being not needed and forgotten to change 
         the method here to call audio_features_help instead!
     """
+    # Grab the total theory for a song, call each getter 
+    # and format the string properly. 
     allTheory = audio_features_help(song)
     if allTheory == "None":
         return "Sorry! This song does not exist."
@@ -518,12 +553,16 @@ def compare_theory(song, song_compare):
     TDD: I realized that mode will always have a difference that puts it in similarities, despite 
          if it is different, so I added it as it's own branch of comparision too. 
     """
+    # Get the audio features of the specific song, grab the dictionary.
     similaritiesList = []
     songA_features = audio_features_help(song)[0]
     songB_features = audio_features_help(song_compare)[0]
 
     if songA_features == "None" or songB_features == "None":
         return similaritiesList
+    # Iterate through each key in both dicts, if one of the keys are something I'm not looking for, continue. 
+    # Otherwise, compare values if they are +/- 0.1. For some, compare +/- 1. 
+    # append to list and return.
     for (featureA,valueA), (featureB,valueB) in zip(songA_features.items(), songB_features.items()):
         if (featureA == "loudness" or featureA == "speechiness" or featureA == "liveness" or featureA == "type"
         or featureA == "id" or featureA == "uri" or featureA == "track_href" or featureA == "analysis_url" or
@@ -561,6 +600,8 @@ def reply_compare_theory(song, song_compare):
     TDD: I did have some extra spaces due to my string concatention issue to which I fixed. I also did not realize that 
          time signature will usually AWLAYS match, so I changed my testing songs to ensure I get 2 100% different songs. 
     """
+    # Check if the returned list is empty, as no similartiies. 
+    # Otherwise, iterate through list and append to return string. 
     similaritiesList = compare_theory(song,song_compare)
     similaritiesString = song + " and " + song_compare + " are similar in: \n"
     if similaritiesList == []:
@@ -593,6 +634,9 @@ def suggest_theory(song_a, song_b):
     
     Returns: A list with up to 5 track_ids if there are matches OR an empty list if things fail or there are no suggestions.
     """
+    # Grab the search results for each song, set the artists to "none" at the moment. 
+    # Grab the artist_id for both songs, if search fails, return empty list. 
+    # Otherwise, grab the audio_features and track_id and genres for each song
     songAResults = sp.search(q= song_a, type="track", limit=1)
     songBResults = sp.search(q= song_b, type="track", limit=1)
     artist_a = "None"
@@ -616,6 +660,9 @@ def suggest_theory(song_a, song_b):
 
         genre_a = sp.artist(artist_a)['genres']
         genre_b = sp.artist(artist_b)['genres']
+        # Check if the genre list is empty. Some artists don't have genres 
+        # and cause a fail if they do not. Do not run search if both
+        # artists do not have a genre.
         if (genre_b == [] and genre_a == []):
             return []
         elif genre_a == []:
@@ -625,6 +672,7 @@ def suggest_theory(song_a, song_b):
         else:
             combined_genres = genre_a[0] + " "  + genre_b[0]
 
+        # Find the max and min for each audio_feature for the search. 
         max_valence = max(float(get_mood(song_a)), float(get_mood(song_b)))
         min_valence = min(float(get_mood(song_a)), float(get_mood(song_b)))
         max_energy = max(float(get_energy(song_a)), float(get_energy(song_b)))
@@ -634,7 +682,7 @@ def suggest_theory(song_a, song_b):
         max_dance = max(float(get_danceability(song_a)), float(get_danceability(song_b)))
         min_dance = min(float(get_danceability(song_a)), float(get_danceability(song_b)))
 
-
+        # Spotify search call for GET_RECOMENDATIONS_BY_SEED 
         recomendations = sp.recommendations(seed_artists = [artist_a, artist_b], seed_genres = [combined_genres],
         seed_tracks = [track_id_A, track_id_B], limit = 5, country = 'US',
         min_valence = min_valence,
@@ -645,6 +693,9 @@ def suggest_theory(song_a, song_b):
         max_tempo = max_tempo,
         min_danceability = min_dance,
         max_danceability = max_dance)
+
+        # Iterate through the results, store the new song tracks and artists_ids into a list.
+        # if the suggested song is the same as the requested song, remove it. 
         for item in recomendations['tracks']:
             artist_id = item['artists'][0]['id']
             track_id = item['id']
@@ -670,6 +721,10 @@ def reply_suggest_theory(song_a, song_b):
              suggest_theory(song_a, song_b) was empty or a string that contains all the similar songs between 
              two songs for the InputClass to use.
     """
+    # Grab the track_list of suggested songs, set up the return string. 
+    # For each element in the track_list, enumerate it and grab the track name 
+    # and track artist for the return string. If the track list is empty, 
+    # return the no suggestions string. 
     track_list = suggest_theory(song_a, song_b)
     reply_string = ("I computed these songs that are similar to " + song_a + " and " + song_b + ": \n")
 
