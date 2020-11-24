@@ -281,16 +281,16 @@ class MusicTheoryTest(unittest.TestCase):
     # did, so therefore I changed it back to two songs and compare + find songs thru that. 
     
     def test_suggest_music_one(self):
-        self.assertEqual(MusicTheory.suggest_theory("FROOT", "Summer Time Sadness"),
-        ("I computed these songs that are similar to FROOT by MARINA and Summertime Sadness by Lana Del Ray \n")
+        self.assertEqual(MusicTheory.suggest_theory("FROOT", "Summertime Sadness"),
+        ("I computed these songs that are similar to FROOT and Summertime Sadness: \n")
         ("1. 1980s Horror Film II by Wallows"))
 
     def test_suggest_music_two(self):
         self.assertEqual(MusicTheory.suggest_theory("Foo Bar Bash Song", "Sheila Ki Jiwani"), "Sorry! There are no suggested songs based on theory from these songs!")
 
     def test_suggest_music_three(self):
-        self.assertEqual(MusicTheory.suggest_theory("POV", "POV"),("I computed these songs that are similar to POV by Ariana Grande and POV by Ariana Grande \n")
-        ("1. POV by Ariana Grande"))
+        self.assertEqual(MusicTheory.suggest_theory("POV", "POV"),("I computed these songs that are similar to POV and POV: \n")
+        ("Sorry! There are no suggested songs based on theory from these songs!"))
 
     def test_suggest_music_two(self):
         self.assertEqual(MusicTheory.suggest_theory("Foo Bar Bash Song", "I am in Art Class"), "Sorry! There are no suggested songs based on theory from these songs!")

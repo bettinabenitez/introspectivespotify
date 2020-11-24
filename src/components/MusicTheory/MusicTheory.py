@@ -593,6 +593,66 @@ def suggest_theory(song_a, song_b):
     
     Returns: A list with up to 5 track_ids if there are matches OR an empty list if things fail or there are no suggestions.
     """
+    songAResults = sp.search(q= song_a, type="track", limit=1)
+    songBResults = sp.search(q= song_b, type="track", limit=1)
+    artist_a = "None"
+    artist_b = "None"
+    track_list = []
+
+    for song in songAResults['tracks']['items']:
+        if song != " ":
+            artist_a = song['artists'][0]['id']
+    for song in songBResults['tracks']['items']:
+        if song != " ":   
+            artist_b = song['artists'][0]['id']
+    
+    if artist_a == "None" or artist_b == "None":
+        return track_list 
+    else:
+        songAFeatures = audio_features_help(song_a)[0]
+        songBFeatures = audio_features_help(song_b)[0]
+        track_id_A = songAFeatures["id"]
+        track_id_B = songBFeatures["id"]
+
+        genre_a = sp.artist(artist_a)['genres'][0]
+        genre_b = sp.artist(artist_b)['genres'][0]
+        combined_genres = genre_a + " "  + genre_b
+
+        max_valence = max(float(get_mood(song_a)), float(get_mood(song_b)))
+        min_valence = min(float(get_mood(song_a)), float(get_mood(song_b)))
+        max_energy = max(float(get_energy(song_a)), float(get_energy(song_b)))
+        min_energy = min(float(get_energy(song_a)), float(get_energy(song_b)))
+        max_tempo = max(float(get_tempo(song_a)), float((get_tempo(song_b))))
+        min_tempo = min(float(get_tempo(song_a)), float((get_tempo(song_b))))
+        max_dance = max(float(get_danceability(song_a)), float(get_danceability(song_b)))
+        min_dance = min(float(get_danceability(song_a)), float(get_danceability(song_b)))
+
+
+        recomendations = sp.recommendations(seed_artists = [artist_a, artist_b], seed_genres = [combined_genres],
+        seed_tracks = [track_id_A, track_id_B], limit = 5, country = 'US',
+        min_valence = min_valence,
+        max_valence = max_valence,
+        min_energy = min_energy,
+        max_energy = max_energy,
+        min_tempo = min_tempo,
+        max_tempo = max_tempo,
+        min_danceability = min_dance,
+        max_danceability = max_dance)
+        for item in recomendations['tracks']:
+            artist_id = item['artists'][0]['id']
+            track_id = item['id']
+            if track_id == track_id_A or track_id == track_id_B:
+                continue
+            else:
+                track_list.append([artist_id, track_id])
+        if len(recomendations) == 0: 
+            return []
+        else:
+            return track_list
+        
+        
+
+
 
 def reply_suggest_theory(song_a, song_b):
     """
@@ -607,3 +667,14 @@ def reply_suggest_theory(song_a, song_b):
              suggest_theory(song_a, song_b) was empty or a string that contains all the similar songs between 
              two songs for the InputClass to use.
     """
+    track_list = suggest_theory(song_a, song_b)
+    reply_string = ("I computed these songs that are similar to " + song_a + " and " + song_b + ": \n")
+
+    if track_list == []:
+        return "Sorry! There are no suggested songs based on theory from these songs!"
+    else:
+        for idx, item in enumerate(track_list):
+            rep = (str(idx + 1) + ". " + sp.track(item[1])['name'] + " by " + sp.artist(item[0])['name'] + "\n")
+            reply_string += rep
+
+    return reply_string
