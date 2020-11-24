@@ -274,26 +274,31 @@ class MusicTheoryTest(unittest.TestCase):
         self.assertEqual(MusicTheory.reply_compare_theory("Far More Blue", "THAT BITCH"),("Sorry! There were no similarties between these songs."))
 
     # I got rid of my second whitebox test for compare_theory as my first blackbox test technically checks the successful branch.
+
     #######################
     ## Phase Five Tests  ##
     #######################
     # I found it way too hard to get a playlist and sort through a playlist due to my own miscomception of what a GET SEED SUGGESTION 
     # did, so therefore I changed it back to two songs and compare + find songs thru that. 
+
+    # Forgot to make the method called be reply_suggest_theory! Name two tests the same thing too, also had parenthesis issues.
+    # Added a newline cmnd after the 1. 1980s Horror film as I decided to have newlines at the end of each line. Also for my POV POV test
+    # I still had the "Computed" line at the end....oops.
+    
+    # TESTS PASSED 24th of November 2020 :) 
     
     def test_suggest_music_one(self):
-        self.assertEqual(MusicTheory.suggest_theory("FROOT", "Summertime Sadness"),
-        ("I computed these songs that are similar to FROOT and Summertime Sadness: \n")
-        ("1. 1980s Horror Film II by Wallows"))
+        self.assertEqual(MusicTheory.reply_suggest_theory("FROOT", "Summertime Sadness"),("I computed these songs that are similar to FROOT and Summertime Sadness: \n"
+        "1. 1980s Horror Film II by Wallows\n"))
 
     def test_suggest_music_two(self):
-        self.assertEqual(MusicTheory.suggest_theory("Foo Bar Bash Song", "Sheila Ki Jiwani"), "Sorry! There are no suggested songs based on theory from these songs!")
+        self.assertEqual(MusicTheory.reply_suggest_theory("Foo Bar Bash Song", "Sheila Ki Jiwani"), "Sorry! There are no suggested songs based on theory from these songs!")
 
     def test_suggest_music_three(self):
-        self.assertEqual(MusicTheory.suggest_theory("POV", "POV"),("I computed these songs that are similar to POV and POV: \n")
-        ("Sorry! There are no suggested songs based on theory from these songs!"))
+        self.assertEqual(MusicTheory.reply_suggest_theory("POV", "POV"),("Sorry! There are no suggested songs based on theory from these songs!"))
 
-    def test_suggest_music_two(self):
-        self.assertEqual(MusicTheory.suggest_theory("Foo Bar Bash Song", "I am in Art Class"), "Sorry! There are no suggested songs based on theory from these songs!")
+    def test_suggest_music_four(self):
+        self.assertEqual(MusicTheory.reply_suggest_theory("Foo Bar Bash Song", "I am in Art Class"), "Sorry! There are no suggested songs based on theory from these songs!")
 
 
 
