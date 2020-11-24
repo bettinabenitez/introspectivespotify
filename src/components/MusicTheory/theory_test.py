@@ -95,7 +95,7 @@ class MusicTheoryTest(unittest.TestCase):
     #######################
     ## Phase Three Tests ##
     #######################
-
+    # ALL TESTS PASSED 21st of NOVEMBER 2020
     def test_reply_tempo(self):
         hardcodedTempo = "Thank You For The Music has a tempo of 98.879 BPM!"
         self.assertEqual(MusicTheory.reply_get_tempo("Thank You For The Music"), hardcodedTempo)
@@ -254,7 +254,8 @@ class MusicTheoryTest(unittest.TestCase):
     #######################
     ## Phase Four Tests  ##
     #######################
-    
+    # ALL TESTS PASSED 22nd OF NOVEMBER 2020
+
     # With testing, I realized I had formatted the way the similar methods are shown in the wrong way so I 
     # fixed that up. I also had spelling mistakes and some spacing errors. 
     def test_compare_theory_functionality(self):
@@ -273,6 +274,30 @@ class MusicTheoryTest(unittest.TestCase):
         self.assertEqual(MusicTheory.reply_compare_theory("Far More Blue", "THAT BITCH"),("Sorry! There were no similarties between these songs."))
 
     # I got rid of my second whitebox test for compare_theory as my first blackbox test technically checks the successful branch.
+    #######################
+    ## Phase Five Tests  ##
+    #######################
+    # I found it way too hard to get a playlist and sort through a playlist due to my own miscomception of what a GET SEED SUGGESTION 
+    # did, so therefore I changed it back to two songs and compare + find songs thru that. 
+    
+    def test_suggest_music_one(self):
+        self.assertEqual(MusicTheory.suggest_theory("FROOT", "Summer Time Sadness"),
+        ("I computed these songs that are similar to FROOT by MARINA and Summertime Sadness by Lana Del Ray \n")
+        ("1. 1980s Horror Film II by Wallows"))
+
+    def test_suggest_music_two(self):
+        self.assertEqual(MusicTheory.suggest_theory("Foo Bar Bash Song", "Sheila Ki Jiwani"), "Sorry! There are no suggested songs based on theory from these songs!")
+
+    def test_suggest_music_three(self):
+        self.assertEqual(MusicTheory.suggest_theory("POV", "POV"),("I computed these songs that are similar to POV by Ariana Grande and POV by Ariana Grande \n")
+        ("1. POV by Ariana Grande"))
+
+    def test_suggest_music_two(self):
+        self.assertEqual(MusicTheory.suggest_theory("Foo Bar Bash Song", "I am in Art Class"), "Sorry! There are no suggested songs based on theory from these songs!")
+
+
+
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MusicTheoryTest)
     unittest.TextTestRunner(verbosity=2).run(suite)
