@@ -43,12 +43,17 @@ def compute_genre_helper(genre_dictionary, limit):
     :rtype: list
     :return: a queue of top genres sorted from most listened to genre to least listened to 
     """
+    # check if limit is out of bounds
+    if limit > 10:
+        limit = 10
+
     top_genre_queue = []
 
-    # sort the genre_dictionary based on how many artists each genre is associated with
+    # sort the genre_dictionary based on the number of artists each genre is associated with
     genre_dictionary = sorted(genre_dictionary, key=lambda k: len(genre_dictionary[k]), reverse=True)
     
     count = 0
+    # add genre to top_genre_queue until limit is reached
     for genre in genre_dictionary:
         if count < limit:
             top_genre_queue.append(genre)
@@ -68,9 +73,11 @@ def compute_top_songs_theory_helper(theory_dictionary):
     """
     for feature in theory_dictionary:
         if feature == "key" or feature == "mode":
+            # find the multimode (all "tied" elements are added into a list)
             theory_dictionary[feature] = multimode(theory_dictionary[feature])
         else:
-            theory_dictionary[feature] = sum(theory_dictionary[feature]) / len(theory_dictionary[feature])
+            # find the mean
+            theory_dictionary[feature] = round(sum(theory_dictionary[feature]) / len(theory_dictionary[feature]), 2)
     return theory_dictionary
 
 ###############################
@@ -124,9 +131,7 @@ def compute_top_songs(time_range, limit):
     if limit > 10:
         limit = 10
 
-    ## TO DO 
-    # calls getAccessToken(discord username) from Spotify Auth class 
-    # uses accessToken and Spotipy object and get user's top artists songs in JSON (uses limit parameter)
+    # TO DO: call getAccessToken(discord username) from Spotify Auth class 
     
     # Make Spotify API call 
     results = sp.current_user_top_tracks(time_range=time_range, limit=limit)
@@ -158,9 +163,7 @@ def compute_top_artists(time_range, limit):
     if limit > 10:
         limit = 10
 
-    ## TO DO 
-    # calls getAccessToken(discord username) from Spotify Auth class 
-    # uses accessToken and Spotipy object and get user's top artists in JSON
+    # TO DO: calls getAccessToken(discord username) from Spotify Auth class 
 
     # Make Spotify API call 
     results = sp.current_user_top_artists(time_range=time_range, limit=limit)
@@ -201,10 +204,8 @@ def compute_top_songs_theory(top_songs):
         theory_dictionary["acousticness"].append(float(get_acousticness(song)))
         theory_dictionary["energy"].append(float(get_energy(song)))
         theory_dictionary["instrumentalness"].append(float(get_instrumentalness(song)))
-    # print(compute_top_songs_theory_helper({'tempo': [95.025, 106.973, 85.012, 77.332, 85.016, 195.09], 'time_signature': [4, 4, 4, 4, 4, 4], 'key': ['3', '2', '3', '0', '2', '1'], 'mode': ['1', '1', '1', '1', '1', '1'], 'mood': [0.462, 0.228, 0.337, 0.943, 0.383, 0.451], 'danceability': [0.598, 0.563, 0.588, 0.553, 0.702, 0.52], 'acousticness': [0.215, 0.872, 0.0678, 0.839, 0.587, 0.464], 'energy': [0.72, 0.283, 0.521, 0.545, 0.597, 0.448], 'instrumentalness': [2.95e-06, 0.000143, 0.149, 0.0, 3.62e-06, 5.79e-06]}))
     return compute_top_songs_theory_helper(theory_dictionary)
 
-#print(compute_top_songs_theory([['Bad Friend', 'Rina Sawayama'], ['cellophane', 'FKA twigs'], ['Daddy Issues', 'The Neighbourhood'], ['Strawberry Blond', 'Mitski'], ['F2020', 'Avenue Beat'], ['Cancelled.', 'Kiana Ledé']]))
 #########################
 ##### REPLY METHODS #####
 #########################
@@ -357,5 +358,3 @@ def reply_top_songs_theory(time_range, limit):
         return output
     except:
         return "An exception occurred. Something went wrong. :( uh oh"
-
-

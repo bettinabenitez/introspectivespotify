@@ -110,7 +110,7 @@ class InputClass(commands.Cog):
     async def topgenres(self, ctx, *args):
         user = ctx.author
         time_range = "medium_term"
-        limit = 3
+        limit = 5
         if len(args) > 0:
             for arg in args:
                 if arg == "medium" or arg == "medium_term" or arg == "m":
