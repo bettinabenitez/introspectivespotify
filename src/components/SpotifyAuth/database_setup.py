@@ -14,7 +14,7 @@ Base = declarative_base()
 class User(Base):
    __tablename__ = 'user'
 
-   discord_name = Column(String, primary_key=True, unique=True)
+   discord_id = Column(String, primary_key=True, unique=True)
    spotify_name = Column(String, unique=True)
    access_token = Column(String)
    expires_at = Column(Integer)
@@ -32,8 +32,10 @@ class User(Base):
       }
 
 engine = create_engine(DB_STRING)
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
 def recreate_database():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
+
+recreate_database()

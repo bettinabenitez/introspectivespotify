@@ -34,11 +34,9 @@ class InputClass(commands.Cog):
     @commands.command()
     async def login(self, ctx):
         user = ctx.author
-        results = spotify_login(user)
-        for idx, item in enumerate(results['items']):
-            artist = item['name']
-            await user.send(str(idx) + " " + artist)
-
+        response = await spotify_login(self.bot, user)
+        await user.send(response)
+        
     @commands.command()
     async def logout(self, ctx):
         user = ctx.author
