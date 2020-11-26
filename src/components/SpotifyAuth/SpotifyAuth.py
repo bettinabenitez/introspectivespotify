@@ -33,6 +33,7 @@ db_session = Session()
 
 # spotify variables
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 s = requests.Session()
@@ -100,12 +101,12 @@ async def spotify_login(bot, user):
     token_dict['expires_at'] = int(time.time()) + token_dict['expires_in']
 
     # write to oAuth cache file
-    cache_file = open(".oAuthCache", "w")
-    cache_file.write(json.dumps(token_dict))
-    cache_file.close()
+    # cache_file = open(".oAuthCache", "w")
+    # cache_file.write(json.dumps(token_dict))
+    # cache_file.close()
 
     # make a call to spotify web API, verify premium
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
+    sp.set_auth(token_dict['access_token'])
     user_me = sp.me()
 
     if user_me['product'] != 'premium':
@@ -133,8 +134,44 @@ async def spotify_login(bot, user):
 
     return "Login Successful"
 
+
 def spotify_logout(user):
-    pass
+    item = db_session.query(User).filter_by(discord_id=str(user.id)).first()
+    if not item:
+        return "You have not logged in!"
+
+    # delete item
+    db_session.delete(item)
+    db_session.commit()
+
+    return "Logout Successful"
+
 
 def get_access_token(user):
-    pass
+    item = db_session.query(User).filter_by(discord_id=str(user.id)).first()
+    if not item:
+        return "You have not logged in!"
+    
+    expired = int(time.time()) - item.expires_at > 3600
+
+    if expired:
+        item.access_token, item.expires_at = __refresh_access_token(item.refresh_token)
+        db_session.add(item)
+        db_session.commit()
+
+    return item.access_token
+
+
+def __refresh_access_token(refresh_token):
+    auth_manager = sp.auth_manager
+    refresh_response = auth_manager.refresh_access_token(refresh_token)
+
+    return (refresh_response['access_token'], refresh_response['expires_at'])
+
+
+def get_spotify_id(user):
+    item = db_session.query(User).filter_by(discord_id=str(user.id)).first()
+    if not item:
+        return "You have not logged in!"
+
+    return item.spotify_name

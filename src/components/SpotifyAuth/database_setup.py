@@ -38,4 +38,4 @@ def recreate_database():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
-recreate_database()
+# recreate_database()
