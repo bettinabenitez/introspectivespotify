@@ -59,6 +59,7 @@ async def spotify_login(bot, user):
     # send url to user, get response url
     await user.send("Please log in using the following link and reply to me with the URL you are redirected to!")
     await user.send(login_url)
+    await user.send("The reply URL should start with 'localhost'.")
     msg = await bot.wait_for('message', check=lambda m: m.author==user)
     auth_response = msg.content
 
@@ -150,7 +151,9 @@ def spotify_logout(user):
 def get_access_token(user):
     item = db_session.query(User).filter_by(discord_id=str(user.id)).first()
     if not item:
-        return "You have not logged in!"
+        # user is not logged in
+        # methods which call get_access_token should do a None check
+        return None
     
     expired = int(time.time()) - item.expires_at > 3600
 

@@ -121,8 +121,8 @@ class InputClass(commands.Cog):
                     time_range = "short_term"
                 elif arg.isdigit():
                     limit = int(arg)
-        reply = reply_top_genres(time_range, limit)
-        await user.send(reply)
+        reply = reply_top_genres(user, time_range, limit)
+        await ctx.send(reply)
 
     @commands.command()
     async def topsongs(self, ctx, *args):
@@ -139,8 +139,8 @@ class InputClass(commands.Cog):
                     time_range = "short_term"
                 elif arg.isdigit():
                     limit = int(arg)
-        reply = reply_top_songs(time_range, limit)
-        await user.send(reply)
+        reply = reply_top_songs(user, time_range, limit)
+        await ctx.send(reply)
 
     @commands.command()
     async def topartists(self, ctx, *args):
@@ -157,8 +157,8 @@ class InputClass(commands.Cog):
                     time_range = "short_term"
                 elif arg.isdigit():
                     limit = int(arg)
-        reply = reply_top_artists(time_range, limit)
-        await user.send(reply)
+        reply = reply_top_artists(user, time_range, limit)
+        await ctx.send(reply)
 
     @commands.command()
     async def topsongstheory(self, ctx, *args):
@@ -175,8 +175,8 @@ class InputClass(commands.Cog):
                     time_range = "short_term"
                 elif arg.isdigit():
                     limit = int(arg)
-        reply = reply_top_songs_theory(time_range, limit)
-        await user.send(reply)
+        reply = reply_top_songs_theory(user, time_range, limit)
+        await ctx.send(reply)
         
 
 def setup(bot):
