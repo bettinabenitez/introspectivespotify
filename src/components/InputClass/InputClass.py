@@ -5,6 +5,7 @@ from discord.ext import commands
 sys.path.append('../')
 
 from SpotifyAuth.SpotifyAuth import spotify_login
+from SpotifyAuth.SpotifyAuth import spotify_logout
 from MusicHistory.MusicHistory import reply_top_songs_theory
 from MusicTheory.MusicTheory import reply_all_musictheory
 from MusicTheory.MusicTheory import reply_get_tempo 
@@ -40,7 +41,8 @@ class InputClass(commands.Cog):
     @commands.command()
     async def logout(self, ctx):
         user = ctx.author
-        # return SpotifyAuth.spotify_login(user)
+        response = spotify_logout(user)
+        await user.send(response)
 
     ##### MUSIC THEORY COMMANDS ##### 
     @commands.command()
