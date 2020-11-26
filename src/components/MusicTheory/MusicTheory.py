@@ -310,36 +310,25 @@ def reply_get_key(song):
 
     Returns: A string that has the value for key and formatted English sentences for the input class.  
 
+    TDD: I read online that if statement branches are less efficient than dictionaries, so I changed it!
+
     """
     # Get the key and convert to correct string format. 
     key = get_key(song)
-    if key == "None" or key == "-1":
-        return "Sorry! This song does not exist."
-    elif key == "0": 
-        return song + " has a key of C!"
-    elif key == "1": 
-        return song + " has a key of C#!"
-    elif key == "2": 
-        return song + " has a key of D!"
-    elif key == "3": 
-        return song + " has a key of D#!"
-    elif key == "4": 
-        return song + " has a key of E!"
-    elif key == "5": 
-        return song + " has a key of F!"
-    elif key == "6": 
-        return song + " has a key of F#!"
-    elif key == "7": 
-        return song + " has a key of G!"
-    elif key == "8": 
-        return song + " has a key of G#!"
-    elif key == "9": 
-        return song + " has a key of A!"
-    elif key == "10": 
-        return song + " has a key of A#!"
-    elif key == "11": 
-        return song + " has a key of B!"
-    
+    key_dict = {"0": "C",
+                "1": "C#/D♭",
+                "2": "D",
+                "3": "D#/E♭",
+                "4": "E",
+                "5": "F",
+                "6": "F#/G♭",
+                "7": "G",
+                "8": "G#/A♭",
+                "9": "A",
+                "10": "A#/B♭",
+                "11": "B",
+                "-1": "Sorry! This song does not exist."}
+    return song + " has a key of " + key_dict[key] + "!"
 
 def reply_get_time_signature(song):
     """
@@ -569,15 +558,19 @@ def compare_theory(song, song_compare):
         featureA == "duration_ms"):
             continue
         else:
+            # If feature is tempo, only offest by one.
             if featureA == "tempo":
                 if valueA - 1 <= valueB <= valueA + 1:
                     similaritiesList.append(featureA)
+            # If the feature is mode, make sure they are equal.
             elif featureA == "mode":
                 if valueA == valueB:
                     similaritiesList.append(featureA)
+            # If the feature is instru. , make sure its offset by 0.01
             elif featureA == "instrumentalness":
                 if valueA - 0.01 <= valueB <= valueA + 0.01:
                     similaritiesList.append(featureA)
+            # Normal Offeset.
             elif valueA - 0.1 <= valueB <= valueA + 0.1:
                     similaritiesList.append(featureA)  
     return similaritiesList
@@ -649,10 +642,11 @@ def suggest_theory(song_a, song_b):
     for song in songBResults['tracks']['items']:
         if song != " ":   
             artist_b = song['artists'][0]['id']
-    
+    # If no artist exists for the specific song.
     if artist_a == "None" or artist_b == "None":
         return track_list 
     else:
+        # Get the audio features, track id, and genre list.
         songAFeatures = audio_features_help(song_a)[0]
         songBFeatures = audio_features_help(song_b)[0]
         track_id_A = songAFeatures["id"]
