@@ -221,9 +221,6 @@ def reply_top_genres(time_range, limit):
     :rtype: string
     :return: a string that describes what a user's top genres are
     """
-    if limit < 0:
-        return "Please try a limit greater than 0! :)"
-
     try:
         # TO DO: call set_auth from Spotify Auth component 
 
@@ -257,9 +254,6 @@ def reply_top_songs(time_range, limit):
     :rtype: string
     :return: a string that describes what a user's top songs are
     """
-    if limit < 0:
-        return "Please try a limit greater than 0! :)"
-
     try:
         # TO DO: call set_auth from Spotify Auth component 
 
@@ -289,9 +283,6 @@ def reply_top_artists(time_range, limit):
     :rtype: string
     :return: a string that describes what a user's top artists are
     """
-    if limit < 0:
-        return "Please try a limit greater than 0! :)"
-
     try:
         # TO DO: call set_auth from Spotify Auth component 
 
@@ -324,16 +315,14 @@ def reply_top_songs_theory(time_range, limit):
     :return: a string that describes what a user's theory data on top songs
     """
     output = "Your top song"
-    if limit < 0:
-        return "Please try a limit greater than 0! :)"
-    elif limit == 1:
+    if limit == 1:
         output += "has the following music theory features:"
     else:
         output += "s have the following music theory features:"
 
     try:
         # TO DO: call set_auth from Spotify Auth component 
-        
+
         top_songs = list(compute_top_songs(time_range, limit).values())
         #theory_dictionary = {'tempo': 195.09, 'time_signature': 4, 'key': ['3', '2'], 'mode': ['1', '0'], 'mood': 0.451, 'danceability': 0.52, 'acousticness': 0.464, 'energy': 0.448, 'instrumentalness':  3.62e-06}
         theory_dictionary = (compute_top_songs_theory(top_songs))

@@ -119,9 +119,13 @@ class InputClass(commands.Cog):
                     time_range = "long_term"
                 elif arg == "short" or arg == "short_term" or arg == "s":
                     time_range = "short_term"
-                elif arg.isdigit():
+                elif arg.isdigit() or arg[1:].isdigit():
                     limit = int(arg)
-        reply = reply_top_genres(time_range, limit)
+
+        if limit <= 0:
+            reply = "Try asking for at least 1 top genre :)"
+        else: 
+            reply = reply_top_genres(time_range, limit)
         await user.send(reply)
 
     @commands.command()
@@ -137,9 +141,12 @@ class InputClass(commands.Cog):
                     time_range = "long_term"
                 elif arg == "short" or arg == "short_term" or arg == "s":
                     time_range = "short_term"
-                elif arg.isdigit():
+                elif arg.isdigit() or arg[1:].isdigit():
                     limit = int(arg)
-        reply = reply_top_songs(time_range, limit)
+        if limit <= 0:
+            reply = "Try asking for at least 1 top song :)"
+        else:
+            reply = reply_top_songs(time_range, limit)
         await user.send(reply)
 
     @commands.command()
@@ -155,9 +162,12 @@ class InputClass(commands.Cog):
                     time_range = "long_term"
                 elif arg == "short" or arg == "short_term" or arg == "s":
                     time_range = "short_term"
-                elif arg.isdigit():
+                elif arg.isdigit() or arg[1:].isdigit():
                     limit = int(arg)
-        reply = reply_top_artists(time_range, limit)
+        if limit <= 0:
+            reply = "Try asking for at least 1 top artist :)"
+        else:
+            reply = reply_top_artists(time_range, limit)
         await user.send(reply)
 
     @commands.command()
@@ -173,9 +183,12 @@ class InputClass(commands.Cog):
                     time_range = "long_term"
                 elif arg == "short" or arg == "short_term" or arg == "s":
                     time_range = "short_term"
-                elif arg.isdigit():
+                elif arg.isdigit() or arg[1:].isdigit():
                     limit = int(arg)
-        reply = reply_top_songs_theory(time_range, limit)
+        if limit <= 0:
+            reply = "Try asking for at least 1 top song's theory data :)"
+        else:
+            reply = reply_top_songs_theory(time_range, limit)
         await user.send(reply)
         
 
