@@ -160,7 +160,7 @@ class MusicTheoryTest(unittest.TestCase):
                          "Thank You For The Music has high acoustics!\n"
                          "Thank You For The Music has low energy!\n"
                          "Thank You For The Music has low instrumentals!")
-        self.assertEqual(MusicTheory.reply_all_music)theory("Thank You For The Music"), hardcodedDict)
+        self.assertEqual(MusicTheory.reply_all_music_theory("Thank You For The Music"), hardcodedDict)
 
     ## Key Tests: Each test here tests that each reply key branch is correct. ##
 
