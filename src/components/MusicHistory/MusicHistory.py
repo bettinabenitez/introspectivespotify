@@ -129,10 +129,6 @@ def compute_top_songs(time_range, limit):
     :rtype: dictionary 
     :return: dictionary with both the IDs and name 
     """
-    # check is limit is out of bounds 
-    if limit > 10:
-        limit = 10
-
     # Make Spotify API call 
     results = sp.current_user_top_tracks(time_range=time_range, limit=limit)
 
@@ -159,10 +155,6 @@ def compute_top_artists(time_range, limit):
     :rtype: list
     :return: dictionary with both the IDs and name 
     """
-    # check is limit is out of bounds 
-    if limit > 10:
-        limit = 10 
-
     # Make Spotify API call 
     results = sp.current_user_top_artists(time_range=time_range, limit=limit)
 

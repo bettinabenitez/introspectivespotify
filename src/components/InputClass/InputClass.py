@@ -124,7 +124,9 @@ class InputClass(commands.Cog):
 
         if limit <= 0:
             reply = "Try asking for at least 1 top genre :)"
-        else: 
+        else:
+            if limit > 10:
+                limit = 10
             reply = reply_top_genres(time_range, limit)
         await user.send(reply)
 
@@ -146,6 +148,8 @@ class InputClass(commands.Cog):
         if limit <= 0:
             reply = "Try asking for at least 1 top song :)"
         else:
+            if limit > 10:
+                limit = 10
             reply = reply_top_songs(time_range, limit)
         await user.send(reply)
 
@@ -167,6 +171,8 @@ class InputClass(commands.Cog):
         if limit <= 0:
             reply = "Try asking for at least 1 top artist :)"
         else:
+            if limit > 10:
+                limit = 10
             reply = reply_top_artists(time_range, limit)
         await user.send(reply)
 
@@ -188,6 +194,8 @@ class InputClass(commands.Cog):
         if limit <= 0:
             reply = "Try asking for at least 1 top song's theory data :)"
         else:
+            if limit > 10:
+                limit = 10
             reply = reply_top_songs_theory(time_range, limit)
         await user.send(reply)
         
