@@ -97,8 +97,6 @@ def compute_genre(time_range, limit):
     :rtype: list
     :return: a queue in the order of most listened to genre to least listened to
     """
-    # TO DO: Calls getAccessToken(discord username) from Spotify Auth class 
-
     # Make Spotify API call to get user's top artists
     results = sp.current_user_top_artists(time_range=time_range, limit=20)
 
@@ -135,8 +133,6 @@ def compute_top_songs(time_range, limit):
     if limit > 10:
         limit = 10
 
-    # TO DO: call getAccessToken(discord username) from Spotify Auth class 
-    
     # Make Spotify API call 
     results = sp.current_user_top_tracks(time_range=time_range, limit=limit)
 
@@ -165,9 +161,7 @@ def compute_top_artists(time_range, limit):
     """
     # check is limit is out of bounds 
     if limit > 10:
-        limit = 10
-
-    # TO DO: calls getAccessToken(discord username) from Spotify Auth class 
+        limit = 10 
 
     # Make Spotify API call 
     results = sp.current_user_top_artists(time_range=time_range, limit=limit)
@@ -231,10 +225,12 @@ def reply_top_genres(time_range, limit):
         return "Please try a limit greater than 0! :)"
 
     try:
+        # TO DO: call set_auth from Spotify Auth component 
+
         top_genres_queue = compute_genre(time_range, limit)
 
         # take care of edge case - all top artists have no genre 
-        if top_genres_queue = []:
+        if top_genres_queue == []:
             return "Sorry, no top genres were found! Spotify is still gathering info about your top artists. Try again another time."
 
         if limit == 1:
@@ -265,6 +261,8 @@ def reply_top_songs(time_range, limit):
         return "Please try a limit greater than 0! :)"
 
     try:
+        # TO DO: call set_auth from Spotify Auth component 
+
         top_songs_dict = compute_top_songs(time_range, limit)
         if limit == 1:
             song_details = list(top_songs_dict.values())[0] 
@@ -295,6 +293,8 @@ def reply_top_artists(time_range, limit):
         return "Please try a limit greater than 0! :)"
 
     try:
+        # TO DO: call set_auth from Spotify Auth component 
+
         top_artists_queue = compute_top_artists(time_range, limit)
         if limit == 1:
             return "Your top artist is " + top_artists_queue[0] + ". You have great taste!"
@@ -332,6 +332,8 @@ def reply_top_songs_theory(time_range, limit):
         output += "s have the following music theory features:"
 
     try:
+        # TO DO: call set_auth from Spotify Auth component 
+        
         top_songs = list(compute_top_songs(time_range, limit).values())
         #theory_dictionary = {'tempo': 195.09, 'time_signature': 4, 'key': ['3', '2'], 'mode': ['1', '0'], 'mood': 0.451, 'danceability': 0.52, 'acousticness': 0.464, 'energy': 0.448, 'instrumentalness':  3.62e-06}
         theory_dictionary = (compute_top_songs_theory(top_songs))
