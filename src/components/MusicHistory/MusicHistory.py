@@ -110,8 +110,12 @@ def compute_genre(time_range, limit):
                 top_genres_dict[genre] = [index]
             else:
                 top_genres_dict[genre].append(index)
-    
-    return (compute_genre_helper(top_genres_dict, limit))
+
+    # take care of edge case - all top artists have no genre 
+    if top_genre_dict == {}:
+        return []
+    else:
+        return (compute_genre_helper(top_genres_dict, limit))
 
 def compute_top_songs(time_range, limit):
     """Returns a user's top songs(s) over a given time range 
@@ -228,6 +232,11 @@ def reply_top_genres(time_range, limit):
 
     try:
         top_genres_queue = compute_genre(time_range, limit)
+
+        # take care of edge case - all top artists have no genre 
+        if top_genres_queue = []:
+            return "Sorry, no top genres were found! Spotify is still gathering info about your top artists. Try again another time."
+
         if limit == 1:
             return "Your top genre is " + top_genres_queue[0] + ". Happy listening!"
         else: 
