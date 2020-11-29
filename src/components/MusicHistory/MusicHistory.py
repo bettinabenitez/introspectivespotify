@@ -53,6 +53,7 @@ def compute_genre_helper(genre_dictionary, limit):
     genre_dictionary = sorted(genre_dictionary, key=lambda k: len(genre_dictionary[k]), reverse=True)
     
     count = 0
+
     # add genre to top_genre_queue until limit is reached
     for genre in genre_dictionary:
         if count < limit:
@@ -112,6 +113,8 @@ def compute_genre(time_range, limit):
     # take care of edge case - all top artists have no genre 
     if top_genre_dict == {}:
         return []
+
+    # covers cases where at least one top artist has an asscociated genre  
     else:
         return compute_genre_helper(top_genres_dict, limit)
 
@@ -221,8 +224,11 @@ def reply_top_genres(time_range, limit):
         if top_genres_queue == []:
             return "Sorry, no top genres were found! Spotify is still gathering info about your top artists. Try again another time."
 
+        # format and return a string with user's top genre 
         if limit == 1:
             return "Your top genre is " + top_genres_queue[0] + ". Happy listening!"
+
+        # format and return a string containing multiple top genres with their ranking 
         else: 
             output = "Your top genres are"
             for index, genre in enumerate(top_genres_queue):
@@ -249,13 +255,22 @@ def reply_top_songs(time_range, limit):
         # TO DO: call set_auth from Spotify Auth component 
 
         top_songs_dict = compute_top_songs(time_range, limit)
+
+        # format and return a string with user's top song 
         if limit == 1:
             song_details = list(top_songs_dict.values())[0] 
+
+            # format track name + artist name 
             return "Your top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bop!"
+        
+        # format and return a string containing multiple top songs with their ranking 
         else: 
             output = "Your top songs are"
             for index, song_details in enumerate(top_songs_dict.values()):
+
+                # format ranking + track name + artist name 
                 output += " (" + str(index + 1) + ") " + song_details[0] + " by " + song_details[1]
+    
             return output + ". Nice bops!"
     except:
         return "An exception occurred. Something went wrong. :( uh oh"
@@ -278,8 +293,12 @@ def reply_top_artists(time_range, limit):
         # TO DO: call set_auth from Spotify Auth component 
 
         top_artists_queue = compute_top_artists(time_range, limit)
+        
+        # format and return a string with user's top artist 
         if limit == 1:
             return "Your top artist is " + top_artists_queue[0] + ". You have great taste!"
+
+        # format and return a string containing multiple top artists with their ranking 
         else: 
             output = "Your top artists are"
             for index, artist in enumerate(top_artists_queue):
@@ -313,10 +332,14 @@ def reply_top_songs_theory(time_range, limit):
 
     try:
         # TO DO: call set_auth from Spotify Auth component 
-
+        
+        # get list containing the track name and artist name for top songs 
         top_songs = list(compute_top_songs(time_range, limit).values())
+
         theory_dictionary = (compute_top_songs_theory(top_songs))
+
         for feature in theory_dictionary:
+
             if feature == "key":
                 key_dict = {"0": "C",
                             "1": "C#/D♭",
@@ -330,21 +353,34 @@ def reply_top_songs_theory(time_range, limit):
                             "9": "A",
                             "10": "A#/B♭",
                             "11": "B"}
+                
+                # no ties - only 1 top key was found
                 if len(theory_dictionary[feature]) == 1:
                     output += "\n• modal key of " + key_dict[theory_dictionary[feature][0]] + "."
+
+                # there are ties - multiple top keys were found 
                 else: 
                     top_keys = ""
                     for key in theory_dictionary[feature]:
                         top_keys += key_dict[key] + ", "
+
+                    # add the formatted top_keys string to the output without the last comma and space 
                     output += "\n• modal keys of " + top_keys[:-2] + "."
-            elif feature == "mode":
-                mode_dict = {"1": "major", "0": "minor"}
+
+            elif feature == "mode":  
+                # no ties - only 1 top mode was found 
                 if len(theory_dictionary[feature]) == 1:
+                    mode_dict = {"1": "major", "0": "minor"}
                     output += "\n• modal modality of " + mode_dict[(theory_dictionary[feature][0])] + "."
+                
+                # a tie was found the 2 modes 
                 else: 
                     output += "\n• modal modalities of major and minor."
+
             else:
+                # add a formatted string containing the averaged theory data to the output 
                 output += "\n• mean " + str(feature) + " of " + str(theory_dictionary[feature]) + "."
+        
         return output
     except:
         return "An exception occurred. Something went wrong. :( uh oh"
