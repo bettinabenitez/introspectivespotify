@@ -113,7 +113,7 @@ def compute_genre(time_range, limit):
     if top_genre_dict == {}:
         return []
     else:
-        return (compute_genre_helper(top_genres_dict, limit))
+        return compute_genre_helper(top_genres_dict, limit)
 
 def compute_top_songs(time_range, limit):
     """Returns a user's top songs(s) over a given time range 
@@ -136,7 +136,6 @@ def compute_top_songs(time_range, limit):
     top_songs_dict = {}
     for song in results['items']:
         # store in dict. key = id, value = name 
-        # top_songs_dict[song['id']]  = song['name']
         top_songs_dict[song['id']]  = [song['name'], song['artists'][0]['name']]
 
     return top_songs_dict
@@ -184,7 +183,7 @@ def compute_top_songs_theory(top_songs):
                         "instrumentalness": []}
 
     for song in top_songs:
-        song = (song[0]) + " " + (song[1]) # song name + artist name 
+        song = song[0] + " " + song[1] # song name + artist name 
         theory_dictionary["tempo"].append(float(get_tempo(song)))
         theory_dictionary["time_signature"].append(int(get_time_signature(song)))
         theory_dictionary["key"].append(get_key(song))
@@ -252,7 +251,7 @@ def reply_top_songs(time_range, limit):
         top_songs_dict = compute_top_songs(time_range, limit)
         if limit == 1:
             song_details = list(top_songs_dict.values())[0] 
-            return "Your top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bops!"
+            return "Your top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bop!"
         else: 
             output = "Your top songs are"
             for index, song_details in enumerate(top_songs_dict.values()):
@@ -316,7 +315,6 @@ def reply_top_songs_theory(time_range, limit):
         # TO DO: call set_auth from Spotify Auth component 
 
         top_songs = list(compute_top_songs(time_range, limit).values())
-        #theory_dictionary = {'tempo': 195.09, 'time_signature': 4, 'key': ['3', '2'], 'mode': ['1', '0'], 'mood': 0.451, 'danceability': 0.52, 'acousticness': 0.464, 'energy': 0.448, 'instrumentalness':  3.62e-06}
         theory_dictionary = (compute_top_songs_theory(top_songs))
         for feature in theory_dictionary:
             if feature == "key":
