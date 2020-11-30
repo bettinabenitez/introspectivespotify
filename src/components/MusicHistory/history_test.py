@@ -6,7 +6,7 @@ class MusicHistoryTest(unittest.TestCase):
     #### BLACK BOX TESTS ####
     #########################
     """ testing compute genre """
-    # need to update data frequently 
+    #need to update data frequently 
     def test_compute_genre_short(self):
         genre_data = ['pop', 'post-teen pop', 'dance pop', 'pop dance']
         self.assertEqual(MusicHistory.compute_genre("short_term", 5), genre_data)
@@ -81,9 +81,38 @@ class MusicHistoryTest(unittest.TestCase):
         many_songs = [['Bad Friend', 'Rina Sawayama'], ['cellophane', 'FKA twigs'], ['Daddy Issues', 'The Neighbourhood'], ['Strawberry Blond', 'Mitski'], ['F2020', 'Avenue Beat'], ['Cancelled.', 'Kiana Ledé'], ['Motion Sickness', 'Phoebe Bridgers'], ['34+35', 'Ariana Grande'], ['everytime', 'Ariana Grande'], ['Everybody Business', 'Kehlani']]
         self.assertEqual(MusicHistory.compute_top_songs_theory(many_songs), song_theory_data)
 
+    # TO DO add reply methods to black box testing
+    
     #########################
     #### WHITE BOX TESTS ####
     #########################
+    
+    """ testing compute genre helper method"""
+    def test_compute_genre_helper_empty(self):
+        genre_dictionary = {}
+        limit = 4
+        top_genres = []
+        self.assertEqual(MusicHistory.compute_genre_helper(genre_dictionary, limit), top_genres)
+    def test_compute_genre_helper_tie(self):
+        genre_dictionary = {"pop": [1, 3], "r&b": [2,5], "indie": [2,4]}
+        limit = 3
+        top_genres = ["pop", "indie", "r&b"]
+        self.assertEqual(MusicHistory.compute_genre_helper(genre_dictionary, limit), top_genres)
+    def test_compute_genre_helper_no_tie(self):
+        genre_dictionary = {"pop": [1], "r&b": [1,4], "indie": [1, 2, 3]}
+        limit = 3
+        top_genres = ["indie", "r&b", "pop"]
+        self.assertEqual(MusicHistory.compute_genre_helper(genre_dictionary, limit), top_genres)
+    def test_compute_genre_helper_small_limit(self):
+        genre_dictionary = {"pop": [1], "r&b": [1,4], "indie": [1, 2, 3]}
+        limit = 1
+        top_genres = ["indie"]
+        self.assertEqual(MusicHistory.compute_genre_helper(genre_dictionary, limit), top_genres)
+    def test_compute_genre_helper_small_limit(self):
+        genre_dictionary = {"pop": [1], "r&b": [1,4], "indie": [1, 2, 3]}
+        limit = 6
+        top_genres = ["indie", "r&b", "pop"]
+        self.assertEqual(MusicHistory.compute_genre_helper(genre_dictionary, limit), top_genres)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MusicHistoryTest)
