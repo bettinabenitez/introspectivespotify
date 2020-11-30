@@ -48,7 +48,7 @@ class InputClass(commands.Cog):
     ##### MUSIC THEORY COMMANDS ##### 
     @commands.command()
     async def musictheory(self, ctx, song):
-        reply = reply_all_musictheory(song)
+        reply = reply_all_music_theory(song)
         await ctx.send(reply)
     
     @commands.command()
@@ -109,9 +109,11 @@ class InputClass(commands.Cog):
     ##### MUSIC HISTORY COMMANDS #####
     @commands.command()
     async def topgenres(self, ctx, *args):
-        user = ctx.author
+        # set default values 
         time_range = "medium_term"
         limit = 5
+
+        # check if user specified a time_range and/or limit
         if len(args) > 0:
             for arg in args:
                 if arg == "medium" or arg == "medium_term" or arg == "m":
@@ -122,20 +124,29 @@ class InputClass(commands.Cog):
                     time_range = "short_term"
                 elif arg.isdigit() or arg[1:].isdigit():
                     limit = int(arg)
-
+        
+        # handle limit out of bounds 
         if limit <= 0:
             reply = "Try asking for at least 1 top genre :)"
         else:
             if limit > 10:
                 limit = 10
-            reply = reply_top_genres(user, time_range, limit)
+            
+            # If a runtime error occurs, send a short sorry message to the user.
+            try:
+                reply = reply_top_genres(user, time_range, limit)
+            except RuntimeError:
+                reply = "Uh oh! We couldn't get your top genres. Sorry about that :( We'll try to fix this issue ASAP"
+        
         await ctx.send(reply)
 
     @commands.command()
     async def topsongs(self, ctx, *args):
-        user = ctx.author
+        # set default values 
         time_range = "medium_term"
         limit = 5
+
+        # check if user specified a time_range and/or limit
         if len(args) > 0:
             for arg in args:
                 if arg == "medium" or arg == "medium_term" or arg == "m":
@@ -146,19 +157,29 @@ class InputClass(commands.Cog):
                     time_range = "short_term"
                 elif arg.isdigit() or arg[1:].isdigit():
                     limit = int(arg)
+        
+        # handle limit out of bounds 
         if limit <= 0:
             reply = "Try asking for at least 1 top song :)"
         else:
             if limit > 10:
                 limit = 10
-            reply = reply_top_songs(user, time_range, limit)
+
+            # If a runtime error occurs, send a short sorry message to the user.
+            try:
+                reply = reply_top_songs(user, time_range, limit)
+            except RuntimeError:
+                reply = "Uh oh! We couldn't get your top songs. Sorry about that :( We'll try to fix this issue ASAP"
+            
         await ctx.send(reply)
 
     @commands.command()
     async def topartists(self, ctx, *args):
-        user = ctx.author
+        # set default values 
         time_range = "medium_term"
         limit = 5
+
+        # check if user specified a time_range and/or limit
         if len(args) > 0:
             for arg in args:
                 if arg == "medium" or arg == "medium_term" or arg == "m":
@@ -169,19 +190,29 @@ class InputClass(commands.Cog):
                     time_range = "short_term"
                 elif arg.isdigit() or arg[1:].isdigit():
                     limit = int(arg)
+        
+        # handle limit out of bounds 
         if limit <= 0:
             reply = "Try asking for at least 1 top artist :)"
         else:
             if limit > 10:
                 limit = 10
-            reply = reply_top_artists(user, time_range, limit)
+
+            # If a runtime error occurs, send a short sorry message to the user.
+            try:
+                reply = reply_top_artists(user, time_range, limit)
+            except RuntimeError:
+                reply = "Uh oh! We couldn't get your top artists. Sorry about that :( We'll try to fix this issue ASAP"
+            
         await ctx.send(reply)
 
     @commands.command()
     async def topsongstheory(self, ctx, *args):
-        user = ctx.author
+        # set default values 
         time_range = "medium_term"
         limit = 5
+
+        # check if user specified a time_range and/or limit        
         if len(args) > 0:
             for arg in args:
                 if arg == "medium" or arg == "medium_term" or arg == "m":
@@ -192,12 +223,20 @@ class InputClass(commands.Cog):
                     time_range = "short_term"
                 elif arg.isdigit() or arg[1:].isdigit():
                     limit = int(arg)
+        
+        # handle limit out of bounds 
         if limit <= 0:
             reply = "Try asking for at least 1 top song's theory data :)"
         else:
             if limit > 10:
                 limit = 10
-            reply = reply_top_songs_theory(user, time_range, limit)
+
+            # If a runtime error occurs, send a short sorry message to the user.
+            try:
+                reply = reply_top_songs_theory(user, time_range, limit)
+            except RuntimeError:
+                reply = "Uh oh! We couldn't get your top artists. Sorry about that :( We'll try to fix this issue ASAP"
+                
         await ctx.send(reply)
         
     @commands.command()
