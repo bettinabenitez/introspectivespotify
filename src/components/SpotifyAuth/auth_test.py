@@ -35,7 +35,25 @@ async def test_login(bot, user):
     pass
 
 def test_logout(user):
-    pass
+    return_string = "test_logout:\n"
+    
+    # testing logout when user is logged in
+    message = SpotifyAuth.spotify_logout(user)
+    try:
+        assert message == "Logout Successful"
+        return_string += "  Logout user logged in assertion passed\n"
+    except AssertionError:
+        return_string += "  Logout user logged in assertion failed\n"
+
+    # testing logout when user is not logged in
+    message = SpotifyAuth.spotify_logout(user)
+    try:
+        assert message == "You have not logged in!"
+        return_string += "  Logout user not logged in assertion passed\n"
+    except AssertionError:
+        return_string += "  Logout user not logged in assertion failed\n"
+    
+    return return_string
 
 def test_get_token(user):
     return_string = "test_get_token:\n"
@@ -150,7 +168,7 @@ async def test_all_auth(bot, user):
     # test_string += test_login_permissions(user)
     # test_string += test_discord_username_change(user)
     test_string += test_refresh_token(user)
-    # test_string += test_logout(user)
+    test_string += test_logout(user)
 
     test_results = open("test_results.txt", "w")
     test_results.write(test_string)
