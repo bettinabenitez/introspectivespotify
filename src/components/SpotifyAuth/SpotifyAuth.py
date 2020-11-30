@@ -68,6 +68,8 @@ async def spotify_login(bot, user):
     fragment = components.fragment
     query = components.query
     response_dict = dict(i.split('=') for i in (fragment or query or auth_response).split('&'))
+    
+    # INCLUDE MORE ERROR CHECK
     if 'error' in response_dict:
         # log error here
         await user.send("There was an error in the response I received. Please run the !login command again.")
@@ -111,7 +113,7 @@ async def spotify_login(bot, user):
     user_me = sp.me()
 
     if user_me['product'] != 'premium':
-        await user.send("Please upgrade to Spotify Premium if you would like to log into Introspective Spotify")
+        await user.send("Please upgrade to Spotify Premium if you would like to log into Introspective Spotify!")
         return "Login Failed"
 
     # make database entry
@@ -155,7 +157,7 @@ def get_access_token(user):
         # methods which call get_access_token should do a None check
         return None
     
-    expired = int(time.time()) - item.expires_at > 3600
+    expired = int(time.time()) - item.expires_at > 3550
 
     if expired:
         item.access_token, item.expires_at = __refresh_access_token(item.refresh_token)
