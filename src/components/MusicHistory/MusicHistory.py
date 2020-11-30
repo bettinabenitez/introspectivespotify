@@ -47,23 +47,11 @@ def compute_genre_helper(genre_dictionary, limit):
     if limit > 10:
         limit = 10
 
-    top_genre_queue = []
-
     # sort the genre_dictionary based on the number of artists each genre is associated with
-    genre_dictionary = sorted(genre_dictionary, key=lambda k: len(genre_dictionary[k]), reverse=True)
+    genre_list = sorted(genre_dictionary, key=lambda k: len(genre_dictionary[k]), reverse=True)
     
-    count = 0
-
-    # add genre to top_genre_queue until limit is reached
-    for genre in genre_dictionary:
-        if count < limit:
-            top_genre_queue.append(genre)
-            count += 1
-        else:
-            break
+    return genre_list[:limit]
     
-    return top_genre_queue
-
 def compute_top_songs_theory_helper(theory_dictionary):
     """Returns theory data on a user's top songs over a given time range 
     :param theory_dictionary: 
@@ -111,7 +99,7 @@ def compute_genre(time_range, limit):
                 top_genres_dict[genre].append(index)
 
     # take care of edge case - all top artists have no genre 
-    if top_genre_dict == {}:
+    if top_genres_dict == {}:
         return []
 
     # covers cases where at least one top artist has an asscociated genre  
@@ -198,6 +186,7 @@ def compute_top_songs_theory(top_songs):
         theory_dictionary["instrumentalness"].append(float(get_instrumentalness(song)))
     return compute_top_songs_theory_helper(theory_dictionary)
 
+print(compute_top_songs_theory([['Bad Friend', 'Rina Sawayama'], ['cellophane', 'FKA twigs'], ['Daddy Issues', 'The Neighbourhood'], ['Strawberry Blond', 'Mitski'], ['F2020', 'Avenue Beat']]))
 #########################
 ##### REPLY METHODS #####
 #########################
