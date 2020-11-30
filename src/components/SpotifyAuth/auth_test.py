@@ -187,16 +187,34 @@ async def test_login_permissions(bot, user):
 
     return return_string      
 
-def test_discord_username_change(user):
-    pass
+async def test_discord_username_change(bot, user):
+    return_string = "test_discord_username_change:\n"
+
+    await user.send("TESTING: please change your Discord id and reply to me once it is changed")
+    await bot.wait_for('message', check=lambda m: m.author==user)
+
+    await user.send("TESTING: logging in with a new Discord id")
+    await SpotifyAuth.spotify_login(bot, user)
+
+    # checking that the database only has one entry for the user
+    items = db_session.query(User).filter_by(discord_id=str(user.id))
+
+    try:
+        assert items.count() == 1
+        return_string += "  Database entry count assertion passed\n"
+    except AssertionError:
+        return_string += "  Database entry count assertion failed\n"
+
+    return return_string
 
 async def test_all_auth(bot, user):
     test_string = ""
+
     test_string += await test_login_permissions(bot, user)
     test_string += await test_login(bot, user)
+    test_string += await test_discord_username_change(bot, user)
     test_string += test_get_token(user)
     test_string += test_spotify_id(user)
-    # test_string += test_discord_username_change(user)
     test_string += test_refresh_token(user)
     test_string += test_logout(user)
 
