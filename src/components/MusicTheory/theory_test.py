@@ -160,7 +160,7 @@ class MusicTheoryTest(unittest.TestCase):
                          "Thank You For The Music has high acoustics!\n"
                          "Thank You For The Music has low energy!\n"
                          "Thank You For The Music has low instrumentals!")
-        self.assertEqual(MusicTheory.reply_all_musictheory("Thank You For The Music"), hardcodedDict)
+        self.assertEqual(MusicTheory.reply_all_music_theory("Thank You For The Music"), hardcodedDict)
 
     ## Key Tests: Each test here tests that each reply key branch is correct. ##
 
@@ -171,7 +171,7 @@ class MusicTheoryTest(unittest.TestCase):
     # Original song was not in the key of C#, Google Lied ;(
     # Same for second song
     def test_reply_key_CS(self):
-        self.assertEqual(MusicTheory.reply_get_key("Bounce Back"), "Bounce Back has a key of C#!")
+        self.assertEqual(MusicTheory.reply_get_key("Bounce Back"), "Bounce Back has a key of C#/D♭!")
 
     def test_reply_key_D(self):
         self.assertEqual(MusicTheory.reply_get_key("Love Story"), "Love Story has a key of D!")
@@ -179,7 +179,7 @@ class MusicTheoryTest(unittest.TestCase):
     # Original song was not in the key of D#, Google Lied ;(
     # Same with second song...
     def test_reply_key_DS(self):
-        self.assertEqual(MusicTheory.reply_get_key("Harajuku Girls"), "Harajuku Girls has a key of D#!")
+        self.assertEqual(MusicTheory.reply_get_key("Harajuku Girls"), "Harajuku Girls has a key of D#/E♭!")
 
     # Original song was not in the key of E, Google Lied ;(
     def test_reply_key_E(self):
@@ -189,21 +189,21 @@ class MusicTheoryTest(unittest.TestCase):
         self.assertEqual(MusicTheory.reply_get_key("This Is America"), "This Is America has a key of F!")
 
     def test_reply_key_FS(self):
-        self.assertEqual(MusicTheory.reply_get_key("Lucid Dreams"), "Lucid Dreams has a key of F#!")
+        self.assertEqual(MusicTheory.reply_get_key("Lucid Dreams"), "Lucid Dreams has a key of F#/G♭!")
 
     # Original song was not in the key of G, Google Lied ;(
     def test_reply_key_G(self):
         self.assertEqual(MusicTheory.reply_get_key("Still Got Time"), "Still Got Time has a key of G!")
 
     def test_reply_key_GS(self):
-        self.assertEqual(MusicTheory.reply_get_key("Don't Cry"), "Don't Cry has a key of G#!")
+        self.assertEqual(MusicTheory.reply_get_key("Don't Cry"), "Don't Cry has a key of G#/A♭!")
 
     def test_reply_key_A(self):
         self.assertEqual(MusicTheory.reply_get_key("No Tears Left To Cry"), "No Tears Left To Cry has a key of A!")
 
     # Original song was not in the key of C#, Google Lied ;(
     def test_reply_key_AS(self):
-        self.assertEqual(MusicTheory.reply_get_key("Hollaback Girl"), "Hollaback Girl has a key of A#!")
+        self.assertEqual(MusicTheory.reply_get_key("Hollaback Girl"), "Hollaback Girl has a key of A#/B♭!")
 
     # Forgot exclamation point at the end of test also mispelled Pijama. 
     def test_reply_key_B(self):
@@ -300,14 +300,16 @@ class MusicTheoryTest(unittest.TestCase):
     # Forgot to make the method called be reply_suggest_theory! Name two tests the same thing too, also had parenthesis issues.
     # Added a newline cmnd after the 1. 1980s Horror film as I decided to have newlines at the end of each line. Also for my POV POV test
     # I still had the "Computed" line at the end....oops.
+    # On 25th November, I changed my key method to a dictionary and noticed music_one failed due to 
+    # a new hardcoded suggestion. So I changed how my test works as Spotify Suggest is never 100% the same EVER.
     
     # TESTS PASSED 24th of November 2020 :) 
     
     # Tests a functionality that these two songs will ALWAYS produce this song for ensuring format is correct.
     # also tests succesful branch.
     def test_suggest_music_one(self):
-        self.assertEqual(MusicTheory.reply_suggest_theory("FROOT", "Summertime Sadness"),("I computed these songs that are similar to FROOT and Summertime Sadness: \n"
-        "1. 1980s Horror Film II by Wallows\n"))
+        headerString = "I computed these songs that are similar to FROOT and Summertime Sadness: \n"
+        self.assertTrue(headerString in MusicTheory.reply_suggest_theory("FROOT", "Summertime Sadness"))
 
     # Tests two songs that have no similarities will produce no suggestions, also tests failure branch.
     def test_suggest_music_two(self):
