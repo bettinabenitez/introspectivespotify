@@ -33,7 +33,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
 ######################################
 ##### COMPUTATION HELPER METHODS #####
 ######################################
-def compute_genre_helper(genre_dictionary, limit):
+def compute_genre_helper(genres_dict, limit):
     """Returns a user's top genres given a dictionary containing potential top genres and their corresponding rankings
     :param genre_dictionary: keys = genre name, values = a list of ints representing the ranking of artist
     :type genre_dictionary: dictionary 
@@ -44,14 +44,15 @@ def compute_genre_helper(genre_dictionary, limit):
     :rtype: list
     :return: a queue of top genres sorted from most listened to genre to least listened to 
     """
-    # check if limit is out of bounds
-    if limit > 10:
-        limit = 10
+    # take care of edge case - all top artists have no genre 
+    if genres_dict == {}:
+        return []
 
     # sort the genre_dictionary based on the number of artists each genre is associated with
-    genre_list = sorted(genre_dictionary, key=lambda k: len(genre_dictionary[k]), reverse=True)
-    
-    return genre_list[:limit]
+    # break ties by comparing values lexigraphically 
+    genres_list = sorted(sorted(genres_dict, key=lambda i: genres_dict[i], reverse=False), key=lambda k: len(genres_dict[k]), reverse=True)
+
+    return genres_list[:limit]
     
 def compute_top_songs_theory_helper(theory_dictionary):
     """Returns theory data on a user's top songs over a given time range 
@@ -98,10 +99,6 @@ def compute_genre(time_range, limit):
                 top_genres_dict[genre] = [index]
             else:
                 top_genres_dict[genre].append(index)
-
-    # take care of edge case - all top artists have no genre 
-    if top_genres_dict == {}:
-        return []
 
     # covers cases where at least one top artist has an asscociated genre  
     else:
@@ -190,7 +187,7 @@ def compute_top_songs_theory(top_songs):
 #########################
 ##### REPLY METHODS #####
 #########################
-def reply_top_genres(user, time_range, limit):
+def reply_top_genres(time_range, limit):
     """Returns a string with a user's top genres that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -218,17 +215,17 @@ def reply_top_genres(user, time_range, limit):
 
     # format and return a string with user's top genre 
     if limit == 1:
-        return user.name + "'s top genre is " + top_genres_queue[0] + ". Happy listening!"
+        return "Your top genre is " + top_genres_queue[0] + ". Happy listening!"
 
     # format and return a string containing multiple top genres with their ranking 
     else: 
-        output = user.name + "'s top genres are"
+        output = "Your top genres are"
         for index, genre in enumerate(top_genres_queue):
             output += " (" + str(index + 1) + ") " + genre 
         return output + ". Happy listening!"
 
     
-def reply_top_songs(user, time_range, limit):
+def reply_top_songs(time_range, limit):
     """Returns a string with a user's top songs that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -255,11 +252,11 @@ def reply_top_songs(user, time_range, limit):
         song_details = list(top_songs_dict.values())[0] 
 
         # format track name + artist name 
-        return user.name + "'s top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bop!"
+        return "Your top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bop!"
     
     # format and return a string containing multiple top songs with their ranking 
     else: 
-        output = user.name + "'s top songs are"
+        output = "Your top songs are"
         for index, song_details in enumerate(top_songs_dict.values()):
 
             # format ranking + track name + artist name 
@@ -267,7 +264,7 @@ def reply_top_songs(user, time_range, limit):
 
         return output + ". Nice bops!"
 
-def reply_top_artists(user, time_range, limit):
+def reply_top_artists(time_range, limit):
     """Returns a string with a user's top artists that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -291,16 +288,16 @@ def reply_top_artists(user, time_range, limit):
     
     # format and return a string with user's top artist 
     if limit == 1:
-        return user.name + "'s top artist is " + top_artists_queue[0] + ". You have great taste!"
+        return "Your top artist is " + top_artists_queue[0] + ". You have great taste!"
 
     # format and return a string containing multiple top artists with their ranking 
     else: 
-        output = user.name + "'s top artists are"
+        output = "Your top artists are"
         for index, artist in enumerate(top_artists_queue):
             output += " (" + str(index + 1) + ") " + artist
         return output + ". You have great taste!"
 
-def reply_top_songs_theory(user, time_range, limit):
+def reply_top_songs_theory(time_range, limit):
     """Returns a string with a user's theory data on their top songs over a given time range that
     the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
@@ -317,7 +314,7 @@ def reply_top_songs_theory(user, time_range, limit):
     :rtype: string
     :return: a string that describes what a user's theory data on top songs
     """
-    output = user.name + "'s top song"
+    output = "Your top song"
     if limit == 1:
         output += "has the following music theory features:"
     else:
