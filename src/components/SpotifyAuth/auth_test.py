@@ -35,6 +35,7 @@ async def test_login(bot, user):
     return_string = "test_login:\n"
 
     # testing login user not logged in
+    await user.send("TESTING: Please approve the following permissions")
     message = await SpotifyAuth.spotify_login(bot, user)
     try:
         assert message == "Login Successful"
@@ -172,18 +173,29 @@ def test_spotify_id(user):
     return return_string
 
 # WHITE BOX TESTS
-def test_login_permissions(user):
-    pass
+async def test_login_permissions(bot, user):
+    return_string = "test_login_permission:\n"
+
+    # testing login when user denies permission
+    await user.send("TESTING: please deny the permissions in the following link:")
+    message = await SpotifyAuth.spotify_login(bot, user)
+    try:
+        assert message == "There was an error in the response I received. Please run the !login command again."
+        return_string += "  Login permission assertion passed\n"
+    except AssertionError:
+        return_string += "  Login permission assertion failed\n"
+
+    return return_string      
 
 def test_discord_username_change(user):
     pass
 
 async def test_all_auth(bot, user):
     test_string = ""
+    test_string += await test_login_permissions(bot, user)
     test_string += await test_login(bot, user)
     test_string += test_get_token(user)
     test_string += test_spotify_id(user)
-    # test_string += test_login_permissions(user)
     # test_string += test_discord_username_change(user)
     test_string += test_refresh_token(user)
     test_string += test_logout(user)

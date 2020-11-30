@@ -72,8 +72,7 @@ async def spotify_login(bot, user):
     # INCLUDE MORE ERROR CHECK
     if 'error' in response_dict:
         # log error here
-        await user.send("There was an error in the response I received. Please run the !login command again.")
-        return "Login Failed"
+        return "There was an error in the response I received. Please run the !login command again."
 
     code = response_dict['code']
     
