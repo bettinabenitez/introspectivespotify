@@ -206,10 +206,10 @@ def reply_top_genres(user, time_range, limit):
     """
     try:
         # set sp to new user
-        # auth_token = get_access_token(user)
-        # if auth_token is None:
-        #     return "You have not logged in!"
-        # sp.set_auth(auth_token)
+        auth_token = get_access_token(user)
+        if auth_token is None:
+            return "You have not logged in!"
+        sp.set_auth(auth_token)
 
         top_genres_queue = compute_genre(time_range, limit)
 
@@ -246,10 +246,10 @@ def reply_top_songs(user, time_range, limit):
     """
     try:
         # set sp to new user
-        # auth_token = get_access_token(user)
-        # if auth_token is None:
-        #     return "You have not logged in!"
-        # sp.set_auth(auth_token)
+        auth_token = get_access_token(user)
+        if auth_token is None:
+            return "You have not logged in!"
+        sp.set_auth(auth_token)
 
         top_songs_dict = compute_top_songs(time_range, limit)
 
@@ -288,10 +288,10 @@ def reply_top_artists(user, time_range, limit):
     """
     try:
         # set sp to new user
-        # auth_token = get_access_token(user)
-        # if auth_token is None:
-        #     return "You have not logged in!"
-        # sp.set_auth(auth_token)
+        auth_token = get_access_token(user)
+        if auth_token is None:
+            return "You have not logged in!"
+        sp.set_auth(auth_token)
 
         top_artists_queue = compute_top_artists(time_range, limit)
         
@@ -333,10 +333,10 @@ def reply_top_songs_theory(user, time_range, limit):
 
     try:
         # set sp to new user
-        # auth_token = get_access_token(user)
-        # if auth_token is None:
-        #     return "You have not logged in!"
-        # sp.set_auth(auth_token)
+        auth_token = get_access_token(user)
+        if auth_token is None:
+            return "You have not logged in!"
+        sp.set_auth(auth_token)
         
         # get list containing the track name and artist name for top songs 
         top_songs = list(compute_top_songs(time_range, limit).values())
