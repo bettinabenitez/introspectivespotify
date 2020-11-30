@@ -6,8 +6,9 @@ sys.path.append('../')
 
 from SpotifyAuth.SpotifyAuth import spotify_login
 from SpotifyAuth.SpotifyAuth import spotify_logout
+from SpotifyAuth.auth_test import test_all_auth
 from MusicHistory.MusicHistory import reply_top_songs_theory
-from MusicTheory.MusicTheory import reply_all_musictheory
+from MusicTheory.MusicTheory import reply_all_music_theory
 from MusicTheory.MusicTheory import reply_get_tempo 
 from MusicTheory.MusicTheory import reply_get_key 
 from MusicTheory.MusicTheory import reply_get_time_signature
@@ -127,7 +128,7 @@ class InputClass(commands.Cog):
         else:
             if limit > 10:
                 limit = 10
-            reply = reply_top_genres(time_range, limit)
+            reply = reply_top_genres(user, time_range, limit)
         await ctx.send(reply)
 
     @commands.command()
@@ -150,7 +151,7 @@ class InputClass(commands.Cog):
         else:
             if limit > 10:
                 limit = 10
-            reply = reply_top_songs(time_range, limit)
+            reply = reply_top_songs(user, time_range, limit)
         await ctx.send(reply)
 
     @commands.command()
@@ -173,7 +174,7 @@ class InputClass(commands.Cog):
         else:
             if limit > 10:
                 limit = 10
-            reply = reply_top_artists(time_range, limit)
+            reply = reply_top_artists(user, time_range, limit)
         await ctx.send(reply)
 
     @commands.command()
@@ -196,9 +197,13 @@ class InputClass(commands.Cog):
         else:
             if limit > 10:
                 limit = 10
-            reply = reply_top_songs_theory(time_range, limit)
+            reply = reply_top_songs_theory(user, time_range, limit)
         await ctx.send(reply)
         
+    @commands.command()
+    async def testAuth(self, ctx):
+        user = ctx.author
+        await test_all_auth(self.bot, user)
 
 def setup(bot):
     bot.add_cog(InputClass(bot))

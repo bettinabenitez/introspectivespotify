@@ -1,32 +1,35 @@
-import logging
 import unittest
-
-class AuthTest(unittest.TestCase):
+import SpotifyAuth.SpotifyAuth
 
 # BLACK BOX TESTS
-    def test_login(self):
-        pass
+async def test_login(bot, user):
+    pass
 
-    def test_logout(self):
-        pass
-    
-    def test_get_token(self):
-        pass
+def test_logout(user):
+    pass
 
-    def test_refresh_token(self):
-        pass
+def test_get_token(user):
+    pass
 
-    def test_spotify_id(self):
-        pass
+def test_refresh_token(user):
+    pass
+
+def test_spotify_id(user):
+    pass
 
 
 # WHITE BOX TESTS
-    def test_login_permissions(self):
-        pass
+def test_login_permissions(user):
+    pass
 
-    def test_discord_username_change(self):
-        pass
+def test_discord_username_change(user):
+    pass
 
-
-if __name__ == '__main__':
-    unittest.main()
+async def test_all_auth(bot, user):
+    await test_login(bot, user)
+    test_logout(user)
+    test_get_token(user)
+    test_refresh_token(user)
+    test_spotify_id(user)
+    test_login_permissions(user)
+    test_discord_username_change(user)

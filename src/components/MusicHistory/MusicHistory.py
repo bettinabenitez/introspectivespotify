@@ -187,7 +187,6 @@ def compute_top_songs_theory(top_songs):
         theory_dictionary["instrumentalness"].append(float(get_instrumentalness(song)))
     return compute_top_songs_theory_helper(theory_dictionary)
 
-print(compute_top_songs_theory([['Bad Friend', 'Rina Sawayama'], ['cellophane', 'FKA twigs'], ['Daddy Issues', 'The Neighbourhood'], ['Strawberry Blond', 'Mitski'], ['F2020', 'Avenue Beat']]))
 #########################
 ##### REPLY METHODS #####
 #########################
