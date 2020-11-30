@@ -1,8 +1,7 @@
 import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from dotenv import load_dotenv
-import SpotifyAuth.SpotifyAuth as SpotifyAuth
+from dotenv import load_dotenvimport SpotifyAuth.SpotifyAuth as SpotifyAuth
 
 # DB imports
 from sqlalchemy import create_engine
@@ -37,6 +36,8 @@ async def test_login(bot, user):
     # testing login user not logged in
     await user.send("TESTING: Please approve the following permissions")
     message = await SpotifyAuth.spotify_login(bot, user)
+
+    # assert that the user is successfully logged in
     try:
         assert message == "Login Successful"
         return_string += "  Login user not logged in assertion passed\n"
@@ -45,6 +46,8 @@ async def test_login(bot, user):
 
     # testing login user already logged in
     message = await SpotifyAuth.spotify_login(bot, user)
+
+    # assert that the function realizes the user is already logged in
     try:
         assert message == "You've already logged in!"
         return_string += "  Login user logged in assertion passed\n"
@@ -58,6 +61,8 @@ def test_logout(user):
     
     # testing logout when user is logged in
     message = SpotifyAuth.spotify_logout(user)
+    
+    # assert that the user is successfully logged out
     try:
         assert message == "Logout Successful"
         return_string += "  Logout user logged in assertion passed\n"
@@ -66,6 +71,8 @@ def test_logout(user):
 
     # testing logout when user is not logged in
     message = SpotifyAuth.spotify_logout(user)
+
+    # assert that the function realizes that the user is already logged out
     try:
         assert message == "You have not logged in!"
         return_string += "  Logout user not logged in assertion passed\n"
@@ -96,6 +103,8 @@ def test_get_token(user):
         'uri': 'spotify:user:tenzynn'
         }
 
+    # assert that the Spotify API call with the access token returns the
+    # expected JSON object
     try:
         assert user_me == correct_user_me
         return_string += "  API call assertion passed\n"
@@ -117,6 +126,8 @@ def test_refresh_token(user):
     
     # refresh access token call
     new_token, new_expires_at = SpotifyAuth.__refresh_access_token(refresh_token)
+
+    # assert that the new expires_at time is different than the old time
     try: 
         assert new_expires_at != old_expires_at
         return_string += "  expires_at assertion passed\n"
@@ -143,6 +154,7 @@ def test_refresh_token(user):
         'uri': 'spotify:user:tenzynn'
         }
 
+    # assert that the Spotify API call with the new token returns the expected JSON object
     try:
         assert user_me == correct_user_me
         return_string += "  new_token assertion passed\n"
@@ -150,7 +162,8 @@ def test_refresh_token(user):
     except AssertionError:
         return_string += "  new_token assertion failed\n"
 
-    # API call with old token
+    # if the old_token is expired to begin with (as required in special setup)
+    # the Spotify API call with the old token should fail
     sp.set_auth(old_token)
     try:
         old_user_me = sp.me()
@@ -164,6 +177,8 @@ def test_refresh_token(user):
 def test_spotify_id(user):
     return_string = "test_spotify_id:\n"
     result = SpotifyAuth.get_spotify_id(user)
+
+    # assert that the spotify id returned matches the user's actual id
     try:
         assert result == "tenzynn"
         return_string += "  spotify id assertion passed\n"
@@ -179,6 +194,8 @@ async def test_login_permissions(bot, user):
     # testing login when user denies permission
     await user.send("TESTING: please deny the permissions in the following link:")
     message = await SpotifyAuth.spotify_login(bot, user)
+
+    # assert that the user is not logged in when they deny permissions
     try:
         assert message == "There was an error in the response I received. Please run the !login command again."
         return_string += "  Login permission assertion passed\n"
@@ -196,9 +213,10 @@ async def test_discord_username_change(bot, user):
     await user.send("TESTING: logging in with a new Discord id")
     await SpotifyAuth.spotify_login(bot, user)
 
-    # checking that the database only has one entry for the user
+    # get database entries
     items = db_session.query(User).filter_by(discord_id=str(user.id))
 
+    # assert that the number of database entries is equal to 1
     try:
         assert items.count() == 1
         return_string += "  Database entry count assertion passed\n"
@@ -208,7 +226,8 @@ async def test_discord_username_change(bot, user):
     return return_string
 
 async def test_all_auth(bot, user):
-    test_string = ""
+    # string for building test total test result output
+    test_string = "Testing Results for the Spotify Authentication Component:\n\n"
 
     test_string += await test_login_permissions(bot, user)
     test_string += await test_login(bot, user)
@@ -218,6 +237,7 @@ async def test_all_auth(bot, user):
     test_string += test_refresh_token(user)
     test_string += test_logout(user)
 
+    # write to a test result file
     test_results = open("test_results.txt", "w")
     test_results.write(test_string)
     test_results.close()
