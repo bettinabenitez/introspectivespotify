@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from statistics import multimode
 
 sys.path.append('../')
-from SpotifyAuth.SpotifyAuth import get_access_token
+#from SpotifyAuth.SpotifyAuth import get_access_token
 from MusicTheory.MusicTheory import get_tempo
 from MusicTheory.MusicTheory import get_key
 from MusicTheory.MusicTheory import get_instrumentalness
