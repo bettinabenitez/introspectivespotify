@@ -497,7 +497,7 @@ def reply_get_instrumentalness(song):
     else:
         return song + " has high instrumentals!"
 
-def reply_all_musictheory(song):
+def reply_all_music_theory(song):
     """
      reply_all_music_theory will call the helper which holds a 
      JSON object representing all of the audio_features from the Spotipy library. 
