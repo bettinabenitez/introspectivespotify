@@ -109,6 +109,8 @@ class InputClass(commands.Cog):
     ##### MUSIC HISTORY COMMANDS #####
     @commands.command()
     async def topgenres(self, ctx, *args):
+        user = ctx.author
+        
         # set default values 
         time_range = "medium_term"
         limit = 5
@@ -142,6 +144,8 @@ class InputClass(commands.Cog):
 
     @commands.command()
     async def topsongs(self, ctx, *args):
+        user = ctx.author
+
         # set default values 
         time_range = "medium_term"
         limit = 5
@@ -175,6 +179,8 @@ class InputClass(commands.Cog):
 
     @commands.command()
     async def topartists(self, ctx, *args):
+        user = ctx.author
+
         # set default values 
         time_range = "medium_term"
         limit = 5
@@ -208,6 +214,8 @@ class InputClass(commands.Cog):
 
     @commands.command()
     async def topsongstheory(self, ctx, *args):
+        user = ctx.author
+        
         # set default values 
         time_range = "medium_term"
         limit = 5
@@ -236,7 +244,7 @@ class InputClass(commands.Cog):
                 reply = reply_top_songs_theory(user, time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top artists. Sorry about that :( We'll try to fix this issue ASAP"
-                
+
         await ctx.send(reply)
         
     @commands.command()
