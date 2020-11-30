@@ -32,8 +32,26 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
 
 # BLACK BOX TESTS
 async def test_login(bot, user):
-    pass
+    return_string = "test_login:\n"
 
+    # testing login user not logged in
+    message = await SpotifyAuth.spotify_login(bot, user)
+    try:
+        assert message == "Login Successful"
+        return_string += "  Login user not logged in assertion passed\n"
+    except AssertionError:
+        return_string += "  Login user not logged in assertion failed\n"
+
+    # testing login user already logged in
+    message = await SpotifyAuth.spotify_login(bot, user)
+    try:
+        assert message == "You've already logged in!"
+        return_string += "  Login user logged in assertion passed\n"
+    except AssertionError:
+        return_string += "  Login user logged in assertion failed\n"
+
+    return return_string 
+        
 def test_logout(user):
     return_string = "test_logout:\n"
     
@@ -162,7 +180,7 @@ def test_discord_username_change(user):
 
 async def test_all_auth(bot, user):
     test_string = ""
-    # test_string += await test_login(bot, user)
+    test_string += await test_login(bot, user)
     test_string += test_get_token(user)
     test_string += test_spotify_id(user)
     # test_string += test_login_permissions(user)
