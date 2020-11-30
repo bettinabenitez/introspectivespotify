@@ -1,7 +1,8 @@
 import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from dotenv import load_dotenvimport SpotifyAuth.SpotifyAuth as SpotifyAuth
+from dotenv import load_dotenv
+import SpotifyAuth.SpotifyAuth as SpotifyAuth
 
 # DB imports
 from sqlalchemy import create_engine
