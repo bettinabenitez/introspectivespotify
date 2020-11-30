@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from statistics import multimode
 
 sys.path.append('../')
+from SpotifyAuth.SpotifyAuth import get_access_token
 from MusicTheory.MusicTheory import get_tempo
 from MusicTheory.MusicTheory import get_key
 from MusicTheory.MusicTheory import get_instrumentalness
@@ -190,7 +191,7 @@ print(compute_top_songs_theory([['Bad Friend', 'Rina Sawayama'], ['cellophane', 
 #########################
 ##### REPLY METHODS #####
 #########################
-def reply_top_genres(time_range, limit):
+def reply_top_genres(user, time_range, limit):
     """Returns a string with a user's top genres that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -205,7 +206,11 @@ def reply_top_genres(time_range, limit):
     :return: a string that describes what a user's top genres are
     """
     try:
-        # TO DO: call set_auth from Spotify Auth component 
+        # set sp to new user
+        auth_token = get_access_token(user)
+        if auth_token is None:
+            return "You have not logged in!"
+        sp.set_auth(auth_token)
 
         top_genres_queue = compute_genre(time_range, limit)
 
@@ -215,18 +220,18 @@ def reply_top_genres(time_range, limit):
 
         # format and return a string with user's top genre 
         if limit == 1:
-            return "Your top genre is " + top_genres_queue[0] + ". Happy listening!"
+            return user.name + "'s top genre is " + top_genres_queue[0] + ". Happy listening!"
 
         # format and return a string containing multiple top genres with their ranking 
         else: 
-            output = "Your top genres are"
+            output = user.name + "'s top genres are"
             for index, genre in enumerate(top_genres_queue):
                 output += " (" + str(index + 1) + ") " + genre 
             return output + ". Happy listening!"
     except:
         return "An exception occurred. Something went wrong. :( uh oh"
     
-def reply_top_songs(time_range, limit):
+def reply_top_songs(user, time_range, limit):
     """Returns a string with a user's top songs that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -241,7 +246,11 @@ def reply_top_songs(time_range, limit):
     :return: a string that describes what a user's top songs are
     """
     try:
-        # TO DO: call set_auth from Spotify Auth component 
+        # set sp to new user
+        auth_token = get_access_token(user)
+        if auth_token is None:
+            return "You have not logged in!"
+        sp.set_auth(auth_token)
 
         top_songs_dict = compute_top_songs(time_range, limit)
 
@@ -250,11 +259,11 @@ def reply_top_songs(time_range, limit):
             song_details = list(top_songs_dict.values())[0] 
 
             # format track name + artist name 
-            return "Your top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bop!"
+            return user.name + "'s top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bop!"
         
         # format and return a string containing multiple top songs with their ranking 
         else: 
-            output = "Your top songs are"
+            output = user.name + "'s top songs are"
             for index, song_details in enumerate(top_songs_dict.values()):
 
                 # format ranking + track name + artist name 
@@ -264,7 +273,7 @@ def reply_top_songs(time_range, limit):
     except:
         return "An exception occurred. Something went wrong. :( uh oh"
 
-def reply_top_artists(time_range, limit):
+def reply_top_artists(user, time_range, limit):
     """Returns a string with a user's top artists that the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
@@ -279,24 +288,28 @@ def reply_top_artists(time_range, limit):
     :return: a string that describes what a user's top artists are
     """
     try:
-        # TO DO: call set_auth from Spotify Auth component 
+        # set sp to new user
+        auth_token = get_access_token(user)
+        if auth_token is None:
+            return "You have not logged in!"
+        sp.set_auth(auth_token)
 
         top_artists_queue = compute_top_artists(time_range, limit)
         
         # format and return a string with user's top artist 
         if limit == 1:
-            return "Your top artist is " + top_artists_queue[0] + ". You have great taste!"
+            return user.name + "'s top artist is " + top_artists_queue[0] + ". You have great taste!"
 
         # format and return a string containing multiple top artists with their ranking 
         else: 
-            output = "Your top artists are"
+            output = user.name + "'s top artists are"
             for index, artist in enumerate(top_artists_queue):
                 output += " (" + str(index + 1) + ") " + artist
             return output + ". You have great taste!"
     except:
         return "An exception occurred. Something went wrong. :( uh oh"
 
-def reply_top_songs_theory(time_range, limit):
+def reply_top_songs_theory(user, time_range, limit):
     """Returns a string with a user's theory data on their top songs over a given time range that
     the Discord Bot will reply to the chat 
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
@@ -313,14 +326,18 @@ def reply_top_songs_theory(time_range, limit):
     :rtype: string
     :return: a string that describes what a user's theory data on top songs
     """
-    output = "Your top song"
+    output = user.name + "'s top song"
     if limit == 1:
         output += "has the following music theory features:"
     else:
         output += "s have the following music theory features:"
 
     try:
-        # TO DO: call set_auth from Spotify Auth component 
+        # set sp to new user
+        auth_token = get_access_token(user)
+        if auth_token is None:
+            return "You have not logged in!"
+        sp.set_auth(auth_token)
         
         # get list containing the track name and artist name for top songs 
         top_songs = list(compute_top_songs(time_range, limit).values())

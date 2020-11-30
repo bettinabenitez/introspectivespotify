@@ -5,6 +5,7 @@ from discord.ext import commands
 sys.path.append('../')
 
 from SpotifyAuth.SpotifyAuth import spotify_login
+from SpotifyAuth.SpotifyAuth import spotify_logout
 from MusicHistory.MusicHistory import reply_top_songs_theory
 from MusicTheory.MusicTheory import reply_all_musictheory
 from MusicTheory.MusicTheory import reply_get_tempo 
@@ -34,15 +35,14 @@ class InputClass(commands.Cog):
     @commands.command()
     async def login(self, ctx):
         user = ctx.author
-        results = spotify_login(user)
-        for idx, item in enumerate(results['items']):
-            artist = item['name']
-            await user.send(str(idx) + " " + artist)
-
+        response = await spotify_login(self.bot, user)
+        await user.send(response)
+        
     @commands.command()
     async def logout(self, ctx):
         user = ctx.author
-        # return SpotifyAuth.spotify_login(user)
+        response = spotify_logout(user)
+        await user.send(response)
 
     ##### MUSIC THEORY COMMANDS ##### 
     @commands.command()
@@ -128,7 +128,7 @@ class InputClass(commands.Cog):
             if limit > 10:
                 limit = 10
             reply = reply_top_genres(time_range, limit)
-        await user.send(reply)
+        await ctx.send(reply)
 
     @commands.command()
     async def topsongs(self, ctx, *args):
@@ -151,7 +151,7 @@ class InputClass(commands.Cog):
             if limit > 10:
                 limit = 10
             reply = reply_top_songs(time_range, limit)
-        await user.send(reply)
+        await ctx.send(reply)
 
     @commands.command()
     async def topartists(self, ctx, *args):
@@ -174,7 +174,7 @@ class InputClass(commands.Cog):
             if limit > 10:
                 limit = 10
             reply = reply_top_artists(time_range, limit)
-        await user.send(reply)
+        await ctx.send(reply)
 
     @commands.command()
     async def topsongstheory(self, ctx, *args):
@@ -197,7 +197,7 @@ class InputClass(commands.Cog):
             if limit > 10:
                 limit = 10
             reply = reply_top_songs_theory(time_range, limit)
-        await user.send(reply)
+        await ctx.send(reply)
         
 
 def setup(bot):
