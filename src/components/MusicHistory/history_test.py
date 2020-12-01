@@ -20,7 +20,7 @@ class MusicHistoryTest(unittest.TestCase):
         genre_data = ['pop']
         self.assertEqual(MusicHistory.compute_genre("medium_term", 1), genre_data)
     def test_compute_genre_many(self):
-        genre_data = ['pop', 'post-teen pop', 'dance pop', 'electropop', 'alternative r&b', 'pop dance', 'r&b', 'art pop', 'pop rap', 'indie r&b']
+        genre_data = ['pop', 'post-teen pop', 'dance pop', 'electropop', 'alternative r&b', 'pop rap', 'r&b', 'pop dance', 'indonesian r&b', 'bedroom soul']
         self.assertEqual(MusicHistory.compute_genre("medium_term", 10), genre_data)
 
     """ testing compute top songs """
@@ -44,19 +44,19 @@ class MusicHistoryTest(unittest.TestCase):
     """ testing compute top artists  """
     # need to update data frequently 
     def test_compute_top_artist_short(self):
-        artist_data = ["Ariana Grande", "Taylor Swift"]
+        artist_data = ['Ariana Grande', 'Taylor Swift']
         self.assertEqual(MusicHistory.compute_top_artists("short_term", 5),artist_data)
     def test_compute_top_artist_medium(self):
-        artist_data = ["Taylor Swift", "Ariana Grande", "Kehlani", "Rina Sawayama", "Lauv"]
+        artist_data = ['Ariana Grande', 'Taylor Swift', 'Kehlani', 'Lauv', 'NIKI']
         self.assertEqual(MusicHistory.compute_top_artists("medium_term", 5), artist_data)
     def test_compute_top_artist_long(self):
         artist_data = ["Taylor Swift", "Ariana Grande", "Shawn Mendes", "Ed Sheeran", "Avril Lavigne"]
         self.assertEqual(MusicHistory.compute_top_artists("long_term", 5), artist_data)
     def test_compute_top_artist_few(self):
-        artist_data = ["Taylor Swift", "Ariana Grande"]
+        artist_data = ['Ariana Grande', 'Taylor Swift']
         self.assertEqual(MusicHistory.compute_top_artists("medium_term", 2), artist_data)
     def test_compute_top_artist_many(self):
-        artist_data = ["Taylor Swift", "Ariana Grande", "Kehlani", "Rina Sawayama", "Lauv", "NIKI", "Frank Ocean", "Jeremy Zucker", "UMI", "Phoebe Bridgers"]
+        artist_data = ['Ariana Grande', 'Taylor Swift', 'Kehlani', 'Lauv', 'NIKI', 'UMI', 'Jeremy Zucker', 'Phoebe Bridgers', 'SZA', 'Kiana Ledé']
         self.assertEqual(MusicHistory.compute_top_artists("medium_term", 10), artist_data)
     
     """ testing compute top song theory  """
@@ -114,6 +114,88 @@ class MusicHistoryTest(unittest.TestCase):
         top_genres = ["indie", "r&b", "pop"]
         self.assertEqual(MusicHistory.compute_genre_helper(genre_dictionary, limit), top_genres)
 
+    """ testing compute top song theory helper """
+    def test_compute_theory_helper_key_tie(self):
+        theory_dict = {'tempo': [95.025, 106.973, 85.012, 77.332],
+                       'time_signature': [4, 4, 3, 4],
+                       'key': ['3', '2', '2', '3'],
+                       'mode': ['1', '1', '1', '0'],
+                       'mood':[0.462, 0.228, 0.337, 0.943],
+                       'danceability': [0.598, 0.563, 0.588, 0.553],
+                       'acousticness': [0.215, 0.872, 0.0678, 0.839],
+                       'energy': [0.72, 0.283, 0.521, 0.545],
+                       'instrumentalness': [2.95e-06, 0.000143, 0.149, 0.0]}
+        excepted_output_dict = {'tempo': 91.09,
+                       'time_signature': 3.75,
+                       'key': ['3', '2'],
+                       'mode': ['1'],
+                       'mood': 0.49,
+                       'danceability': 0.58,
+                       'acousticness': 0.50,
+                       'energy': 0.52,
+                       'instrumentalness': 0.04}
+        self.assertEqual(MusicHistory.compute_top_songs_theory_helper(theory_dict), excepted_output_dict)
+    def test_compute_theory_helper_mode_tie(self):
+        theory_dict = {'tempo': [95.025, 106.973, 85.012, 77.332],
+                       'time_signature': [4, 4, 3, 4],
+                       'key': ['3', '2', '4', '3'],
+                       'mode': ['1', '1', '0', '0'],
+                       'mood':[0.462, 0.228, 0.337, 0.943],
+                       'danceability': [0.598, 0.563, 0.588, 0.553],
+                       'acousticness': [0.215, 0.872, 0.0678, 0.839],
+                       'energy': [0.72, 0.283, 0.521, 0.545],
+                       'instrumentalness': [2.95e-06, 0.000143, 0.149, 0.0]}
+        excepted_output_dict = {'tempo': 91.09,
+                       'time_signature': 3.75,
+                       'key': ['3'],
+                       'mode': ['1', '0'],
+                       'mood': 0.49,
+                       'danceability': 0.58,
+                       'acousticness': 0.50,
+                       'energy': 0.52,
+                       'instrumentalness': 0.04}
+        self.assertEqual(MusicHistory.compute_top_songs_theory_helper(theory_dict), excepted_output_dict)
+    def test_compute_theory_helper_both_tie(self):
+        theory_dict = {'tempo': [95.025, 106.973, 85.012, 77.332],
+                       'time_signature': [4, 4, 3, 4],
+                       'key': ['3', '2', '1', '4'],
+                       'mode': ['1', '1', '0', '0'],
+                       'mood':[0.462, 0.228, 0.337, 0.943],
+                       'danceability': [0.598, 0.563, 0.588, 0.553],
+                       'acousticness': [0.215, 0.872, 0.0678, 0.839],
+                       'energy': [0.72, 0.283, 0.521, 0.545],
+                       'instrumentalness': [2.95e-06, 0.000143, 0.149, 0.0]}
+        excepted_output_dict = {'tempo': 91.09,
+                       'time_signature': 3.75,
+                       'key': ['3', '2', '1', '4'],
+                       'mode': ['1', '0'],
+                       'mood': 0.49,
+                       'danceability': 0.58,
+                       'acousticness': 0.50,
+                       'energy': 0.52,
+                       'instrumentalness': 0.04}
+        self.assertEqual(MusicHistory.compute_top_songs_theory_helper(theory_dict), excepted_output_dict)
+    def test_compute_theory_helper_no_tie(self):
+        theory_dict = {'tempo': [95.025, 106.973, 85.012, 77.332],
+                       'time_signature': [4, 4, 3, 4],
+                       'key': ['1', '1', '1', '4'],
+                       'mode': ['1', '0', '0', '0'],
+                       'mood':[0.462, 0.228, 0.337, 0.943],
+                       'danceability': [0.598, 0.563, 0.588, 0.553],
+                       'acousticness': [0.215, 0.872, 0.0678, 0.839],
+                       'energy': [0.72, 0.283, 0.521, 0.545],
+                       'instrumentalness': [2.95e-06, 0.000143, 0.149, 0.0]}
+        excepted_output_dict = {'tempo': 91.09,
+                       'time_signature': 3.75,
+                       'key': ['1'],
+                       'mode': ['0'],
+                       'mood': 0.49,
+                       'danceability': 0.58,
+                       'acousticness': 0.50,
+                       'energy': 0.52,
+                       'instrumentalness': 0.04}
+        self.assertEqual(MusicHistory.compute_top_songs_theory_helper(theory_dict), excepted_output_dict)
+    
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MusicHistoryTest)
     unittest.TextTestRunner(verbosity=2).run(suite)
