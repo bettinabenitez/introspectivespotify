@@ -136,7 +136,7 @@ class InputClass(commands.Cog):
             
             # If a runtime error occurs, send a short sorry message to the user.
             try:
-                reply = reply_top_genres(user, time_range, limit)
+                reply = reply_top_genres(time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top genres. Sorry about that :( We'll try to fix this issue ASAP"
         
@@ -171,7 +171,7 @@ class InputClass(commands.Cog):
 
             # If a runtime error occurs, send a short sorry message to the user.
             try:
-                reply = reply_top_songs(user, time_range, limit)
+                reply = reply_top_songs(time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top songs. Sorry about that :( We'll try to fix this issue ASAP"
             
@@ -206,7 +206,7 @@ class InputClass(commands.Cog):
 
             # If a runtime error occurs, send a short sorry message to the user.
             try:
-                reply = reply_top_artists(user, time_range, limit)
+                reply = reply_top_artists(time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top artists. Sorry about that :( We'll try to fix this issue ASAP"
             
@@ -241,7 +241,7 @@ class InputClass(commands.Cog):
 
             # If a runtime error occurs, send a short sorry message to the user.
             try:
-                reply = reply_top_songs_theory(user, time_range, limit)
+                reply = reply_top_songs_theory(time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top artists. Sorry about that :( We'll try to fix this issue ASAP"
 
