@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from statistics import multimode
 
 sys.path.append('../')
-#from SpotifyAuth.SpotifyAuth import get_access_token
+# from SpotifyAuth.SpotifyAuth import get_access_token
 from MusicTheory.MusicTheory import get_tempo
 from MusicTheory.MusicTheory import get_key
 from MusicTheory.MusicTheory import get_instrumentalness
@@ -16,6 +16,7 @@ from MusicTheory.MusicTheory import get_time_signature
 from MusicTheory.MusicTheory import get_energy
 from MusicTheory.MusicTheory import get_acousticness
 from MusicTheory.MusicTheory import get_mood
+from MusicTheory.MusicTheory import reply_all_music_theory
 
 load_dotenv()
 
@@ -314,12 +315,6 @@ def reply_top_songs_theory(time_range, limit):
     :rtype: string
     :return: a string that describes what a user's theory data on top songs
     """
-    output = "Your top song"
-    if limit == 1:
-        output += "has the following music theory features:"
-    else:
-        output += "s have the following music theory features:"
-
     # set sp to new user
     # auth_token = get_access_token(user)
     # if auth_token is None:
@@ -329,49 +324,54 @@ def reply_top_songs_theory(time_range, limit):
     # get list containing the track name and artist name for top songs 
     top_songs = list(compute_top_songs(time_range, limit).values())
 
-    theory_dictionary = (compute_top_songs_theory(top_songs))
-
-    for feature in theory_dictionary:
-
-        if feature == "key":
-            key_dict = {"0": "C",
-                        "1": "C#/D♭",
-                        "2": "D",
-                        "3": "D#/E♭",
-                        "4": "E",
-                        "5": "F",
-                        "6": "F#/G♭",
-                        "7": "G",
-                        "8": "G#/A♭",
-                        "9": "A",
-                        "10": "A#/B♭",
-                        "11": "B"}
-            
-            # no ties - only 1 top key was found
-            if len(theory_dictionary[feature]) == 1:
-                output += "\n• modal key of " + key_dict[theory_dictionary[feature][0]] + "."
-
-            # there are ties - multiple top keys were found 
-            else: 
-                top_keys = ""
-                for key in theory_dictionary[feature]:
-                    top_keys += key_dict[key] + ", "
-
-                # add the formatted top_keys string to the output without the last comma and space 
-                output += "\n• modal keys of " + top_keys[:-2] + "."
-
-        elif feature == "mode":  
-            # no ties - only 1 top mode was found 
-            if len(theory_dictionary[feature]) == 1:
-                mode_dict = {"1": "major", "0": "minor"}
-                output += "\n• modal modality of " + mode_dict[(theory_dictionary[feature][0])] + "."
-            
-            # a tie was found the 2 modes 
-            else: 
-                output += "\n• modal modalities of major and minor."
-
-        else:
-            # add a formatted string containing the averaged theory data to the output 
-            output += "\n• mean " + str(feature) + " of " + str(theory_dictionary[feature]) + "."
+    if limit == 1:
+        return "Your top song has the following music theory features:\n" + reply_all_music_theory(" ".join(top_songs[0]))
+    else:
+        output = "Your top songs have the following music theory features:"
     
-    return output
+        theory_dictionary = (compute_top_songs_theory(top_songs))
+
+        for feature in theory_dictionary:
+
+            if feature == "key":
+                key_dict = {"0": "C",
+                            "1": "C#/D♭",
+                            "2": "D",
+                            "3": "D#/E♭",
+                            "4": "E",
+                            "5": "F",
+                            "6": "F#/G♭",
+                            "7": "G",
+                            "8": "G#/A♭",
+                            "9": "A",
+                            "10": "A#/B♭",
+                            "11": "B"}
+                
+                # no ties - only 1 top key was found
+                if len(theory_dictionary[feature]) == 1:
+                    output += "\n• modal key of " + key_dict[theory_dictionary[feature][0]] + "."
+
+                # there are ties - multiple top keys were found 
+                else: 
+                    top_keys = ""
+                    for key in theory_dictionary[feature]:
+                        top_keys += key_dict[key] + ", "
+
+                    # add the formatted top_keys string to the output without the last comma and space 
+                    output += "\n• modal keys of " + top_keys[:-2] + "."
+
+            elif feature == "mode":  
+                # no ties - only 1 top mode was found 
+                if len(theory_dictionary[feature]) == 1:
+                    mode_dict = {"1": "major", "0": "minor"}
+                    output += "\n• modal modality of " + mode_dict[(theory_dictionary[feature][0])] + "."
+                
+                # a tie was found the 2 modes 
+                else: 
+                    output += "\n• modal modalities of major and minor."
+
+            else:
+                # add a formatted string containing the averaged theory data to the output 
+                output += "\n• mean " + str(feature) + " of " + str(theory_dictionary[feature]) + "."
+        
+        return output

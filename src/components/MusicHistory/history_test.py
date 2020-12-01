@@ -81,12 +81,41 @@ class MusicHistoryTest(unittest.TestCase):
         many_songs = [['Bad Friend', 'Rina Sawayama'], ['cellophane', 'FKA twigs'], ['Daddy Issues', 'The Neighbourhood'], ['Strawberry Blond', 'Mitski'], ['F2020', 'Avenue Beat'], ['Cancelled.', 'Kiana Ledé'], ['Motion Sickness', 'Phoebe Bridgers'], ['34+35', 'Ariana Grande'], ['everytime', 'Ariana Grande'], ['Everybody Business', 'Kehlani']]
         self.assertEqual(MusicHistory.compute_top_songs_theory(many_songs), song_theory_data)
 
-    # TO DO add reply methods to black box testing
+    """ testing reply compute genre method """
+    def test_reply_genre_1(self):
+        expected_reply = "Your top genre is pop. Happy listening!"
+        self.assertEqual(MusicHistory.reply_top_genres("long_term", 1), expected_reply)
+    def test_reply_genre_more(self):
+        expected_reply = "Your top genres are (1) pop (2) post-teen pop (3) dance pop (4) electropop (5) pop dance (6) canadian pop. Happy listening!"
+        self.assertEqual(MusicHistory.reply_top_genres("long_term", 6), expected_reply)
+    
+    """ testing reply compute top songs method """
+    def test_reply_song_1(self):
+        expected_reply = "Your top song is 8TEEN by Khalid. Nice bop!"
+        self.assertEqual(MusicHistory.reply_top_songs("long_term", 1), expected_reply)
+    def test_reply_song_more(self):
+        expected_reply = "Your top songs are (1) 8TEEN by Khalid (2) Pompeii by Jasmine Thompson (3) Capsize by Grace Grundy (4) needy by Ariana Grande (5) Satisfied by Renée Elise Goldsberry (6) Wait for It by Leslie Odom Jr.. Nice bops!"
+        self.assertEqual(MusicHistory.reply_top_songs("long_term", 6), expected_reply)
+    
+    """ testing reply compute top artists method """
+    def test_reply_song_1(self):
+        expected_reply = "Your top artist is Taylor Swift. You have great taste!"
+        self.assertEqual(MusicHistory.reply_top_artists("long_term", 1), expected_reply)
+    def test_reply_song_more(self):
+        expected_reply = "Your top artists are (1) Taylor Swift (2) Ariana Grande (3) Shawn Mendes (4) Ed Sheeran (5) Avril Lavigne (6) Lauv. You have great taste!"
+        self.assertEqual(MusicHistory.reply_top_artists("long_term", 6), expected_reply)
+    
+    """ test reply compute top song theory method """
+    def test_reply_song_theory_1(self):
+        expected_reply = "Your top song has the following music theory features:\n8TEEN Khalid has a tempo of 105.03 BPM!\n8TEEN Khalid has a key of C#/D♭!\n8TEEN Khalid has a time signature of 4 beats per bar!\n8TEEN Khalid is in the Major modality!\n8TEEN Khalid is generally happy, cheerful, euphoric :)\n8TEEN Khalid has high danceability!\n8TEEN Khalid has low acoustics!\n8TEEN Khalid has medium energy!\n8TEEN Khalid has low instrumentals!"
+        self.assertEqual(MusicHistory.reply_top_songs_theory("long_term", 1), expected_reply)
+    def test_reply_song_theory_more(self):
+        expected_reply = "Your top songs have the following music theory features:\n• mean tempo of 123.76.\n• mean time_signature of 4.0.\n• modal keys of C#/D♭, A, D#/E♭, G.\n• modal modality of major.\n• mean mood of 0.39.\n• mean danceability of 0.61.\n• mean acousticness of 0.71.\n• mean energy of 0.33.\n• mean instrumentalness of 0.0."
+        self.assertEqual(MusicHistory.reply_top_songs_theory("long_term", 4), expected_reply)
     
     #########################
     #### WHITE BOX TESTS ####
     #########################
-    
     """ testing compute genre helper method"""
     def test_compute_genre_helper_empty(self):
         genre_dictionary = {}
