@@ -12,7 +12,7 @@ class MusicHistoryTest(unittest.TestCase):
     NOTE: genre_data (hard coded) needs to be updated as I listen to more music 
     """
     def test_compute_genre_short(self):
-        genre_data = ['pop', 'post-teen pop', 'dance pop', 'pop dance']
+        genre_data = ['pop', 'post-teen pop', 'dance pop', 'pop dance', 'alternative r&b']
 
         # compute genre with "short_term" parameter 
         self.assertEqual(MusicHistory.compute_genre("short_term", 5), genre_data)
@@ -127,7 +127,7 @@ class MusicHistoryTest(unittest.TestCase):
     NOTE: artist_data (hard coded) needs to be updated as I listen to more music
     """
     def test_compute_top_artist_short(self):
-        artist_data = ['Ariana Grande', 'Taylor Swift']
+        artist_data = ['Ariana Grande', 'Taylor Swift', 'UMI']
         
         # compute top artist call with "short_term" parameter 
         self.assertEqual(MusicHistory.compute_top_artists("short_term", 5),artist_data)
@@ -151,7 +151,7 @@ class MusicHistoryTest(unittest.TestCase):
         self.assertEqual(MusicHistory.compute_top_artists("medium_term", 2), artist_data)
     
     def test_compute_top_artist_many(self):
-        artist_data = ['Ariana Grande', 'Taylor Swift', 'Kehlani', 'Lauv', 'NIKI', 'UMI', 'Phoebe Bridgers', 'Jeremy Zucker', 'SZA', 'Kiana Ledé']
+        artist_data = ['Ariana Grande', 'Taylor Swift', 'Kehlani', 'Lauv', 'NIKI', 'UMI', 'Jeremy Zucker', 'Phoebe Bridgers', 'SZA', 'Kiana Ledé']
         
         # compute top artist call with high limit
         self.assertEqual(MusicHistory.compute_top_artists("medium_term", 10), artist_data)
