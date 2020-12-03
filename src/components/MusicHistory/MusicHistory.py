@@ -68,7 +68,7 @@ def compute_top_songs_theory_helper(theory_dictionary):
             # find the multimode (all "tied" elements are added into a list)
             theory_dictionary[feature] = multimode(theory_dictionary[feature])
         else:
-            # find the mean
+            # find the mean, round to 2 decimals 
             theory_dictionary[feature] = round(sum(theory_dictionary[feature]) / len(theory_dictionary[feature]), 2)
     return theory_dictionary
 
