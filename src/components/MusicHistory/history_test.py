@@ -49,35 +49,76 @@ class MusicHistoryTest(unittest.TestCase):
     NOTE: song_data (hard coded) needs to be updated as I listen to more music 
     """
     def test_compute_top_song_short(self):
-        song_data = {'2cYALQZNXmuFGp2ecgpKMa': ['cellophane', 'FKA twigs'], '6Im9k8u9iIzKMrmV7BWtlF': ['34+35', 'Ariana Grande'], '0WdR2AyLW1Drd3OUdwezM0': ['everytime', 'Ariana Grande'], '49UDOG8DoBajXTJSTqfRMg': ['Kyoto', 'Phoebe Bridgers'], '15ahYSiHAIMxAnujlXVtta': ['Super Far', 'LANY']}
-        
-        # compute top song call with "short_term" parameter 
+        song_data = {'2cYALQZNXmuFGp2ecgpKMa': ['cellophane', 'FKA twigs'],
+                    '6Im9k8u9iIzKMrmV7BWtlF': ['34+35', 'Ariana Grande'],
+                    '0WdR2AyLW1Drd3OUdwezM0': ['everytime', 'Ariana Grande'],
+                    '49UDOG8DoBajXTJSTqfRMg': ['Kyoto', 'Phoebe Bridgers'],
+                    '2mtLGVN6xZm93wDG9nvviS': ['Wrong Places (from Songland)','H.E.R.']}
+
+        # compute top song call with "short_term" parameter
+        # check that outputted dict has correct keys
         self.assertEqual(MusicHistory.compute_top_songs("short_term", 5),song_data)
-    
+        
+        # check that values are in the correct order 
+        self.assertEqual(list(MusicHistory.compute_top_songs("short_term", 5).values()), list(song_data.values()))
+
     def test_compute_top_song_medium(self):
-        song_data = {'1ApN1loxlt0rzRFc8iETw7': ['Bad Friend', 'Rina Sawayama'], '2cYALQZNXmuFGp2ecgpKMa': ['cellophane', 'FKA twigs'], '5E30LdtzQTGqRvNd7l6kG5': ['Daddy Issues', 'The Neighbourhood'], '3eGsNpXzcb1BDkfSJI54NY': ['Strawberry Blond', 'Mitski'], '3HZuxQ80VWOsBWws8XQdFB': ['F2020', 'Avenue Beat']}
+        song_data = {'1ApN1loxlt0rzRFc8iETw7': ['Bad Friend', 'Rina Sawayama'],
+                    '2cYALQZNXmuFGp2ecgpKMa': ['cellophane', 'FKA twigs'],
+                    '5E30LdtzQTGqRvNd7l6kG5': ['Daddy Issues', 'The Neighbourhood'],
+                    '3eGsNpXzcb1BDkfSJI54NY': ['Strawberry Blond', 'Mitski'],
+                    '3HZuxQ80VWOsBWws8XQdFB': ['F2020', 'Avenue Beat']}
         
         # compute top song call with "medium_term" parameter 
+        # check that outputted dict has correct keys
         self.assertEqual(MusicHistory.compute_top_songs("medium_term", 5), song_data)
-    
+
+        # check that values are in the correct order 
+        self.assertEqual(list(MusicHistory.compute_top_songs("medium_term", 5).values()), list(song_data.values()))
+
     def test_compute_top_song_long(self):
-        song_data = {'5bgwqaRSS3M8WHWruHgSL5': ['8TEEN', 'Khalid'], '1KHGSJPHiHkG2FEGFy8fLc': ['Pompeii', 'Jasmine Thompson'], '6ZevjRLgEEXYagcPRE1cxY': ['Capsize', 'Grace Grundy'], '1TEL6MlSSVLSdhOSddidlJ': ['needy', 'Ariana Grande'], '3dP0pLbg9OfVwssDjp9aT0': ['Satisfied', 'Renée Elise Goldsberry']}
+        song_data = {'5bgwqaRSS3M8WHWruHgSL5': ['8TEEN', 'Khalid'],
+                    '1KHGSJPHiHkG2FEGFy8fLc': ['Pompeii', 'Jasmine Thompson'],
+                    '6ZevjRLgEEXYagcPRE1cxY': ['Capsize', 'Grace Grundy'],
+                    '1TEL6MlSSVLSdhOSddidlJ': ['needy', 'Ariana Grande'],
+                    '3dP0pLbg9OfVwssDjp9aT0': ['Satisfied', 'Renée Elise Goldsberry']}
         
         # compute top song call with "long_term" parameter 
         self.assertEqual(MusicHistory.compute_top_songs("long_term", 5), song_data)
-    
+
+        # check that values are in the correct order 
+        self.assertEqual(list(MusicHistory.compute_top_songs("long_term", 5).values()), list(song_data.values()))
+
     def test_compute_top_song_few(self):
         song_data = {'1ApN1loxlt0rzRFc8iETw7': ['Bad Friend', 'Rina Sawayama'] }
         
         # compute top song call with a low limit
+        # check that outputted dict has correct keys
         self.assertEqual(MusicHistory.compute_top_songs("medium_term", 1), song_data)
+
+        # check that values is correct 
+        self.assertEqual(list(MusicHistory.compute_top_songs("medium_term", 1).values()), list(song_data.values()))
+
     
     def test_compute_top_song_many(self):
-        song_data = {'1ApN1loxlt0rzRFc8iETw7': ['Bad Friend', 'Rina Sawayama'], '2cYALQZNXmuFGp2ecgpKMa': ['cellophane', 'FKA twigs'], '5E30LdtzQTGqRvNd7l6kG5': ['Daddy Issues', 'The Neighbourhood'], '3eGsNpXzcb1BDkfSJI54NY': ['Strawberry Blond', 'Mitski'], '3HZuxQ80VWOsBWws8XQdFB': ['F2020', 'Avenue Beat'], '5oruuYKxGXcS0Cm1hpRLup': ['Cancelled.', 'Kiana Ledé'], '6LxcPUqx6noURdA5qc4BAT': ['Motion Sickness', 'Phoebe Bridgers'], '6Im9k8u9iIzKMrmV7BWtlF': ['34+35', 'Ariana Grande'], '0WdR2AyLW1Drd3OUdwezM0': ['everytime', 'Ariana Grande'], '6TrdeNEgbKuBqIToRfdWMY': ['Everybody Business', 'Kehlani']}
+        song_data = {'1ApN1loxlt0rzRFc8iETw7': ['Bad Friend', 'Rina Sawayama'],
+                    '2cYALQZNXmuFGp2ecgpKMa': ['cellophane', 'FKA twigs'],
+                    '5E30LdtzQTGqRvNd7l6kG5': ['Daddy Issues', 'The Neighbourhood'],
+                    '3eGsNpXzcb1BDkfSJI54NY': ['Strawberry Blond', 'Mitski'],
+                    '3HZuxQ80VWOsBWws8XQdFB': ['F2020', 'Avenue Beat'],
+                    '5oruuYKxGXcS0Cm1hpRLup': ['Cancelled.', 'Kiana Ledé'],
+                    '6LxcPUqx6noURdA5qc4BAT': ['Motion Sickness', 'Phoebe Bridgers'],
+                    '6Im9k8u9iIzKMrmV7BWtlF': ['34+35', 'Ariana Grande'],
+                    '0WdR2AyLW1Drd3OUdwezM0': ['everytime', 'Ariana Grande'],
+                    '6TrdeNEgbKuBqIToRfdWMY': ['Everybody Business', 'Kehlani']}
         
         # compute top song call with a high limit
+        # check that outputted dict has correct keys
         self.assertEqual(MusicHistory.compute_top_songs("medium_term", 10), song_data)
-    
+
+        # check that values are in correct order
+        self.assertEqual(list(MusicHistory.compute_top_songs("medium_term", 10).values()), list(song_data.values()))
+
 
     """ TESTING COMPUTE TOP ARTISTS
     check that the outputted artists(s) are equal to the expected hard-coded data from
@@ -110,7 +151,7 @@ class MusicHistoryTest(unittest.TestCase):
         self.assertEqual(MusicHistory.compute_top_artists("medium_term", 2), artist_data)
     
     def test_compute_top_artist_many(self):
-        artist_data = ['Ariana Grande', 'Taylor Swift', 'Kehlani', 'Lauv', 'NIKI', 'UMI', 'Jeremy Zucker', 'Phoebe Bridgers', 'SZA', 'Kiana Ledé']
+        artist_data = ['Ariana Grande', 'Taylor Swift', 'Kehlani', 'Lauv', 'NIKI', 'UMI', 'Phoebe Bridgers', 'Jeremy Zucker', 'SZA', 'Kiana Ledé']
         
         # compute top artist call with high limit
         self.assertEqual(MusicHistory.compute_top_artists("medium_term", 10), artist_data)
@@ -388,7 +429,6 @@ class MusicHistoryTest(unittest.TestCase):
                        'energy': 0.52,
                        'instrumentalness': 0.04}
         self.assertEqual(MusicHistory.compute_top_songs_theory_helper(theory_dict), excepted_output_dict)
-
 
 
 if __name__ == '__main__':
