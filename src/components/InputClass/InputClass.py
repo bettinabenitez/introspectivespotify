@@ -7,24 +7,23 @@ sys.path.append('../')
 from SpotifyAuth.SpotifyAuth import spotify_login
 from SpotifyAuth.SpotifyAuth import spotify_logout
 from SpotifyAuth.auth_test import test_all_auth
-from MusicHistory.MusicHistory import reply_top_songs_theory
-from MusicTheory.MusicTheory import reply_all_music_theory
-from MusicTheory.MusicTheory import reply_get_tempo 
-from MusicTheory.MusicTheory import reply_get_key 
-from MusicTheory.MusicTheory import reply_get_time_signature
-from MusicTheory.MusicTheory import reply_get_mode 
-from MusicTheory.MusicTheory import reply_get_mood 
-from MusicTheory.MusicTheory import reply_get_danceability 
-from MusicTheory.MusicTheory import reply_get_acousticness
-from MusicTheory.MusicTheory import reply_get_energy
-from MusicTheory.MusicTheory import reply_get_instrumentalness 
-from MusicTheory.MusicTheory import reply_compare_theory
-from MusicTheory.MusicTheory import reply_suggest_theory
-from MusicHistory.MusicHistory import reply_top_songs_theory
-from MusicHistory.MusicHistory import reply_top_genres
-from MusicHistory.MusicHistory import reply_top_songs
-from MusicHistory.MusicHistory import reply_top_artists
-
+from MusicAnalytics.MusicTheory import reply_all_music_theory
+from MusicAnalytics.MusicTheory import reply_get_tempo 
+from MusicAnalytics.MusicTheory import reply_get_key 
+from MusicAnalytics.MusicTheory import reply_get_time_signature
+from MusicAnalytics.MusicTheory import reply_get_mode 
+from MusicAnalytics.MusicTheory import reply_get_mood 
+from MusicAnalytics.MusicTheory import reply_get_danceability 
+from MusicAnalytics.MusicTheory import reply_get_acousticness
+from MusicAnalytics.MusicTheory import reply_get_energy
+from MusicAnalytics.MusicTheory import reply_get_instrumentalness 
+from MusicAnalytics.MusicTheory import reply_compare_theory
+from MusicAnalytics.MusicTheory import reply_suggest_theory
+from MusicAnalytics.MusicHistory import reply_top_genres
+from MusicAnalytics.MusicHistory import reply_top_songs_theory
+from MusicAnalytics.MusicHistory import reply_top_songs
+from MusicAnalytics.MusicHistory import reply_top_artists
+from MusicAnalytics.MusicHistory import reply_top_songs_theory
 
 # import MusicHistory
 

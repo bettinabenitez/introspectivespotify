@@ -5,18 +5,19 @@ from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 from statistics import multimode
 
+from MusicTheory import get_tempo
+from MusicTheory import get_key
+from MusicTheory import get_instrumentalness
+from MusicTheory import get_danceability
+from MusicTheory import get_mode
+from MusicTheory import get_time_signature
+from MusicTheory import get_energy
+from MusicTheory import get_acousticness
+from MusicTheory import get_mood
+from MusicTheory import reply_all_music_theory
+
 sys.path.append('../')
 # from SpotifyAuth.SpotifyAuth import get_access_token
-from MusicTheory.MusicTheory import get_tempo
-from MusicTheory.MusicTheory import get_key
-from MusicTheory.MusicTheory import get_instrumentalness
-from MusicTheory.MusicTheory import get_danceability
-from MusicTheory.MusicTheory import get_mode
-from MusicTheory.MusicTheory import get_time_signature
-from MusicTheory.MusicTheory import get_energy
-from MusicTheory.MusicTheory import get_acousticness
-from MusicTheory.MusicTheory import get_mood
-from MusicTheory.MusicTheory import reply_all_music_theory
 
 load_dotenv()
 
