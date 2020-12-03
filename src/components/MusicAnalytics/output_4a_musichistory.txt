@@ -1,0 +1,41 @@
+test_compute_genre_few (__main__.MusicHistoryTest) ... ok
+test_compute_genre_helper_empty (__main__.MusicHistoryTest) ... ok
+test_compute_genre_helper_no_tie (__main__.MusicHistoryTest) ... ok
+test_compute_genre_helper_small_limit (__main__.MusicHistoryTest) ... ok
+test_compute_genre_helper_tie (__main__.MusicHistoryTest) ... ok
+test_compute_genre_long (__main__.MusicHistoryTest) ... ok
+test_compute_genre_many (__main__.MusicHistoryTest) ... ok
+test_compute_genre_medium (__main__.MusicHistoryTest) ... ok
+test_compute_genre_short (__main__.MusicHistoryTest) ... ok
+test_compute_theory_helper_both_tie (__main__.MusicHistoryTest) ... ok
+test_compute_theory_helper_key_tie (__main__.MusicHistoryTest) ... ok
+test_compute_theory_helper_mode_tie (__main__.MusicHistoryTest) ... ok
+test_compute_theory_helper_no_tie (__main__.MusicHistoryTest) ... ok
+test_compute_top_artist_few (__main__.MusicHistoryTest) ... ok
+test_compute_top_artist_long (__main__.MusicHistoryTest) ... ok
+test_compute_top_artist_many (__main__.MusicHistoryTest) ... ok
+test_compute_top_artist_medium (__main__.MusicHistoryTest) ... ok
+test_compute_top_artist_short (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_few (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_long (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_many (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_medium (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_short (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_theory_few (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_theory_long (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_theory_many (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_theory_medium (__main__.MusicHistoryTest) ... ok
+test_compute_top_song_theory_short (__main__.MusicHistoryTest) ... ok
+test_reply_artist_1 (__main__.MusicHistoryTest) ... ok
+test_reply_artist_more (__main__.MusicHistoryTest) ... ok
+test_reply_genre_1 (__main__.MusicHistoryTest) ... ok
+test_reply_genre_more (__main__.MusicHistoryTest) ... ok
+test_reply_song_1 (__main__.MusicHistoryTest) ... ok
+test_reply_song_more (__main__.MusicHistoryTest) ... ok
+test_reply_song_theory_1 (__main__.MusicHistoryTest) ... ok
+test_reply_song_theory_more (__main__.MusicHistoryTest) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 76.706s
+
+OK

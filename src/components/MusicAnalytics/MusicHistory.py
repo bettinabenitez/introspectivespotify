@@ -5,17 +5,19 @@ from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 from statistics import multimode
 
+from MusicAnalytics.MusicTheory import get_tempo
+from MusicAnalytics.MusicTheory import get_key
+from MusicAnalytics.MusicTheory import get_instrumentalness
+from MusicAnalytics.MusicTheory import get_danceability
+from MusicAnalytics.MusicTheory import get_mode
+from MusicAnalytics.MusicTheory import get_time_signature
+from MusicAnalytics.MusicTheory import get_energy
+from MusicAnalytics.MusicTheory import get_acousticness
+from MusicAnalytics.MusicTheory import get_mood
+from MusicAnalytics.MusicTheory import reply_all_music_theory
+
 sys.path.append('../')
 from SpotifyAuth.SpotifyAuth import get_access_token
-from MusicTheory.MusicTheory import get_tempo
-from MusicTheory.MusicTheory import get_key
-from MusicTheory.MusicTheory import get_instrumentalness
-from MusicTheory.MusicTheory import get_danceability
-from MusicTheory.MusicTheory import get_mode
-from MusicTheory.MusicTheory import get_time_signature
-from MusicTheory.MusicTheory import get_energy
-from MusicTheory.MusicTheory import get_acousticness
-from MusicTheory.MusicTheory import get_mood
 
 load_dotenv()
 
@@ -33,7 +35,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
 ######################################
 ##### COMPUTATION HELPER METHODS #####
 ######################################
-def compute_genre_helper(genre_dictionary, limit):
+def compute_genre_helper(genres_dict, limit):
     """Returns a user's top genres given a dictionary containing potential top genres and their corresponding rankings
     :param genre_dictionary: keys = genre name, values = a list of ints representing the ranking of artist
     :type genre_dictionary: dictionary 
@@ -44,18 +46,19 @@ def compute_genre_helper(genre_dictionary, limit):
     :rtype: list
     :return: a queue of top genres sorted from most listened to genre to least listened to 
     """
-    # check if limit is out of bounds
-    if limit > 10:
-        limit = 10
+    # take care of edge case - all top artists have no genre 
+    if genres_dict == {}:
+        return []
 
     # sort the genre_dictionary based on the number of artists each genre is associated with
-    genre_list = sorted(genre_dictionary, key=lambda k: len(genre_dictionary[k]), reverse=True)
-    
-    return genre_list[:limit]
+    # break ties by comparing values lexigraphically 
+    genres_list = sorted(sorted(genres_dict, key=lambda i: genres_dict[i], reverse=False), key=lambda k: len(genres_dict[k]), reverse=True)
+
+    return genres_list[:limit]
     
 def compute_top_songs_theory_helper(theory_dictionary):
     """Returns theory data on a user's top songs over a given time range 
-    :param theory_dictionary: 
+    :param theory_dictionary: keys refer to music theory features, values refer to a list of ints about the feature in user's top songs
     :type theory_dictionary: dictionary 
 
     :rtype: dictionary
@@ -66,7 +69,7 @@ def compute_top_songs_theory_helper(theory_dictionary):
             # find the multimode (all "tied" elements are added into a list)
             theory_dictionary[feature] = multimode(theory_dictionary[feature])
         else:
-            # find the mean
+            # find the mean, round to 2 decimals 
             theory_dictionary[feature] = round(sum(theory_dictionary[feature]) / len(theory_dictionary[feature]), 2)
     return theory_dictionary
 
@@ -78,11 +81,8 @@ def compute_genre(time_range, limit):
     :param time_range: when in the user's Spotify history to analyze. (long, medium, or short) defaults to medium 
     :type time_range: string 
 
-    :param limit: indicate how many genres to compute, defaults to 3. Minimum of 1, maximum of 5. 
+    :param limit: indicate how many genres to compute, defaults to 5. Minimum of 1, maximum of 10. 
     :type limit: int 
-
-    :param discord_user: Discord user's username that we want to analyze
-    :type discord_user: string 
 
     :rtype: list
     :return: a queue in the order of most listened to genre to least listened to
@@ -99,10 +99,6 @@ def compute_genre(time_range, limit):
             else:
                 top_genres_dict[genre].append(index)
 
-    # take care of edge case - all top artists have no genre 
-    if top_genres_dict == {}:
-        return []
-
     # covers cases where at least one top artist has an asscociated genre  
     else:
         return compute_genre_helper(top_genres_dict, limit)
@@ -113,10 +109,7 @@ def compute_top_songs(time_range, limit):
     :type time_range: string 
 
     :param limit: indicate how many songs to compute, defaults to 5. Minimum of 1, maximum of 10. 
-    :type limit: int 
-
-    :param discord_user: Discord username of the person that we want to analyze
-    :type discord_user: string 
+    :type limit: int  
 
     :rtype: dictionary 
     :return: dictionary with both the IDs and name 
@@ -140,9 +133,6 @@ def compute_top_artists(time_range, limit):
     :param limit: indicate how many artists to compute, defaults to 5. Minimum of 1, maximum of 10. 
     :type limit: int 
 
-    :param discord_user: Discord username of the person that we want to analyze
-    :type discord_user: string 
-
     :rtype: list
     :return: dictionary with both the IDs and name 
     """
@@ -158,7 +148,7 @@ def compute_top_artists(time_range, limit):
 
 def compute_top_songs_theory(top_songs):
     """Returns theory data on a user's top songs over a given time range 
-    :param top_song: a dictionary that stores a user's top songs 
+    :param top_song: a dictionary that stores a user's top songs (key = id, value = track + artist name)
     :type top_song: dictionary 
 
     :rtype: dictionary
@@ -198,37 +188,38 @@ def reply_top_genres(user, time_range, limit):
     :param limit: indicate how many genres to compute, defaults to 3. Minimum of 1, maximum of 5. 
     :type limit: int 
 
-    :param discord_user: Discord user's username that we want to analyze
-    :type discord_user: string 
+    :param discord_user: Discord user's id
+    :type discord_user: Discord user object 
+    ** Note: this parameter has been temporarily removed/commented out, so
+       that the MusicHistory class can be tested independently from methods in the
+       the SpotifyAuth component 
 
     :rtype: string
     :return: a string that describes what a user's top genres are
     """
-    try:
-        # set sp to new user
-        auth_token = get_access_token(user)
-        if auth_token is None:
-            return "You have not logged in!"
-        sp.set_auth(auth_token)
+    # set sp to new user
+    auth_token = get_access_token(user)
+    if auth_token is None:
+        return "You have not logged in!"
+    sp.set_auth(auth_token)
+    
+    top_genres_queue = compute_genre(time_range, limit)
 
-        top_genres_queue = compute_genre(time_range, limit)
+    # take care of edge case - all top artists have no genre 
+    if top_genres_queue == []:
+        return "Sorry, no top genres were found! Spotify is still gathering info about your top artists. Try again another time."
 
-        # take care of edge case - all top artists have no genre 
-        if top_genres_queue == []:
-            return "Sorry, no top genres were found! Spotify is still gathering info about your top artists. Try again another time."
+    # format and return a string with user's top genre 
+    if limit == 1:
+        return user.name + "'s top genre is " + top_genres_queue[0] + ". Happy listening!"
 
-        # format and return a string with user's top genre 
-        if limit == 1:
-            return user.name + "'s top genre is " + top_genres_queue[0] + ". Happy listening!"
+    # format and return a string containing multiple top genres with their ranking 
+    else: 
+        output = user.name + "'s top genres are"
+        for index, genre in enumerate(top_genres_queue):
+            output += " (" + str(index + 1) + ") " + genre 
+        return output + ". Happy listening!"
 
-        # format and return a string containing multiple top genres with their ranking 
-        else: 
-            output = user.name + "'s top genres are"
-            for index, genre in enumerate(top_genres_queue):
-                output += " (" + str(index + 1) + ") " + genre 
-            return output + ". Happy listening!"
-    except:
-        return "An exception occurred. Something went wrong. :( uh oh"
     
 def reply_top_songs(user, time_range, limit):
     """Returns a string with a user's top songs that the Discord Bot will reply to the chat 
@@ -238,39 +229,39 @@ def reply_top_songs(user, time_range, limit):
     :param limit: indicate how many songs to compute, defaults to 5. Minimum of 1, maximum of 10. 
     :type limit: int 
 
-    :param discord_user: Discord username of the person that we want to analyze
-    :type discord_user: string 
+    :param discord_user: Discord user's id
+    :type discord_user: Discord user object  
+    ** Note: this parameter has been temporarily removed/commented out, so
+       that the MusicHistory class can be tested independently from methods in the
+       the SpotifyAuth component 
 
     :rtype: string
     :return: a string that describes what a user's top songs are
     """
-    try:
-        # set sp to new user
-        auth_token = get_access_token(user)
-        if auth_token is None:
-            return "You have not logged in!"
-        sp.set_auth(auth_token)
+    # set sp to new user
+    auth_token = get_access_token(user)
+    if auth_token is None:
+        return "You have not logged in!"
+    sp.set_auth(auth_token)
 
-        top_songs_dict = compute_top_songs(time_range, limit)
+    top_songs_dict = compute_top_songs(time_range, limit)
 
-        # format and return a string with user's top song 
-        if limit == 1:
-            song_details = list(top_songs_dict.values())[0] 
+    # format and return a string with user's top song 
+    if limit == 1:
+        song_details = list(top_songs_dict.values())[0] 
 
-            # format track name + artist name 
-            return user.name + "'s top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bop!"
-        
-        # format and return a string containing multiple top songs with their ranking 
-        else: 
-            output = user.name + "'s top songs are"
-            for index, song_details in enumerate(top_songs_dict.values()):
-
-                # format ranking + track name + artist name 
-                output += " (" + str(index + 1) + ") " + song_details[0] + " by " + song_details[1]
+        # format track name + artist name 
+        return user.name + "'s top song is " + str(song_details[0]) + " by " + str(song_details[1]) + ". Nice bop!"
     
-            return output + ". Nice bops!"
-    except:
-        return "An exception occurred. Something went wrong. :( uh oh"
+    # format and return a string containing multiple top songs with their ranking 
+    else: 
+        output = user.name + "'s top songs are"
+        for index, song_details in enumerate(top_songs_dict.values()):
+
+            # format ranking + track name + artist name 
+            output += " (" + str(index + 1) + ") " + song_details[0] + " by " + song_details[1]
+
+        return output + ". Nice bops!"
 
 def reply_top_artists(user, time_range, limit):
     """Returns a string with a user's top artists that the Discord Bot will reply to the chat 
@@ -280,33 +271,33 @@ def reply_top_artists(user, time_range, limit):
     :param limit: indicate how many artists to compute, defaults to 5. Minimum of 1, maximum of 10. 
     :type limit: int 
 
-    :param discord_user: Discord username of the person that we want to analyze
-    :type discord_user: string 
+    :param discord_user: Discord user's id
+    :type discord_user: Discord user object 
+    ** Note: this parameter has been temporarily removed/commented out, so
+       that the MusicHistory class can be tested independently from methods in the
+       the SpotifyAuth component     
     
     :rtype: string
     :return: a string that describes what a user's top artists are
     """
-    try:
-        # set sp to new user
-        auth_token = get_access_token(user)
-        if auth_token is None:
-            return "You have not logged in!"
-        sp.set_auth(auth_token)
+    # set sp to new user
+    auth_token = get_access_token(user)
+    if auth_token is None:
+        return "You have not logged in!"
+    sp.set_auth(auth_token)
 
-        top_artists_queue = compute_top_artists(time_range, limit)
-        
-        # format and return a string with user's top artist 
-        if limit == 1:
-            return user.name + "'s top artist is " + top_artists_queue[0] + ". You have great taste!"
+    top_artists_queue = compute_top_artists(time_range, limit)
+    
+    # format and return a string with user's top artist 
+    if limit == 1:
+        return user.name + "'s top artist is " + top_artists_queue[0] + ". You have great taste!"
 
-        # format and return a string containing multiple top artists with their ranking 
-        else: 
-            output = user.name + "'s top artists are"
-            for index, artist in enumerate(top_artists_queue):
-                output += " (" + str(index + 1) + ") " + artist
-            return output + ". You have great taste!"
-    except:
-        return "An exception occurred. Something went wrong. :( uh oh"
+    # format and return a string containing multiple top artists with their ranking 
+    else: 
+        output = user.name + "'s top artists are"
+        for index, artist in enumerate(top_artists_queue):
+            output += " (" + str(index + 1) + ") " + artist
+        return output + ". You have great taste!"
 
 def reply_top_songs_theory(user, time_range, limit):
     """Returns a string with a user's theory data on their top songs over a given time range that
@@ -320,27 +311,32 @@ def reply_top_songs_theory(user, time_range, limit):
     :param top_songIDs: a dictionary that stores a user's top songs 
     :type top_songIDs: dictionary 
 
-    :param discord_user: Discord username of the person that we want to analyze
+    :param discord_user: Discord user's id
+    :type discord_user: Discord user object 
+    ** Note: this parameter has been temporarily removed/commented out, so
+       that the MusicHistory class can be tested independently from methods in the
+       the SpotifyAuth component 
 
     :rtype: string
     :return: a string that describes what a user's theory data on top songs
     """
-    output = user.name + "'s top song"
+    # set sp to new user
+    auth_token = get_access_token(user)
+    if auth_token is None:
+        return "You have not logged in!"
+    sp.set_auth(auth_token)
+    
+    # get list containing the track name and artist name for top songs 
+    top_songs = list(compute_top_songs(time_range, limit).values())
+
+    # call reply music theory method with top song's track name and artist name 
     if limit == 1:
-        output += "has the following music theory features:"
+        return user.name + "'s top song has the following music theory features:\n" + reply_all_music_theory(" ".join(top_songs[0]))
+    
+    # call compute_top_songs_theory on all top songs + format a reply message
     else:
-        output += "s have the following music theory features:"
-
-    try:
-        # set sp to new user
-        auth_token = get_access_token(user)
-        if auth_token is None:
-            return "You have not logged in!"
-        sp.set_auth(auth_token)
-        
-        # get list containing the track name and artist name for top songs 
-        top_songs = list(compute_top_songs(time_range, limit).values())
-
+        output = user.name + "'s top songs have the following music theory features:"
+    
         theory_dictionary = (compute_top_songs_theory(top_songs))
 
         for feature in theory_dictionary:
@@ -387,5 +383,3 @@ def reply_top_songs_theory(user, time_range, limit):
                 output += "\n• mean " + str(feature) + " of " + str(theory_dictionary[feature]) + "."
         
         return output
-    except:
-        return "An exception occurred. Something went wrong. :( uh oh"
