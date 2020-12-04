@@ -1,6 +1,0 @@
-Moving forward:
-    Work with other architectures that are already there (spotify API)
-    When choosing components to implement, think about what features would prove the value of our product and be a good demo to recruit others
-    Get positive feedback to motivate us
-    Prototype to find out if people would care
-    What could we build by the end of the class that will be a good demo to others.

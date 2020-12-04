@@ -206,7 +206,7 @@ def get_access_token(user):
 
 def __refresh_access_token(refresh_token):
     """
-    Refreshs expired access tokens by sending a request to the token endpoint of the
+    Refreshes expired access tokens by sending a request to the token endpoint of the
     Spotify Web API via the Spotipy library.
 
     Param: refresh_token, a user's Spotify Web API refresh_token
