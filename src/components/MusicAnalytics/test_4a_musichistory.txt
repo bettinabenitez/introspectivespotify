@@ -1,0 +1,26 @@
+﻿Team: Dewbed
+    Members: Bettina, Devika, Emily, William
+    Project: 4A - Final Code (Music History)
+Final Specification: https://docs.google.com/document/d/1HKXEmzND2fV_6nfGU3RSrfRnNxmqY2xuppZ_9yAk-PE/edit#
+
+
+Final Design: 
+https://docs.google.com/document/d/1p5_NoSHRQ2bMkLmwJOtbOiVB3zE3oz_pdqKhB1Hv6w4/edit#
+
+
+Final Test Plan:
+https://docs.google.com/document/d/1-TGScw0socoYX70gH2aIt1ksbRG6EyE0dPgLbNRupQM/edit#
+
+
+Final Source Code (MusicHistory.py):
+https://github.com/bettinabenitez/introspectivespotify/blob/master/src/components/MusicAnalytics/MusicTheory.py
+
+
+Final Source Code (history_test.py)
+https://github.com/bettinabenitez/introspectivespotify/blob/master/src/components/MusicAnalytics/history_test.py
+
+
+Note: The GitHub folders were refactored, so commit changes can be now viewed at this link: https://github.com/bettinabenitez/introspectivespotify/commits/master/src/components
+
+Primary Author: Emily
+Slip Days: 2 (Emily)

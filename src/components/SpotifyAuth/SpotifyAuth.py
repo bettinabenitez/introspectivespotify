@@ -23,7 +23,6 @@ CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 DB_STRING = os.getenv("DB_STRING")
-CACHE_PATH = os.getenv("CACHE_PATH")
 
 # connect to IntrospectiveSpotify database
 engine = create_engine(DB_STRING)
@@ -206,7 +205,7 @@ def get_access_token(user):
 
 def __refresh_access_token(refresh_token):
     """
-    Refreshs expired access tokens by sending a request to the token endpoint of the
+    Refreshes expired access tokens by sending a request to the token endpoint of the
     Spotify Web API via the Spotipy library.
 
     Param: refresh_token, a user's Spotify Web API refresh_token

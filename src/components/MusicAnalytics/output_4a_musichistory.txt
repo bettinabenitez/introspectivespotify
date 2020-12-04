@@ -36,6 +36,6 @@ test_reply_song_theory_1 (__main__.MusicHistoryTest) ... ok
 test_reply_song_theory_more (__main__.MusicHistoryTest) ... ok
 
 ----------------------------------------------------------------------
-Ran 36 tests in 76.706s
+Ran 36 tests in 77.292s
 
 OK
