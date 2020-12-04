@@ -1,0 +1,125 @@
+Team: Dewbed
+    Members: Bettina, Devika, Emily, William
+    Project: 4B - Review Report
+https://docs.google.com/document/d/1jULqSH7L0C0gN37shwut4ak7sxeJ_-TxIrZlKQv9Sr8/edit
+
+Primary Author: Emily
+Slip Days: 2 (Emily)
+
+
+Table of Contents       
+Review Meeting Information        
+Summary of Issues        
+Computation helper methods        
+Computation methods       
+Reply methods        
+Overall Code Quality        
+Post-Review Meeting Reflections        
+
+
+________________
+Review Meeting Information
+* Attendees: Devika, Emily, William
+* Time: 11/27/2020 10 PM - 11 PM PST
+* Where: Zoom Call
+* Component reviewed: Music History
+* Review package: 
+https://docs.google.com/document/d/1zvN8q3mN67fombUfQJwHTIpjktc8Qkaql2cLCP4FMeU/edit
+
+
+Summary of Issues
+Computation helper methods
+* Edge case - artists with no genre [must fix]
+   * During the review meeting, we discussed that the current code does not account for the edge 
+case where all the top artists do not have associated genres. Compute_genre or compute_genre_helper 
+should definitely be modified to cover this path.  
+   * Response: This was a great suggestion and I have implemented a solution to the issue. 
+   * Commit Change Hash: 9cafbd24381a40f72ed0d8cc025d9a9edfdab3a5
+* Improve the efficiency of compute genre helper [should-fix]
+   * We discussed that changing the incrementing variable in compute genre helper to go from 0 to 
+limit would improve code efficiency. The variable count is unnecessary.  
+   * Response: This comment pointed out that my code was lacking efficiency. While I did not 
+implement the recommended specific solution, I found another solution that was even more efficient 
+and implemented it. 
+   * Commit Change Hash: ca3f12e0c9a6ec733d1f175678d0874410b03e9b
+Computation methods 
+* Move limit error checking into the input class [advice]
+   * It was suggested that the input class should handle value errors (for limit variable) instead 
+of the computation methods in the Music History component. This would increase component cohesion 
+and code readability. 
+   * Response: I fully implemented this suggestion.
+   * Commit Change Hash: 5bd45d5fa26a4757c7e5dee8cde5a2102556a045
+* Moved authorization set up from computation methods to reply methods [advice] 
+   * Because reply methods already take in the Discord user object and because the Spotify object 
+in MusicHistory is a global variable, it was suggested that the authorization steps should be moved 
+into the reply methods instead of the computation methods. This would prevent redundancy. 
+   * Response: I fully implemented this suggestion.
+   * Commit Change Hash: 0bcd657b4fe4701ff03eca7c66624a5594dd0c70
+Reply methods
+* Move limit error checking into the input class [advice]
+   * Similar to limit checking related advice in the computation methods, checking if a limit is 
+less than 0 should be handled by the input class to increase component cohesion and code 
+readability. 
+   * Response: I fully implemented this suggestion.
+   * Commit Change Hash: 856d2e23effe6cf106358c0016c22f57a9f7c169
+* Make the exceptions more specific [advice]
+   * During the meeting, we discussed that the exception messages should be more descriptive. If 
+possible, the exception type should also be stated. 
+   * Response: This was great feedback. I went back and wrote more detailed exception messages. 
+Unfortunately, the try and except blocks were still very broad, and I could not specify the 
+exception type. The purpose of my try-except blocks varies from typical usage (there is no one 
+specific error that I am trying to catch). Instead, the purpose of the try-except blocks was to be 
+able to deliver Discord users a message when something in the code went wrong. Thus, even though 
+they were not incredibly readable or precise, I still believe it offers a great feature for users! 
+However, I do acknowledge that the code lacked readability. Drawing inspiration from an earlier 
+suggestion about moving limit error checking to the Input Class, I have also moved the try-except 
+blocks into the Input class to improve cohesion and readability. 
+   * Commit Change Hash: 83f92b337b8d11e43d38786a6fac1514153617be
+* Code readability/Comments [should fix]
+   * It was mentioned that the current reply methods have very few comments. More comments would be 
+incredibly helpful for readers to understand the code.
+   * Response: I fully implemented this suggestion.
+   * Commit Change Hash: dc8f9271fa22f87f39a35b4d4e6918db821bbdd3
+
+
+Overall Code Quality
+* General code clean up [should fix]
+   * We discussed that there extra parentheses and print statements in the code. These should be 
+removed to clean up the code. Additionally, there is a typo on line 262, where “nice bops” should 
+be “nice bop.”
+   * Response: I fully implemented this suggestion.
+   * Commit Change Hash: ca55254fc65f3f05bbc2fc4bfdfd1d316fa774e0
+
+
+________________
+Post-Review Meeting Reflections
+The input from the code review process was incredibly helpful. My teammates were able to catch many 
+errors and primarily found problems relating to code efficiency and readability. One edge case even 
+was caught from this process, as well! 
+My team was very thorough with their feedback, so not many issues were found after I implemented 
+their suggestions. However, one big problem that remained after the code review process was the 
+accuracy of my compute_genre_helper method. The review process did not catch that my code was not 
+accounting for the edge case where there existed a tie AND the tied genres have a shared artist. 
+Finding this edge case would require knowledge about how Spotify categorizes artists into genre(s) 
+so I am not surprised that this bug was not found in the review process. I believe the tests were 
+able to catch this type of error because the white box tests tested all of the paths. Consequently, 
+this edge case was tested and found. Overall, not many problems were found post-review session 
+except a bug that required Spotify Web API background knowledge. 
+I found that doing the code review before testing was very eye-opening. My teammates were able to 
+offer valuable insights. By doing the code review before testing, my teammates were not granted a 
+false sense of optimism about my code, so perhaps they were more thorough. One drawback about doing 
+the code review before testing would be that I was not able to receive any feedback on my final 
+code. I think another round of review after testing would have been beneficial to ensure that I 
+have implemented their suggestions to their satisfaction. 
+Knowing that I had a code review did not cause any changes to my testing suite. While the code 
+review was very helpful, I did not want to over-rely on it to ensure accuracy. I wanted my testing 
+suite to still be very thorough despite the code review. However, I did make changes to my schedule 
+regarding testing. I did not start writing tests until after the review meeting, so I would not be 
+tempted to run them. Additionally, knowing that I had a code review encouraged me to start writing 
+my code as early as possible because I knew that my teammates would need an adequate amount of time 
+to review my code before the meeting. 
+If I had another opportunity to do a code review, then I would add more comments to my code before 
+creating the review package. My teammates mentioned that there were some parts of the code that 
+were particularly difficult to understand. I think if I were able to improve my code readability 
+before creating the review package, then my teammates may have been able to provide more insights 
+about topics not relating to code readability and/or spend less time deciphering code.
