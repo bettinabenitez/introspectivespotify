@@ -23,7 +23,6 @@ CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 DB_STRING = os.getenv("DB_STRING")
-CACHE_PATH = os.getenv("CACHE_PATH")
 
 # connect to IntrospectiveSpotify database
 engine = create_engine(DB_STRING)
