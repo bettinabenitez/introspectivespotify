@@ -14,12 +14,14 @@ Base = declarative_base()
 class User(Base):
    __tablename__ = 'user'
 
+   # create columns in table
    discord_id = Column(String, primary_key=True, unique=True)
    spotify_name = Column(String, unique=True)
    access_token = Column(String)
    expires_at = Column(Integer)
    refresh_token = Column(String)
 
+   # serialize function to return user data in JSON format
    @property
    def serialize(self):
       return{
@@ -32,10 +34,13 @@ class User(Base):
       }
 
 engine = create_engine(DB_STRING)
+
+# uncomment line below to create database table
 # Base.metadata.create_all(engine)
 
 def recreate_database():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
+# uncomment line below to remake database table
 # recreate_database()

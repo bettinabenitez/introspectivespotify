@@ -1,0 +1,22 @@
+Testing Results for the Spotify Authentication Component:
+
+test_login_permission:
+  Login permission assertion passed
+test_login:
+  Login user not logged in assertion passed
+  Login user logged in assertion passed
+test_discord_username_change:
+  Database entry count assertion passed
+test_get_token:
+  API call assertion passed
+test_spotify_id:
+  spotify id assertion passed
+test_refresh_token:
+  expires_at assertion passed
+  new_token assertion passed
+  old_token call failed (as expected)
+test_logout:
+  Logout user logged in assertion passed
+  Logout user not logged in assertion passed
+
+Ran the Spotify Authentication tests in 47 seconds.
