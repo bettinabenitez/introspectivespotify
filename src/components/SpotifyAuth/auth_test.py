@@ -169,10 +169,10 @@ def test_refresh_token(user):
     sp.set_auth(old_token)
     try:
         old_user_me = sp.me()
-        return_string += "  old_token call worked\n"
+        return_string += "  old_token call worked (not expected)\n"
 
     except spotipy.SpotifyException:
-        return_string += "  old_token call failed\n"
+        return_string += "  old_token call failed (as expected)\n"
 
     return return_string
 
@@ -231,8 +231,8 @@ async def test_all_auth(bot, user):
     # string for building test total test result output
     test_string = "Testing Results for the Spotify Authentication Component:\n\n"
 
+    # run all the tests, record output
     start = int(time.time())
-
     test_string += await test_login_permissions(bot, user)
     test_string += await test_login(bot, user)
     test_string += await test_discord_username_change(bot, user)

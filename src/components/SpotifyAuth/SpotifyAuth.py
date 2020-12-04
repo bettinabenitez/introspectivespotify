@@ -34,11 +34,24 @@ db_session = Session()
 # spotify variables
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
+
+# HTTP request to spotify web api variables
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 s = requests.Session()
 
 async def spotify_login(bot, user):
+    """
+    Sends users a private message with a link to log into Introspective Spotify externally via
+    their own Spotify account. Retrieves the user’s Spotify username and access tokens
+    from the Spotify Web API and stores that information in addition to the user’s discord ID
+    in the user session database.
+
+    Param: bot, connection to the Introspective Spotify Discord bot
+    Param: user, a Discord user object 
+
+    Returns: A string that describes the results of the login attempt
+    """
 
     # check that user is not already logged in
     item = db_session.query(User).filter_by(discord_id=str(user.id)).first()
@@ -131,6 +144,7 @@ async def spotify_login(bot, user):
         await user.send("There was an error with processing your Spotify Information. Please run !login again.")
         return "Login Failed"
     
+    # add user to database
     db_session.add(db_user)
     db_session.commit()
 
@@ -138,6 +152,16 @@ async def spotify_login(bot, user):
 
 
 def spotify_logout(user):
+    """
+    Disconnects Introspective Spotify from the user’s Spotify account and deletes
+    the corresponding entry in the user session database.
+
+    Param: user, a Discord user object 
+
+    Returns: A string that describes the results of the logout attempt
+    """
+    
+    # check that user is logged in
     item = db_session.query(User).filter_by(discord_id=str(user.id)).first()
     if not item:
         return "You have not logged in!"
@@ -150,16 +174,30 @@ def spotify_logout(user):
 
 
 def get_access_token(user):
+    """
+    Retrieves the user’s entry in the user session database to extract the user’s
+    Spotify Web API access token.
+
+    Param: user, a Discord user object 
+
+    Returns: None if the user is not logged in, else the user's access token
+    """
+
+    # check that user is logged in
     item = db_session.query(User).filter_by(discord_id=str(user.id)).first()
     if not item:
         # user is not logged in
         # methods which call get_access_token should do a None check
         return None
     
+    # check if access token has expired
     expired = int(time.time()) - item.expires_at > 3550
 
     if expired:
+        # refresh token and expire time
         item.access_token, item.expires_at = __refresh_access_token(item.refresh_token)
+
+        # update entry in database
         db_session.add(item)
         db_session.commit()
 
@@ -167,6 +205,16 @@ def get_access_token(user):
 
 
 def __refresh_access_token(refresh_token):
+    """
+    Refreshs expired access tokens by sending a request to the token endpoint of the
+    Spotify Web API via the Spotipy library.
+
+    Param: refresh_token, a user's Spotify Web API refresh_token
+
+    Returns: a tuple containing the refreshed access token and new expire time.
+    """
+
+    # utilize spotipy refresh token functionality
     auth_manager = sp.auth_manager
     refresh_response = auth_manager.refresh_access_token(refresh_token)
 
@@ -174,6 +222,16 @@ def __refresh_access_token(refresh_token):
 
 
 def get_spotify_id(user):
+    """
+    Retrieves the user’s entry in the user session database to extract the user’s
+    Spotify ID.
+
+    Param: user, a Discord user object 
+
+    Returns: user's spotify name, or an error message if they're not logged in
+    """
+    
+    # check that user is logged in
     item = db_session.query(User).filter_by(discord_id=str(user.id)).first()
     if not item:
         return "You have not logged in!"
