@@ -3,9 +3,14 @@ import time
 import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from collections import defaultdict
 from dotenv import load_dotenv
+
 load_dotenv()
 
+CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 """
 Public Instance Variables
@@ -14,15 +19,15 @@ Public Instance Variables
 """
 Private Instance Variables
 """
+
 current_song = ""
 current_pos = ""
-users = []
+users = defaultdict(None)
 total_number_songs = 0
+listening_party = False
 
-CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
-CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
-REDIRECT_URI = os.getenv("REDIRECT_URI")
-scope = "user-read-currently-playing, "
+
+scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
 current_song = ""
@@ -90,10 +95,19 @@ def join(self, user):
     This function will then use the setCurrentSong function and use current_song and current_position to play that track and position for the new user in order to synchronise the users with the rest of the party.
 
     Args:
-        user (int): discord userid
+        user: discord user object  
 
     """
+    if not listening_party:
+        listening_party = True
 
+    if users[user.id] is None:
+        users[user.id] = user
+        return user.name + " joined the listening party!"
+
+    return user.name + " is already in the listening party!"
+
+    
 
 
 def leave(self, user):
@@ -103,9 +117,16 @@ def leave(self, user):
     The user is then removed from the database of list of users on the listening party
 
     Args:
-        user (int): discord userid
+        user: discord user object  
 
     """
+
+    if users[user.id] is None:
+        return user.name + " is not in the listening party!"
+    
+    del users[user.id]
+
+    return user.name + " has left the listening party."
 
 
 
@@ -184,9 +205,6 @@ def add(self, song):
     for item in results['tracks']['items']:      
         trackID = item['id']
         #add track id to queue
-        
-
-
 
 
 def remove(self, song):
@@ -226,26 +244,14 @@ def createPlaylist(self, user):
 
     """
 
-def listeningParty():
+async def listeningParty():
     """
-    Runs whenever the user list is not empty\
-    Set listeningParty to true
+    Runs whenever the user list is not empty
     While the queue is not empty, run the commands below:
     Gets the total time length of getCurrentSong() using Spotipy object to find duration_ms of the song from the JSON data given when song searched using Spotify Web API search endpoint then store the integer to local variable
     Use time.sleep() until the current_position = total time length of song (local variable)
     Run skip() command
     Sets listeningParty variable to false once the function is over (no users no songs in queue)
-
-    """
-    pass
-
-def queueManagement():
-    """
-    Manages the songs stored on the database and checks whether the queue is correct 
-    Goes through the song database per song
-    Checks if the all the songs with a position on queue that is less than the position of the current song has status of 0, if not set that status to 0.
-    When it gets to the current song on the database, check if the status is 1, if not change the status to 1. 
-    Check if all songs after the current song have the status 2
 
     """
     pass
