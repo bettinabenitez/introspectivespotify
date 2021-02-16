@@ -21,10 +21,12 @@ Private Instance Variables
 """
 
 current_song = ""
-current_pos = ""
+current_pos = 0
 users = defaultdict(None)
 total_number_songs = 0
 listening_party = False
+queue = []
+
 
 
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
@@ -49,7 +51,6 @@ def getCurrentSong(self):
 
     return current_song
 
-
 def setCurrentSong(self):
     """
     Mutator method that sets the current song playing by the listening party. 
@@ -65,9 +66,6 @@ def setCurrentSong(self):
     if trackID != "":
         current_song = trackID
         
-    
-
-
 def getQueue(self):
     """
     Acessor method that gets songs added in the listening party’s queue with the current song as the first item of the list. 
@@ -78,6 +76,8 @@ def getQueue(self):
         list: track songs of songs currently on the listening party’s queue
     """
 
+    return queue
+
 def displayQueue(self):
     """
     Displays songs added in the listening party’s queue with the current song as the first item of the list. 
@@ -85,7 +85,25 @@ def displayQueue(self):
 
     """
 
+    songs = []
 
+    # for i in range(len(q)):
+        #  find track on spotify api using track id
+        #  add song name to songs list
+
+    return "Your songs in the queue are" + songs
+
+    # THIS IS REFERENCE FROM ADD
+
+    #results = sp.search(q= song, type="track", limit=1)
+
+    # Iterate through the results specifically for tracks in items and grab
+
+    # for item in results['tracks']['items']:      
+    #     trackID = item['id']
+    
+    # q = q.append(trackID)
+    # return song + "was added to the queue"
 
 def join(self, user):
     """
@@ -100,15 +118,14 @@ def join(self, user):
     """
     if not listening_party:
         listening_party = True
+        listeningParty()
 
     if users[user.id] is None:
         users[user.id] = user
+        # make user's current song be the listening party's current song at current position
         return user.name + " joined the listening party!"
 
     return user.name + " is already in the listening party!"
-
-    
-
 
 def leave(self, user):
     """
@@ -126,9 +143,11 @@ def leave(self, user):
     
     del users[user.id]
 
+    if len(users) == 0:
+        listening_party = False
+        return user.name + " has left the listening party and the listening party is over. :("
+
     return user.name + " has left the listening party."
-
-
 
 def play(self):
     """
@@ -138,7 +157,6 @@ def play(self):
 
     """
 
-
 def pause(self):
     """
     Pauses the playback for all users in the listening party.
@@ -147,7 +165,6 @@ def pause(self):
 
     """
 
-
 def skip(self, user):
     """
     Skips the playback for all users in the listening party.
@@ -155,7 +172,6 @@ def skip(self, user):
     then using the spotify object to play that song for all the users
 
     """
-
 
 def rewind(self, user):
     """
@@ -178,7 +194,6 @@ def shuffle(self, user):
 
     """
 
-
 def add(self, song):
     """
     Adds a song to the playback for all users in the listening party.
@@ -198,13 +213,16 @@ def add(self, song):
 
     """
 
+
     results = sp.search(q= song, type="track", limit=1)
 
     # Iterate through the results specifically for tracks in items and grab
 
     for item in results['tracks']['items']:      
         trackID = item['id']
-        #add track id to queue
+    
+    q = q.append(trackID)
+    return song + "was added to the queue"
 
 
 def remove(self, song):
@@ -221,6 +239,18 @@ def remove(self, song):
 
     """
 
+    results = sp.search(q= song, type="track", limit=1)
+
+    # Iterate through the results specifically for tracks in items and grab
+
+    for item in results['tracks']['items']:      
+        trackID = item['id']
+    
+    if trackID not in q:
+        return song + "not in queue"
+    
+    q = q.remove(trackID)
+    return song + "was removed from queue"
 
 def createPlaylist(self, user):
     """
@@ -251,9 +281,11 @@ async def listeningParty():
     Gets the total time length of getCurrentSong() using Spotipy object to find duration_ms of the song from the JSON data given when song searched using Spotify Web API search endpoint then store the integer to local variable
     Use time.sleep() until the current_position = total time length of song (local variable)
     Run skip() command
-    Sets listeningParty variable to false once the function is over (no users no songs in queue)
 
     """
-    pass
+    if listening_party:
+
+
+
 
     
