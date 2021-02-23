@@ -1,6 +1,7 @@
 import os
 import sys
 import discord
+import asyncio
 from discord.ext import commands
 sys.path.append('../')
 
@@ -24,8 +25,7 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from MusicAnalytics.MusicHistory import reply_top_songs
 from MusicAnalytics.MusicHistory import reply_top_artists
 from MusicAnalytics.MusicHistory import reply_top_songs_theory
-from Visualization.Visualization import playlist_features
-
+from Visualization.Visualization import personality_graphs
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -255,8 +255,11 @@ class InputClass(commands.Cog):
     @commands.command()
     async def testVisual(self, ctx, url):
         user = ctx.author
-        msg = playlist_features(url)
-        await ctx.send(msg)
+        async with ctx.typing():
+            personality_graphs(url)
+            await ctx.send(file=discord.File('plot.png'))
 
+        os.remove('plot.png')
+        
 def setup(bot):
     bot.add_cog(InputClass(bot))
