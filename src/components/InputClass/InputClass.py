@@ -24,6 +24,7 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from MusicAnalytics.MusicHistory import reply_top_songs
 from MusicAnalytics.MusicHistory import reply_top_artists
 from MusicAnalytics.MusicHistory import reply_top_songs_theory
+from Visualization.Visualization import playlist_features
 
 # import MusicHistory
 
@@ -250,6 +251,12 @@ class InputClass(commands.Cog):
     async def testAuth(self, ctx):
         user = ctx.author
         await test_all_auth(self.bot, user)
+
+    @commands.command()
+    async def testVisual(self, ctx, url):
+        user = ctx.author
+        msg = playlist_features(url)
+        await ctx.send(msg)
 
 def setup(bot):
     bot.add_cog(InputClass(bot))
