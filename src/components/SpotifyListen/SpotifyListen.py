@@ -2,6 +2,7 @@ import random
 import time
 import os
 import spotipy
+import discord
 from spotipy.oauth2 import SpotifyOAuth
 from collections import defaultdict
 from dotenv import load_dotenv
@@ -26,7 +27,6 @@ users = defaultdict(None)
 total_number_songs = 0
 listening_party = False
 queue = []
-
 
 
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
@@ -224,7 +224,6 @@ def add(self, song):
     q = q.append(trackID)
     return song + "was added to the queue"
 
-
 def remove(self, song):
     """
     removes a song to the playback for all users in the listening party.
@@ -284,6 +283,40 @@ async def listeningParty():
 
     """
     if listening_party:
+
+def connect_(self, ctx, *, channel: discord.VoiceChannel=None):
+        """Connect to voice.
+
+        Parameters
+        ------------
+        channel: discord.VoiceChannel [Optional]
+            The channel to connect to. If a channel is not specified, an attempt to join the voice channel you are in
+            will be made.
+
+        This command also handles moving the bot to different channels.
+        """
+        if not channel:
+            try:
+                channel = ctx.author.voice.channel
+            except AttributeError:
+                await ctx.send(":notes: Please join voice channel or specify one with command!")
+
+        vc = ctx.voice_client
+        
+        if vc:
+            if vc.channel.id == channel.id:
+                return
+            try:
+                await vc.move_to(channel)
+            except asyncio.TimeoutError:
+                raise VoiceConnectionError(f'Moving to channel: <{channel}> timed out.')
+        else:
+            try:
+                await channel.connect()
+            except asyncio.TimeoutError:
+                raise VoiceConnectionError(f'Connecting to channel: <{channel}> timed out.')
+
+        await ctx.send(f":notes: Connected to channel: **{channel}**", delete_after=20) 
 
 
 
