@@ -4,9 +4,9 @@ import discord
 from discord.ext import commands
 sys.path.append('../')
 
-from SpotifyAuth.SpotifyAuth import spotify_login
-from SpotifyAuth.SpotifyAuth import spotify_logout
-from SpotifyAuth.auth_test import test_all_auth
+# from SpotifyAuth.SpotifyAuth import spotify_login
+# from SpotifyAuth.SpotifyAuth import spotify_logout
+# from SpotifyAuth.auth_test import test_all_auth
 from MusicAnalytics.MusicTheory import reply_all_music_theory
 from MusicAnalytics.MusicTheory import reply_get_tempo 
 from MusicAnalytics.MusicTheory import reply_get_key 
@@ -24,6 +24,7 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from MusicAnalytics.MusicHistory import reply_top_songs
 from MusicAnalytics.MusicHistory import reply_top_artists
 from MusicAnalytics.MusicHistory import reply_top_songs_theory
+from SpotifyListen.SpotifyListen import add_song
 
 # import MusicHistory
 
@@ -250,6 +251,11 @@ class InputClass(commands.Cog):
     async def testAuth(self, ctx):
         user = ctx.author
         await test_all_auth(self.bot, user)
+
+    @commands.command()
+    async def addSong(self, ctx, song):
+        reply = add_song(song)
+        await ctx.send(reply)
 
 def setup(bot):
     bot.add_cog(InputClass(bot))
