@@ -47,11 +47,12 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
                             scope=scope, cache_path=".oAuthCache"))
 
 
-def average_playlist_features(playlist_url):
+def personality_graphs_helper(playlist_url):
     """
-        Retrieve the average audio features of a user-specified playlist.
+        Retrieve the average audio features and name of a user-specified playlist
         Input: playlist_url A url that links to a Spotify
                playlist.
+        Output: Playlist name, features dictionary
     """
     results = sp.playlist(playlist_url)
     num_tracks = len(results['tracks']['items'])
@@ -65,18 +66,18 @@ def average_playlist_features(playlist_url):
             # value/num_tracks is the contribution from one song to the entire average
             features[key] = features.get(key, 0.0) + (value/num_tracks)
 
-    return features
+    return (results['name'], features)
 
 
 def personality_graphs(playlist_url):
-    graph_features = ['danceability', 'energy', 'speechiness', 'acousticness', 'valence', 'tempo']
+    graph_features = ['danceability', 'energy', 'instrumentalness', 'acousticness', 'valence', 'tempo']
 
-    average_feats = average_playlist_features(playlist_url)
+    name, average_feats = personality_graphs_helper(playlist_url)
     
     # scale the tempo to be between 0 and 1
-    average_feats['tempo'] = average_feats['tempo'] / 200
+    average_feats['tempo'] /= 200
     if average_feats['tempo'] > 1.0: average_feats['tempo'] = 1.0 
-
+    
     # adjust speechiness and acoustiness
 
 
@@ -101,7 +102,8 @@ def personality_graphs(playlist_url):
 
     # get random color
     clr = [np.random.choice(range(256))/255.0 for i in range(3)]
-
+    
+    ax.set_title('{} {}'.format('Personality of', name), y=1.08)
     ax.plot(angs, vals, color=clr, linewidth=1)
     ax.fill(angs, vals, color=clr, alpha=0.6)
 
@@ -111,7 +113,16 @@ def personality_graphs(playlist_url):
     
     # Draw axis lines for each angle and label.
     ax.set_thetagrids(np.degrees(angs[:-1]), graph_features)
+
     
-    ax.set_rgrids([0, 0.2, 0.4, 0.6, 0.8,1])
-    ax.set_title("swag", y=1.08)
+
+    # ax.set_rgrids([0, 0.2, 0.4, 0.6, 0.8,1])
+
+    # removing white background
+    # ax.patch.set_alpha(0.0)
+    # fig.patch.set_alpha(0.0)
+
+    # remove axis lines 
+    # ax.axis('off')
+
     fig.savefig(fname='plot.png')

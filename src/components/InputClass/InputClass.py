@@ -253,7 +253,7 @@ class InputClass(commands.Cog):
         await test_all_auth(self.bot, user)
 
     @commands.command()
-    async def testVisual(self, ctx, url):
+    async def personality(self, ctx, url):
         user = ctx.author
         async with ctx.typing():
             personality_graphs(url)
