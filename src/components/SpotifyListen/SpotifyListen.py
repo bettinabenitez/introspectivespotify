@@ -32,11 +32,9 @@ queue = []
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
-current_song = ""
-current_position = ""
 
 
-def getCurrentSong(self, spotify_id):
+def getCurrentSong():
     """
     returns the current song the listening party is listening to 
 
@@ -49,26 +47,25 @@ def getCurrentSong(self, spotify_id):
 
     """
 
-    setCurrentSong = setCurrentSong()
+    results = sp.current_user_playing_track()
+    print(results)
+
+    trackID = results['item']['id']
+    if trackID != "":
+        current_song = trackID
 
     return current_song
 
-# def setCurrentSong(self):
-#     """
-#     Mutator method that sets the current song playing by the listening party. 
-#     When called, the function uses the Spotipy object to find the current song of the users in the listening party and set's the current song and current position of that song to the private instance variables: current_song and current_position
-#     This can be done by checking the first user’s current song and song position since everyone on the list should have the same song and position.
+def setCurrentSong():
+    """
+    Mutator method that sets the current song playing by the listening party. 
+    When called, the function uses the Spotipy object to find the current song of the users in the listening party and set's the current song and current position of that song to the private instance variables: current_song and current_position
+    This can be done by checking the first user’s current song and song position since everyone on the list should have the same song and position.
 
-
-
-#     """
-#     results = sp.current_user_playing_track()
-
-#     trackID = results['items']['id']
-#     if trackID != "":
-#         current_song = trackID
+    """
+    
         
-def getQueue(self, spotify_id):
+def getQueue(spotify_id):
     """
     get queue that we have stored (not spotify user's queue)
     returns a list
@@ -83,7 +80,7 @@ def getQueue(self, spotify_id):
 
     return queue
 
-def displayQueue(self, spotify_id):
+def displayQueue(spotify_id):
     """
     show users what the queue is 
     returns a string 
@@ -157,7 +154,7 @@ def displayQueue(self, spotify_id):
 
 #     return user.name + " has left the listening party."
 
-def play(self, spotify_id):
+def play_party():
     """
     adds a song to the user's Spotify queue and also to our queue 
     void
@@ -167,19 +164,11 @@ def play(self, spotify_id):
     Note: If the song on the user is currently playing, this function will not run. 
 
     """
-    results = sp.search(q= song, type="track", limit=1)
+    sp.start_playback()
 
-    # Iterate through the results specifically for tracks in items and grab
+    return " Listening Party is playing"
 
-    for item in results['tracks']['items']:      
-        trackID = item['id']
-
-    queue.append(trackID) # Adds to queue
-    sp.add_to_queue(trackId)
-
-    return song + " was added to the queue"
-
-def pause(self, spotify_id):
+def pause_party():
     """
     pauses Spotify user's Spotify 
     void 
@@ -190,7 +179,11 @@ def pause(self, spotify_id):
 
     """
 
-def skip(self, user, listening_party_id):
+    sp.pause_playback()
+
+    return " Listening Party is paused"
+
+def skip(user, listening_party_id):
     """
     skips the current song 
     void
@@ -204,7 +197,7 @@ def skip(self, user, listening_party_id):
     # find where current song is in the queue (searching from the end)
     # call play on next song after the current song in the queue
 
-def rewind(self, user, spotify_id):
+def rewind(user, spotify_id):
     """
     rewind to previous song on the queue
     void
@@ -256,13 +249,15 @@ def add_song(song):
 
     # Iterate through the results specifically for tracks in items and grab
 
-    for item in results['tracks']['items']:      
+    for item in results['tracks']['items']:   
+        print(item)   
         trackID = item['id']
+        trackName = item['name']
 
     queue.append(trackID) # Adds to queue
     sp.add_to_queue(trackID)
     print(queue)
-    return song + " was added to the queue"
+    return trackName + " was added to the queue"
 
 # def remove(self, song, listening_party_id):
 #     """

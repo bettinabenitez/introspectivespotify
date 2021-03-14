@@ -25,6 +25,8 @@ from MusicAnalytics.MusicHistory import reply_top_songs
 from MusicAnalytics.MusicHistory import reply_top_artists
 from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from SpotifyListen.SpotifyListen import add_song
+from SpotifyListen.SpotifyListen import play_party
+from SpotifyListen.SpotifyListen import pause_party
 
 # import MusicHistory
 
@@ -253,9 +255,20 @@ class InputClass(commands.Cog):
         await test_all_auth(self.bot, user)
 
     @commands.command()
-    async def addSong(self, ctx, song):
-        reply = add_song(song)
+    async def addSong(self, ctx, *, arg):
+        reply = add_song(arg)
         await ctx.send(reply)
+
+    @commands.command()
+    async def play(self, ctx):
+        reply = play_party()
+        await ctx.send(reply)
+    
+    @commands.command()
+    async def pause(self, ctx):
+        reply = pause_party()
+        await ctx.send(reply)
+
 
 def setup(bot):
     bot.add_cog(InputClass(bot))
