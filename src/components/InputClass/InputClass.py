@@ -27,6 +27,7 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from SpotifyListen.SpotifyListen import add_song
 from SpotifyListen.SpotifyListen import play_party
 from SpotifyListen.SpotifyListen import pause_party
+from SpotifyListen.SpotifyListen import skip_party
 
 # import MusicHistory
 
@@ -267,6 +268,12 @@ class InputClass(commands.Cog):
     @commands.command()
     async def pause(self, ctx):
         reply = pause_party()
+        await ctx.send(reply)
+
+    @commands.command()
+    async def skip(self, ctx):
+        user = ctx.author.name
+        reply = skip_party(user)
         await ctx.send(reply)
 
 

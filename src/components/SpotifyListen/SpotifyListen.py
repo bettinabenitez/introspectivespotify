@@ -21,9 +21,9 @@ Public Instance Variables
 Private Instance Variables
 """
 
-current_song = ""
+# current_song = ""
 current_pos = 0
-users = defaultdict(None)
+users = []
 total_number_songs = 0
 listening_party = False
 queue = []
@@ -46,6 +46,7 @@ def getCurrentSong():
         string: Name of the current song being played in the listening party
 
     """
+    current_song = ""
 
     results = sp.current_user_playing_track()
     print(results)
@@ -181,9 +182,9 @@ def pause_party():
 
     sp.pause_playback()
 
-    return " Listening Party is paused"
+    return "Listening Party is paused"
 
-def skip(user, listening_party_id):
+def skip_party(user):
     """
     skips the current song 
     void
@@ -193,11 +194,15 @@ def skip(user, listening_party_id):
     then using the spotify object to play that song for all the users
 
     """
+
+    sp.next_track()
+
+    return user + " skipped to the next track"
     # call current song
     # find where current song is in the queue (searching from the end)
     # call play on next song after the current song in the queue
 
-def rewind(user, spotify_id):
+def rewind_party(user):
     """
     rewind to previous song on the queue
     void
@@ -207,6 +212,15 @@ def rewind(user, spotify_id):
     then using the spotipy object to play that song for all the users
 
     """
+
+    current_song = getCurrentSong()
+
+    for i in range(len(queue)-1, 0, -1):
+        if current_song == queue[i]:
+            prev_uri = "spotify:track:" + queue[i-1]
+            sp.start_playback(uri=prev_uri)
+    return user + " "
+
     # call current song
     # find where current song is in the queue (searching from the end)
     # call play on previous song before the current song in the queue
