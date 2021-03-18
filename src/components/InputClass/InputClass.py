@@ -28,7 +28,7 @@ from SpotifyListen.SpotifyListen import add_song
 from SpotifyListen.SpotifyListen import play_party
 from SpotifyListen.SpotifyListen import pause_party
 from SpotifyListen.SpotifyListen import skip_party
-
+from SpotifyListen.SpotifyListen import rewind_party
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -275,6 +275,13 @@ class InputClass(commands.Cog):
         user = ctx.author.name
         reply = skip_party(user)
         await ctx.send(reply)
+
+    @commands.command()
+    async def rewind(self, ctx):
+        user = ctx.author.name
+        reply = rewind_party(user)
+        await ctx.send(reply)
+
 
 
 def setup(bot):

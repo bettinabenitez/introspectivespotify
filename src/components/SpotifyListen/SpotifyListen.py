@@ -22,7 +22,7 @@ Private Instance Variables
 """
 
 # current_song = ""
-current_pos = 0
+# current_pos = 0
 users = []
 total_number_songs = 0
 listening_party = False
@@ -47,15 +47,19 @@ def getCurrentSong():
 
     """
     current_song = ""
-
+    current_pos = 0
+    
     results = sp.current_user_playing_track()
-    print(results)
+    #print(results)
 
     trackID = results['item']['id']
-    if trackID != "":
-        current_song = trackID
 
-    return current_song
+    if trackID != "": # check if there is a song playing
+        current_song = trackID
+        current_pos = results['progress_ms']
+
+    print(f"Current position: {current_pos}")
+    return (current_song, current_pos)
 
 def setCurrentSong():
     """
@@ -214,12 +218,22 @@ def rewind_party(user):
     """
 
     current_song = getCurrentSong()
+    #print(f"queue is:: {queue} and length is {len(queue)}")
+
+    # This checks whether the song was rewinded later in the song to go back to the beginning of the song
+    if current_song[1] >= 5000: # 5 seconds
+        sp.start_playback(uris=["spotify:track:" + current_song[0]])
+        return user + " rewinded song to beginning"
 
     for i in range(len(queue)-1, 0, -1):
-        if current_song == queue[i]:
+        # look for the index of our current song in our queue 
+        #print(f"current song is: {current_song} and the song id is {queue[i]}")      
+        if current_song[0] == queue[i]:
+            #print("here in if: " + current_song)
             prev_uri = "spotify:track:" + queue[i-1]
-            sp.start_playback(uri=prev_uri)
-    return user + " "
+            sp.start_playback(uris=[prev_uri])
+            
+    return user + " rewinded song to previous song"
 
     # call current song
     # find where current song is in the queue (searching from the end)
@@ -260,18 +274,22 @@ def add_song(song):
 
     """
     results = sp.search(q= song, type="track", limit=1)
-
+    print(results)
     # Iterate through the results specifically for tracks in items and grab
-
+    
+    
     for item in results['tracks']['items']:   
-        print(item)   
+        #print(item)   
         trackID = item['id']
         trackName = item['name']
-
+        trackArtist = item['artists'][0]['name']
+        for artist_index in range(1, len(item['artists'])):
+            trackArtist = trackArtist + ", " + item['artists'][artist_index]['name']
+    
     queue.append(trackID) # Adds to queue
-    sp.add_to_queue(trackID)
-    print(queue)
-    return trackName + " was added to the queue"
+    sp.add_to_queue(trackID) 
+    #print(queue)
+    return trackName + " by " + trackArtist + " was added to the queue"
 
 # def remove(self, song, listening_party_id):
 #     """
