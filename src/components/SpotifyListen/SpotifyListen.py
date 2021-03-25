@@ -13,13 +13,6 @@ CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
-"""
-Public Instance Variables
-"""
-
-"""
-Private Instance Variables
-"""
 
 # current_song = ""
 # current_pos = 0
@@ -32,6 +25,26 @@ queue = []
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
+##### new design idea - make playlist for each listening party #####
+
+## methods that need to change
+# start listening party --- needs to make a playlist + start playing it? 
+# addSong --- needs to add song to playlist (not to user's queue)
+# remove song --- playlist_remove_all_occurrences_of_items or playlist_remove_specific_occurrences_of_items
+# displayQueue --- call getQueue and format 
+# getQueue --- call playlist_tracks from Spotipy and loop through the output to get ID, name, and artist(s) 
+# shuffle ---
+    # can we change order of songs in playlist? yes we can!
+    # Or we can take off all the items after our current song and readd them in a diff order
+
+## methods that can stay the same
+# getCurrentSong 
+# skip 
+# play/pause 
+
+## lingering questions
+# do we still need to keep track of the queue in a list? or can we just let spotify handle it?
+    # answer: maybe don't need to keep track. we can get the queue by getting current song + comparing to tracks in playlist
 
 
 def getCurrentSong():
@@ -45,12 +58,14 @@ def getCurrentSong():
     Returns:
         string: Name of the current song being played in the listening party
 
+        TODO: fix comments
+
     """
     current_song = ""
     current_pos = 0
     
+    # get info about user's current song 
     results = sp.current_user_playing_track()
-    #print(results)
 
     trackID = results['item']['id']
 
@@ -58,7 +73,7 @@ def getCurrentSong():
         current_song = trackID
         current_pos = results['progress_ms']
 
-    print(f"Current position: {current_pos}")
+    # print(f"Current position: {current_pos}")
     return (current_song, current_pos)
 
 def setCurrentSong():
@@ -81,11 +96,13 @@ def getQueue(spotify_id):
     
     Returns:
         list: track songs of songs currently on the listening party’s queue
-    """
 
+
+    TODO: fix comments is this needed?
+    """
     return queue
 
-def displayQueue(spotify_id):
+def display_queue():
     """
     show users what the queue is 
     returns a string 
@@ -93,15 +110,16 @@ def displayQueue(spotify_id):
     Displays songs added in the listening party’s queue with the current song as the first item of the list. 
     This is done by calling the getQueue function then using discord API to send a message on the discord channel.
 
+    TODO: just do this lmao
     """
 
-    songs = []
+    songs = f"1. {queue[0][1]} by {queue[0][2]} \n"
 
-    # for i in range(len(q)):
-        #  find track on spotify api using track id
-        #  add song name to songs list
+    print(queue)
+    for i in range(1, len(queue)):
+        songs = songs + f"{i+1}. {queue[i][1]} by {queue[i][2]} \n"
 
-    return "Your songs in the queue are" + songs
+    return "Your songs in the queue are: \n \n" + songs
 
     # THIS IS REFERENCE FROM ADD
 
@@ -168,6 +186,8 @@ def play_party():
     This is done by using the spotipy object to play the song on the user's playback.
     Note: If the song on the user is currently playing, this function will not run. 
 
+    TODO: fix comments
+          add play song?
     """
     sp.start_playback()
 
@@ -181,6 +201,8 @@ def pause_party():
     Pauses the playback for all users in the listening party.
     This is done by using the spotipy object to pause the song on the user's playback.
     Note: If the song on the user is currently paused, this function will not run.
+
+    TODO: fix comments
 
     """
 
@@ -215,22 +237,30 @@ def rewind_party(user):
     This is done by selecting the song on the queue from the database prior to song currently being played 
     then using the spotipy object to play that song for all the users
 
-    """
+    TODO: fix comments
 
+    """
     current_song = getCurrentSong()
     #print(f"queue is:: {queue} and length is {len(queue)}")
 
-    # This checks whether the song was rewinded later in the song to go back to the beginning of the song
-    if current_song[1] >= 5000: # 5 seconds
+    # we have played over 5 seconds of the current song
+    # rewind to beginning
+    if current_song[1] >= 5000:  # 5 seconds
         sp.start_playback(uris=["spotify:track:" + current_song[0]])
         return user + " rewinded song to beginning"
 
+    # we are at the beginning of the song. Rewind to previous song. 
     for i in range(len(queue)-1, 0, -1):
         # look for the index of our current song in our queue 
-        #print(f"current song is: {current_song} and the song id is {queue[i]}")      
-        if current_song[0] == queue[i]:
-            #print("here in if: " + current_song)
-            prev_uri = "spotify:track:" + queue[i-1]
+        # print(f"current song is: {current_song} and the song id is {queue[i]}")   
+
+        if current_song[0] == queue[i][0]:   
+        #if current_song[0] == queue[i]:
+            # print("here in if: " + current_song)
+            # play previous song in queue 
+
+            prev_uri = "spotify:track:" + queue[i-1][0]
+            #prev_uri = "spotify:track:" + queue[i-1]
             sp.start_playback(uris=[prev_uri])
             
     return user + " rewinded song to previous song"
@@ -272,12 +302,14 @@ def add_song(song):
     Args:
         song (string): name of the song
 
+        TODO: fix comments
+
     """
     results = sp.search(q= song, type="track", limit=1)
     print(results)
-    # Iterate through the results specifically for tracks in items and grab
     
-    
+    # Iterate through the results specifically for tracks in items
+    # grab track id, name, and artist(s)
     for item in results['tracks']['items']:   
         #print(item)   
         trackID = item['id']
@@ -286,8 +318,11 @@ def add_song(song):
         for artist_index in range(1, len(item['artists'])):
             trackArtist = trackArtist + ", " + item['artists'][artist_index]['name']
     
-    queue.append(trackID) # Adds to queue
-    sp.add_to_queue(trackID) 
+
+    ## IDEA: we should add trackName and Track artist too! As a 3 element tuple
+    queue.append((trackID, trackName, trackArtist))
+    #queue.append(trackID) # Adds to queue
+    sp.add_to_queue(trackID)  
     #print(queue)
     return trackName + " by " + trackArtist + " was added to the queue"
 
@@ -320,7 +355,7 @@ def add_song(song):
 #     q = q.remove(trackID)
 #     return song + "was removed from queue"
 
-def createPlaylist(self, user):
+def createPlaylist(playlist_name):
     """
     Creates a playlist with all the songs played during the listening party. 
     This is done by: 
@@ -340,7 +375,28 @@ def createPlaylist(self, user):
     Returns:
         string: link to the created playlist
 
+    TODO: work on this !!!
     """
+    # check if playlist_name was provided. if not, default 
+    # if playlist_name == "":
+        # playlist_name = "i like potatos"
+
+
+    # user_playlist_create(user, name, public=True, collaborative=False, description='')
+        # Creates a playlist for a user
+
+        # Parameters:
+        # user - the id of the user
+        # name - the name of the playlist
+        # public - is the created playlist public
+        # collaborative - is the created playlist collaborative
+        # description - the description of the playlist
+
+    # tracks_to_add = []
+    # for song in queue:
+        # tracks_to_add.append(song[0])
+
+    # playlist_add_items(playlist_id, tracks_to_add, position=None)
 
 async def startListeningParty():
     """

@@ -29,6 +29,7 @@ from SpotifyListen.SpotifyListen import play_party
 from SpotifyListen.SpotifyListen import pause_party
 from SpotifyListen.SpotifyListen import skip_party
 from SpotifyListen.SpotifyListen import rewind_party
+from SpotifyListen.SpotifyListen import display_queue
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -280,6 +281,12 @@ class InputClass(commands.Cog):
     async def rewind(self, ctx):
         user = ctx.author.name
         reply = rewind_party(user)
+        await ctx.send(reply)
+
+    @commands.command()
+    async def display(self, ctx):
+        #user = ctx.author.name
+        reply = display_queue()
         await ctx.send(reply)
 
 
