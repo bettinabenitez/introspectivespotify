@@ -24,12 +24,20 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from MusicAnalytics.MusicHistory import reply_top_songs
 from MusicAnalytics.MusicHistory import reply_top_artists
 from MusicAnalytics.MusicHistory import reply_top_songs_theory
-from SpotifyListen.SpotifyListen import add_song
-from SpotifyListen.SpotifyListen import play_party
-from SpotifyListen.SpotifyListen import pause_party
-from SpotifyListen.SpotifyListen import skip_party
-from SpotifyListen.SpotifyListen import rewind_party
-from SpotifyListen.SpotifyListen import display_queue
+# from SpotifyListen.SpotifyListen import add_song
+# from SpotifyListen.SpotifyListen import play_party
+# from SpotifyListen.SpotifyListen import pause_party
+# from SpotifyListen.SpotifyListen import skip_party
+# from SpotifyListen.SpotifyListen import rewind_party
+# from SpotifyListen.SpotifyListen import display_queue
+from SpotifyListen.SpotifyListen2 import add_song
+from SpotifyListen.SpotifyListen2 import play_party
+from SpotifyListen.SpotifyListen2 import pause_party
+from SpotifyListen.SpotifyListen2 import skip_party
+from SpotifyListen.SpotifyListen2 import rewind_party
+from SpotifyListen.SpotifyListen2 import display_queue
+from SpotifyListen.SpotifyListen2 import start_listening_party
+from SpotifyListen.SpotifyListen2 import delete_playlist
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -256,39 +264,51 @@ class InputClass(commands.Cog):
         user = ctx.author
         await test_all_auth(self.bot, user)
 
-    @commands.command()
-    async def addSong(self, ctx, *, arg):
-        reply = add_song(arg)
-        await ctx.send(reply)
+    # @commands.command()
+    # async def addSong(self, ctx, *, arg):
+    #     reply = add_song(arg)
+    #     await ctx.send(reply)
 
-    @commands.command()
-    async def play(self, ctx):
-        reply = play_party()
-        await ctx.send(reply)
+    # @commands.command()
+    # async def play(self, ctx):
+    #     reply = play_party()
+    #     await ctx.send(reply)
     
+    # @commands.command()
+    # async def pause(self, ctx):
+    #     reply = pause_party()
+    #     await ctx.send(reply)
+
+    # @commands.command()
+    # async def skip(self, ctx):
+    #     user = ctx.author.name
+    #     reply = skip_party(user)
+    #     await ctx.send(reply)
+
+    # @commands.command()
+    # async def rewind(self, ctx):
+    #     user = ctx.author.name
+    #     reply = rewind_party(user)
+    #     await ctx.send(reply)
+
+    # @commands.command()
+    # async def display(self, ctx):
+    #     #user = ctx.author.name
+    #     reply = display_queue()
+    #     await ctx.send(reply)
+
+    ####### new spotify listening commands here #######
+    # TO DO: test start with and without arg
     @commands.command()
-    async def pause(self, ctx):
-        reply = pause_party()
+    async def start(self, ctx, *, arg):
+        print(arg)
+        reply = start_listening_party(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def skip(self, ctx):
-        user = ctx.author.name
-        reply = skip_party(user)
+    async def delete(self, ctx):
+        reply = delete_playlist()
         await ctx.send(reply)
-
-    @commands.command()
-    async def rewind(self, ctx):
-        user = ctx.author.name
-        reply = rewind_party(user)
-        await ctx.send(reply)
-
-    @commands.command()
-    async def display(self, ctx):
-        #user = ctx.author.name
-        reply = display_queue()
-        await ctx.send(reply)
-
 
 
 def setup(bot):
