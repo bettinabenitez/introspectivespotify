@@ -26,6 +26,9 @@ from MusicAnalytics.MusicHistory import reply_top_songs
 from MusicAnalytics.MusicHistory import reply_top_artists
 from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from Visualization.Visualization import personality_graphs
+from Visualization.Visualization import timeline_graphs
+from Visualization.Visualization import cover_graph
+
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -260,6 +263,24 @@ class InputClass(commands.Cog):
             await ctx.send(file=discord.File('plot.png'))
 
         os.remove('plot.png')
+
+    @commands.command()
+    async def timeline(self, ctx):
+        user = ctx.author
+        async with ctx.typing():
+            timeline_graphs()
+            await ctx.send(file=discord.File('timeplot.png'))
+
+        os.remove('timeplot.png')
+
+    @commands.command()
+    async def cover(self, ctx, url):
+        user = ctx.author
+        async with ctx.typing():
+            cover_graph(url)
+            await ctx.send(file=discord.File('coverplot.jpg'))
+
+        os.remove('coverplot.jpg')
         
 def setup(bot):
     bot.add_cog(InputClass(bot))
