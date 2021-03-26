@@ -264,10 +264,10 @@ class InputClass(commands.Cog):
         user = ctx.author
         await test_all_auth(self.bot, user)
 
-    # @commands.command()
-    # async def addSong(self, ctx, *, arg):
-    #     reply = add_song(arg)
-    #     await ctx.send(reply)
+    @commands.command()
+    async def addSong(self, ctx, *, arg):
+        reply = add_song(arg)
+        await ctx.send(reply)
 
     # @commands.command()
     # async def play(self, ctx):
@@ -298,11 +298,16 @@ class InputClass(commands.Cog):
     #     await ctx.send(reply)
 
     ####### new spotify listening commands here #######
-    # TO DO: test start with and without arg
     @commands.command()
-    async def start(self, ctx, *, arg):
-        print(arg)
-        reply = start_listening_party(arg)
+    async def start(self, ctx, *args):
+        playlist_name = ""
+        if not args:
+            playlist_name = "default playlist name here"
+        else:
+            for word in args:
+                playlist_name += word + " "
+
+        reply = start_listening_party(playlist_name)
         await ctx.send(reply)
 
     @commands.command()

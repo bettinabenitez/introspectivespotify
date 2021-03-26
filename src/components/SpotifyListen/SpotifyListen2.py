@@ -18,7 +18,7 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 # current_pos = 0
 
 # TODO: figure out why strings dont fucking work
-info = []
+info = []  # info[0] = spotify user, info[1] = playlist_id
 total_number_songs = 0
 listening_party = False
 queue = []
@@ -207,24 +207,39 @@ def add_song(song):
 
     """
     results = sp.search(q= song, type="track", limit=1)
-    print(results)
     
     # Iterate through the results specifically for tracks in items
-    # grab track id, name, and artist(s)
-    for item in results['tracks']['items']:   
-        #print(item)   
+    # grab track id, name, and artist(s) and add to our queue
+    for item in results['tracks']['items']:     
         trackID = item['id']
         trackName = item['name']
         trackArtist = item['artists'][0]['name']
         for artist_index in range(1, len(item['artists'])):
             trackArtist = trackArtist + ", " + item['artists'][artist_index]['name']
-    
-
-    ## IDEA: we should add trackName and Track artist too! As a 3 element tuple
     queue.append((trackID, trackName, trackArtist))
-    #queue.append(trackID) # Adds to queue
-    sp.add_to_queue(trackID)  
-    #print(queue)
+
+    # get songs in playlist (before adding song to playlist)
+    playlist_items = sp.playlist_items(info[1], fields=None, limit=100, offset=0, market=None, additional_types=('track', 'episode'))
+
+    # add song to Spotify playlist. pass in playlist_id, list of song id
+    sp.playlist_add_items(info[1], [trackID], position=None)
+
+    # find device to play on
+    # TO DO: need to add try and except in case no active devices are found. 
+    id_found = ""
+    devices = sp.devices()
+    print(f"devices are here: {sp.devices()}")
+    for device in devices['devices']:
+        print(device)
+        print(".....")
+        if device['is_active'] == True:
+            id_found = device['id']
+            break
+
+    # check if playlist was empty before adding current song. if so, play playlist 
+    if playlist_items['total'] == 0:
+        sp.start_playback(device_id = id_found, context_uri="spotify:playlist:" + info[1])
+
     return trackName + " by " + trackArtist + " was added to the queue"
 
 def remove(self, song, listening_party_id):
@@ -258,52 +273,34 @@ def remove(self, song, listening_party_id):
 
 def getUserID():
     return sp.current_user()['id']
-#print(getUserID())
 
-def start_listening_party(playlist_name="testing testing", des="This playlist was made by Introspective Spotify!"):
+def start_listening_party(playlist_name):
     """
     start the listening party
     create a playlist + start playing the playlist?
     
     """
+    # store user ID
     info.append(getUserID())
-    # print(f"2. user is {info[0]}")
     
-    playlist = sp.user_playlist_create(info[0], playlist_name=playlist_name, public=False, collaborative=False, description=des)
-    print(playlist)
-    info.append(playlist['id'])
+    # create a playlist and store playlist ID 
+    playlist = sp.user_playlist_create(info[0], playlist_name, public=False, collaborative=False, description= "This playlist was made by Introspective Spotify!")
+    info.append(playlist['id']) 
 
-    # tracks_to_add = []
-    # for song in queue:
-        # tracks_to_add.append(song[0])
-
-    # playlist_add_items(playlist_id, tracks_to_add, position=None)
-
-    return "We created a playlist for you!"
-
-# current_user_unfollow_playlist(playlist_id)
-# Unfollows (deletes) a playlist for the current authenticated user
-
-# Parameters:
-# name - the name of the playlist
+    # return link of spotify playlist
+    playlist_link = playlist['external_urls']['spotify']
+    return f"We created a playlist for you! Here is the link: {playlist_link}"
 
 
 def delete_playlist():
     """
     """   
-
+    # pass in spotify user and playlist id 
     sp.user_playlist_unfollow(info[0], info[1])
     
     return "we deleted the playlist for the listening party"
 
 
-# user_playlist_unfollow(user, playlist_id)
-# Unfollows (deletes) a playlist for a user
-
-# Parameters:
-# user - the id of the user
-# name - the name of the playlist
-    
 ###############################################################
 # functions to implement later below!
 
