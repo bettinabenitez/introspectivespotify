@@ -28,6 +28,7 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from Visualization.Visualization import personality_graphs
 from Visualization.Visualization import timeline_graphs
 from Visualization.Visualization import cover_graph
+from Visualization.Visualization import upload_cover
 
 # import MusicHistory
 
@@ -276,11 +277,37 @@ class InputClass(commands.Cog):
     @commands.command()
     async def cover(self, ctx, url):
         user = ctx.author
+        if url[:5] == 'https':
+            filename = "cover_" + url[34:56] + ".jpg"
+        elif url[:7] == 'spotify':
+            filename = "cover_" + url[17:] + ".jpg"
+        else:
+            await ctx.send("Please provide a valid playlist URL.")
+            return
         async with ctx.typing():
-            cover_graph(url)
-            await ctx.send(file=discord.File('coverplot.jpg'))
+            owner = cover_graph(url, user, filename)
+            await ctx.send("Here is the cover art for your playlist!")
+            await ctx.send(file=discord.File(filename))
+            if owner:
+                msg = await ctx.send("Would you like me to replace your current playlist cover with this masterpiece?\n" \
+                                    "React with the 🖌 emoji to confirm.\n" \
+                                    " \n"\
+                                    " 🚨 !! Warning this will replace your current playlist cover !! 🚨\n ")
+                reactions = ["🖌"]
 
-        os.remove('coverplot.jpg')
-        
+                for emoji in reactions: 
+                    await msg.add_reaction(emoji)
+                def check(reaction, user):
+                    return user == ctx.author and str(reaction.emoji) in ["🖌"] and reaction.message == msg
+                try:
+                    confirmation = await self.bot.wait_for("reaction_add", check=check, timeout = 15)
+                    if confirmation:
+                        rtn_msg = upload_cover(url, user, filename)
+                        await msg.edit(content=rtn_msg)
+                except asyncio.TimeoutError:
+                    await msg.edit(content="You kept me on my toes! I timed out... 😴")
+
+        os.remove(filename)
+
 def setup(bot):
     bot.add_cog(InputClass(bot))

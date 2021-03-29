@@ -16,6 +16,7 @@ from collections import OrderedDict
 from math import log
 from glob import glob
 import textwrap
+import base64
 from PIL import ImageFont, ImageDraw, Image
 from datetime import timedelta
 import calendar
@@ -42,6 +43,7 @@ from MusicAnalytics.MusicTheory import get_all_music_theory
 
 sys.path.append('../')
 from SpotifyAuth.SpotifyAuth import get_access_token
+from SpotifyAuth.SpotifyAuth import get_spotify_id
 
 load_dotenv()
 
@@ -49,7 +51,7 @@ load_dotenv()
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
-scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
+scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, playlist-modify-private, user-read-private, ugc-image-upload"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
                             client_secret=CLIENT_SECRET,
                             redirect_uri=REDIRECT_URI,
@@ -79,7 +81,7 @@ def cover_graphs_helper(playlist_url):
         dance.append(song_features['danceability'])
         mood.append(song_features['valence'])
 
-    return (results['name'], tempo, dance, mood)
+    return (results['name'], results['owner']['display_name'], results['owner']['id'], tempo, dance, mood)
 
 def personality_graphs_helper(playlist_url):
     """
@@ -160,24 +162,27 @@ def personality_graphs(playlist_url):
 
 
 
-def cover_graph(playlist_url):
+def cover_graph(playlist_url, discord_user, filename):
     """
         
     """
-    name, tempo, dance, mood = cover_graphs_helper(playlist_url)
-
+    name, user, user_id, tempo, dance, mood = cover_graphs_helper(playlist_url)
     # Divide tempo by 200 to scale values down. If not, give default val of 1.0.
     tempo_mean = np.mean(tempo)
     tempo = list(map(lambda x: x/tempo_mean, tempo))
     
     mood_mean = np.mean(mood)
     color_start = 0.0
+    color = (127, 84, 141)
     if mood_mean <= .25:
         color_start = 2.0
+        color = (166, 142, 99)
     elif mood_mean <= .5:
         color_start = 1.67
+        color = (137, 153, 88)
     elif mood_mean <= .75:
         color_start = .33
+        color = (118, 130, 161)
 
     sns.set_theme(style="white")
     
@@ -206,17 +211,20 @@ def cover_graph(playlist_url):
     # ax.set(xlim=(-3.5, 3.5), ylim=(-3.5, 3.5))
     #fig.subplots_adjust(0, 0, 1, 1, .08, .08)
 
-    fig.savefig(fname='coverplot.jpg', bbox_inches='tight')    
-    write_title(name)
+    fig.savefig(fname=filename, bbox_inches='tight')  
+    write_title(name, user, color, filename)
 
-def write_title(name):
+    return get_spotify_id(discord_user) == user_id
+
+def write_title(name, user, color, filename):
     #Read Image
-    img = cv2.imread('coverplot.jpg', cv2.IMREAD_UNCHANGED)
+    img = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
     # setup text
     # font = cv2.FONT_HERSHEY_SIMPLEX
     font_size = 1
     font_thickness = 2
-    font_path = "./Teko-Light.ttf"
+    font_path = "./fonts/Teko-Light.ttf"
+    
     TEXT_GAP = 40
 
     # PIL vars
@@ -226,6 +234,7 @@ def write_title(name):
 
     # get boundary aof text nd coords based on bounds
     wrapped_text = textwrap.wrap(name, width=35)
+    # wrapped_text = textwrap.wrap(name + " by " + user, width=35)
     for i, line in enumerate(wrapped_text):
         # textsize = cv2.getTextSize(line, font, font_size, font_thickness)[0]
         textsize = font.getsize(line)
@@ -234,11 +243,30 @@ def write_title(name):
 
         # add tet centered on image and rewrite image
         # cv2.putText(img, line, (x, y), font, font_size, (0, 0, 0), font_thickness, lineType = cv2.LINE_AA)
-        draw.text((x,y), line, font=font, fill=(0, 0, 0, 0))
+        draw.text((x,y), line, font=font, fill=color)
+    by_line = "curated by " + user
+    textsize = font.getsize(by_line)
+    x = int((img.shape[1] - textsize[0]) / 2)
+    draw.text((x,img.shape[0]-(2*TEXT_GAP)), by_line, font=font, fill=color)
 
     img = np.array(img_pil)
-    cv2.imwrite('coverplot.jpg', img)
-    
+    cv2.imwrite(filename, img)
+
+
+
+def upload_cover(url, user, filename):
+
+    auth_token = get_access_token(user)
+    if auth_token is None:
+        return "You have not logged in!"
+    sp.set_auth(auth_token)
+
+    with open(filename, "rb") as img_file:
+        b64_string = base64.b64encode(img_file.read())
+
+    sp.playlist_upload_cover_image(url, b64_string)
+
+    return "Playlist cover successfully uploaded! 🎶🖼"
 
 def timeline_graphs():
     streaming_history = read_history()
