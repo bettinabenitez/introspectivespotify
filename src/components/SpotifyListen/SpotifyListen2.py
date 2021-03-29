@@ -30,8 +30,9 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
 ##### new design idea - make playlist for each listening party #####
 
 ## methods that need to change
-# start listening party --- needs to make a playlist + start playing it? 
-# addSong --- needs to add song to playlist (not to user's queue)
+# DONE: start listening party --- needs to make a playlist + start playing it? 
+# DONE: delete listening party
+# ALMOST DONE?: addSong --- needs to add song to playlist (not to user's queue)
 # remove song --- playlist_remove_all_occurrences_of_items or playlist_remove_specific_occurrences_of_items
 # displayQueue --- call getQueue and format 
 # getQueue ---
@@ -51,6 +52,8 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
     # answer: maybe don't need to keep track. we can get the queue by getting current song + comparing to tracks in playlist
     # depends on if we want our queue to automatically store name, artist, ID
     
+
+## another idea: get everyone's spotify ID and play the playlist for everyone. SO pause can finally work :)
 
 def getCurrentSong():
     """
@@ -109,14 +112,30 @@ def display_queue():
 
     TODO: just do this lmao
     """
-
-    songs = f"1. {queue[0][1]} by {queue[0][2]} \n"
-
+    # pass in playlist_id
+    queue = sp.playlist_items(playlist_id=info[1])
     print(queue)
-    for i in range(1, len(queue)):
-        songs = songs + f"{i+1}. {queue[i][1]} by {queue[i][2]} \n"
 
-    return "Your songs in the queue are: \n \n" + songs
+    output = "Your songs in the queue are: \n \n" 
+
+    # Iterate through the results specifically for tracks in items
+    # grab track id, name, and artist(s) and add to our queue
+    counter = 1
+    for item in queue['items']:
+        # get song name and artist
+        trackName = item['track']['name']
+        trackArtist = item['track']['artists'][0]['name']
+
+        # if song has multiple artists, add them to trackArtist
+        for artist_index in range(1, len(item['track']['artists'])):
+            trackArtist = trackArtist + ", " + item['track']['artists'][artist_index]['name']
+        
+        output += str(counter) + ". " + trackName + " by " + trackArtist + "\n"
+        counter += 1
+
+        # TO DO: 
+
+    return output
 
 
 def play_party():
@@ -150,7 +169,7 @@ def pause_party():
 
     sp.pause_playback()
 
-    return "Listening Party is paused"
+    return "Listening Party is paused (only for host)"
 
 def skip_party(user):
     """
@@ -179,8 +198,15 @@ def rewind_party(user):
     TODO: fix comments
 
     """
+    current_song = getCurrentSong()
 
-            
+    # we have played over 5 seconds of the current song
+    # rewind to beginning
+    if current_song[1] >= 5000:  # 5 seconds
+        sp.seek_track(0)
+        return user + " rewinded song to beginning"
+    
+    sp.previous_track()
     return user + " rewinded song to previous song"
 
 def add_song(song):
@@ -221,20 +247,25 @@ def add_song(song):
     # get songs in playlist (before adding song to playlist)
     playlist_items = sp.playlist_items(info[1], fields=None, limit=100, offset=0, market=None, additional_types=('track', 'episode'))
 
-    # add song to Spotify playlist. pass in playlist_id, list of song id
-    sp.playlist_add_items(info[1], [trackID], position=None)
-
     # find device to play on
-    # TO DO: need to add try and except in case no active devices are found. 
     id_found = ""
     devices = sp.devices()
-    print(f"devices are here: {sp.devices()}")
+    #print(f"devices are here: {sp.devices()}")
     for device in devices['devices']:
-        print(device)
-        print(".....")
+        #print(device)
+        #print(".....")
         if device['is_active'] == True:
             id_found = device['id']
+            sp.shuffle(state = False, device_id=id_found)
+            sp.repeat(state = "context", device_id=id_found)
             break
+    
+    # no device was found. Send error message to discord chat. 
+    if id_found == "":
+        return "No Device Found. Please check that one of your devices is active by playing a song."
+
+    # add song to Spotify playlist. pass in playlist_id, list of song id
+    sp.playlist_add_items(info[1], [trackID], position=None)
 
     # check if playlist was empty before adding current song. if so, play playlist 
     if playlist_items['total'] == 0:

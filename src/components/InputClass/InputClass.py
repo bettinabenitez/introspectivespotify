@@ -269,33 +269,33 @@ class InputClass(commands.Cog):
         reply = add_song(arg)
         await ctx.send(reply)
 
-    # @commands.command()
-    # async def play(self, ctx):
-    #     reply = play_party()
-    #     await ctx.send(reply)
+    @commands.command()
+    async def play(self, ctx):
+        reply = play_party()
+        await ctx.send(reply)
     
-    # @commands.command()
-    # async def pause(self, ctx):
-    #     reply = pause_party()
-    #     await ctx.send(reply)
+    @commands.command()
+    async def pause(self, ctx):
+        reply = pause_party()
+        await ctx.send(reply)
 
-    # @commands.command()
-    # async def skip(self, ctx):
-    #     user = ctx.author.name
-    #     reply = skip_party(user)
-    #     await ctx.send(reply)
+    @commands.command()
+    async def skip(self, ctx):
+        user = ctx.author.name
+        reply = skip_party(user)
+        await ctx.send(reply)
 
-    # @commands.command()
-    # async def rewind(self, ctx):
-    #     user = ctx.author.name
-    #     reply = rewind_party(user)
-    #     await ctx.send(reply)
+    @commands.command()
+    async def rewind(self, ctx):
+        user = ctx.author.name
+        reply = rewind_party(user)
+        await ctx.send(reply)
 
-    # @commands.command()
-    # async def display(self, ctx):
-    #     #user = ctx.author.name
-    #     reply = display_queue()
-    #     await ctx.send(reply)
+    @commands.command()
+    async def display(self, ctx):
+        #user = ctx.author.name
+        reply = display_queue()
+        await ctx.send(reply)
 
     ####### new spotify listening commands here #######
     @commands.command()
