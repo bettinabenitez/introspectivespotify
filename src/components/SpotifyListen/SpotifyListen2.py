@@ -17,7 +17,9 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 # current_song = ""
 # current_pos = 0
 
-# TODO: figure out why strings dont fucking work
+
+
+
 info = []  # info[0] = spotify user, info[1] = playlist_id
 total_number_songs = 0
 listening_party = False
@@ -30,8 +32,6 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
 ##### new design idea - make playlist for each listening party #####
 
 ## methods that need to change
-# DONE: start listening party --- needs to make a playlist + start playing it? 
-# DONE: delete listening party
 # ALMOST DONE?: addSong --- needs to add song to playlist (not to user's queue)
 # remove song --- playlist_remove_all_occurrences_of_items or playlist_remove_specific_occurrences_of_items
 # displayQueue --- call getQueue and format 
@@ -51,7 +51,10 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
 # do we still need to keep track of the queue in a list? or can we just let spotify handle it?
     # answer: maybe don't need to keep track. we can get the queue by getting current song + comparing to tracks in playlist
     # depends on if we want our queue to automatically store name, artist, ID
-    
+
+# TODO: figure out why strings dont fucking work!!!
+# TODO: Assign people to roles/groups -> those roles and those people in the listening party this is instead of using the database DEVIKA WILL HELP
+# TODO: Prepare for merge    
 
 ## another idea: get everyone's spotify ID and play the playlist for everyone. SO pause can finally work :)
 
