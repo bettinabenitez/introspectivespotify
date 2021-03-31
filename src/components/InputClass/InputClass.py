@@ -269,7 +269,10 @@ class InputClass(commands.Cog):
             return
         
         async with ctx.typing():
-            personality_graphs(url, filename)
+            successful = personality_graphs(url, filename)
+            if successful == None:
+                await ctx.send("An unexpected error occurred :(")
+                return
             await ctx.send(file=discord.File(filename))
 
         os.remove(filename)
@@ -289,6 +292,10 @@ class InputClass(commands.Cog):
 
         async with ctx.typing():
             owner = cover_graph(url, user, filename)
+            if owner == None:
+                await ctx.send("An unexpected error occurred :(")
+                return
+                
             await ctx.send("Here is the cover art for your playlist!")
             await ctx.send(file=discord.File(filename))
 

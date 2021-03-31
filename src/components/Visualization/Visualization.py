@@ -13,6 +13,7 @@ import base64
 from PIL import ImageFont, ImageDraw, Image
 
 from spotipy.oauth2 import SpotifyOAuth
+from spotipy import SpotifyException
 from dotenv import load_dotenv
 
 from MusicAnalytics.MusicTheory import get_tempo
@@ -56,7 +57,10 @@ def cover_graphs_helper(playlist_url):
     dance = []
     mood = []
     # Grab the API result into a dictionary
-    results = sp.playlist(playlist_url)
+    try:
+        results = sp.playlist(playlist_url)
+    except SpotifyException:
+        return None
     num_tracks = len(results['tracks']['items'])
 
     # Append the tempo, danceability, mood
@@ -81,7 +85,10 @@ def personality_graphs_helper(playlist_url):
         Output: A PNG figure representing a playlist specific polar graph.
     """
     # Spotipy call to grab playlist data
-    results = sp.playlist(playlist_url)
+    try:
+        results = sp.playlist(playlist_url)
+    except SpotifyException:
+        return None 
     num_tracks = len(results['tracks']['items'])
     features = {}
     # For every item in the plalyist, grab the track name, features, 
@@ -106,11 +113,14 @@ def personality_graphs(playlist_url, filename):
         Input: playlist_url A url that links to a Spotify playlist.
                filename: A string representing "cover_playlistID" for formatting.
         Output: Playlist name, features dictionary
-        
     """
     graph_features = ['danceability', 'energy', 'instrumentalness', 'acousticness', 'valence', 'tempo']
 
-    name, average_feats = personality_graphs_helper(playlist_url)
+    rtnTuple = personality_graphs_helper(playlist_url)
+    if rtnTuple == None:
+        return None
+
+    name, average_feats = rtnTuple
     
     # scale the tempo to be between 0 and 1
     average_feats['tempo'] /= 200
@@ -149,6 +159,7 @@ def personality_graphs(playlist_url, filename):
 
     # Draw axis lines for each angle.
     ax.set_thetagrids(np.degrees(angs[:-1]), graph_features)
+    ax.set_rgrids([0, 0.2, 0.4, 0.6, 0.8,1])
     
     # If we want to remove the background of the image, uncomment this: 
         # # removing white background
@@ -158,6 +169,7 @@ def personality_graphs(playlist_url, filename):
         # ax.axis('off')
 
     fig.savefig(fname=filename)
+    return "Here's the personality of your playlist!"
 
 
 
@@ -175,7 +187,12 @@ def cover_graph(playlist_url, discord_user, filename):
                 is the same as the playlist author. Will trigger an addtional function 
                 to upload the new graphic, otherwise will just create a png image. 
     """
-    name, user, user_id, tempo, dance, mood = cover_graphs_helper(playlist_url)
+    returnTPL = cover_graphs_helper(playlist_url)
+    
+    if returnTPL == None:
+        return None
+    
+    name, user, user_id, tempo, dance, mood = returnTPL
     # Divide tempo by 200 to scale values down. If not, give default val of 1.0.
     tempo_mean = np.mean(tempo)
     tempo = list(map(lambda x: x/tempo_mean, tempo))
@@ -277,7 +294,10 @@ def upload_cover(url, user, filename):
     with open(filename, "rb") as img_file:
         b64_string = base64.b64encode(img_file.read())
 
-    sp.playlist_upload_cover_image(url, b64_string)
-
+    try:
+        sp.playlist_upload_cover_image(url, b64_string)
+    except SpotifyException:
+        return "An unexpected error occurred :("
+    
     return "Playlist cover successfully uploaded! 🎶🖼"
  # HI WE SHOULD ERROR CATCH HERE
