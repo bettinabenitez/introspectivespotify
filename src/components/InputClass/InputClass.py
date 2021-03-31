@@ -26,7 +26,6 @@ from MusicAnalytics.MusicHistory import reply_top_songs
 from MusicAnalytics.MusicHistory import reply_top_artists
 from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from Visualization.Visualization import personality_graphs
-from Visualization.Visualization import timeline_graphs
 from Visualization.Visualization import cover_graph
 from Visualization.Visualization import upload_cover
 
@@ -259,46 +258,57 @@ class InputClass(commands.Cog):
     @commands.command()
     async def personality(self, ctx, url):
         user = ctx.author
+
+        # create filename using playlist url
+        if url[:5] == 'https':
+            filename = "personality_" + url[34:56] + ".jpg"
+        elif url[:7] == 'spotify':  
+            filename = "personality_" + url[17:] + ".jpg"
+        else:
+            await ctx.send("Please provide a valid playlist URL.")
+            return
+        
         async with ctx.typing():
-            personality_graphs(url)
-            await ctx.send(file=discord.File('plot.png'))
+            personality_graphs(url, filename)
+            await ctx.send(file=discord.File(filename))
 
-        os.remove('plot.png')
-
-    @commands.command()
-    async def timeline(self, ctx):
-        user = ctx.author
-        async with ctx.typing():
-            timeline_graphs()
-            await ctx.send(file=discord.File('timeplot.png'))
-
-        os.remove('timeplot.png')
+        os.remove(filename)
 
     @commands.command()
     async def cover(self, ctx, url):
         user = ctx.author
+
+        # create filename using playlist url
         if url[:5] == 'https':
             filename = "cover_" + url[34:56] + ".jpg"
-        elif url[:7] == 'spotify':
+        elif url[:7] == 'spotify':  
             filename = "cover_" + url[17:] + ".jpg"
         else:
             await ctx.send("Please provide a valid playlist URL.")
             return
+
         async with ctx.typing():
             owner = cover_graph(url, user, filename)
             await ctx.send("Here is the cover art for your playlist!")
             await ctx.send(file=discord.File(filename))
+
+            # if user owns the playlist, ask them if they want to update the playlist cover
             if owner:
                 msg = await ctx.send("Would you like me to replace your current playlist cover with this masterpiece?\n" \
                                     "React with the 🖌 emoji to confirm.\n" \
                                     " \n"\
                                     " 🚨 !! Warning this will replace your current playlist cover !! 🚨\n ")
                 reactions = ["🖌"]
-
+                # For the specific approved emojis, add an emoji to the bot's message
                 for emoji in reactions: 
                     await msg.add_reaction(emoji)
+
+                # Check that command calling author reacts to the bot's message with the specified emoji.
                 def check(reaction, user):
                     return user == ctx.author and str(reaction.emoji) in ["🖌"] and reaction.message == msg
+                
+                # If the user reacts, upload the generated image as the new playlist image and send a confirmation. 
+                # otherwise, if the bot times out after 15 seconds, send a timeout message and end. 
                 try:
                     confirmation = await self.bot.wait_for("reaction_add", check=check, timeout = 15)
                     if confirmation:
@@ -307,6 +317,7 @@ class InputClass(commands.Cog):
                 except asyncio.TimeoutError:
                     await msg.edit(content="You kept me on my toes! I timed out... 😴")
 
+        # remove file
         os.remove(filename)
 
 def setup(bot):
