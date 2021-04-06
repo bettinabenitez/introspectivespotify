@@ -68,24 +68,69 @@ def display_queue():
     # Iterate through the results specifically for tracks in items
     # grab track id, name, and artist(s) and add to our queue
     counter = 1
+    found = False 
+    found_previous = False
+
+    currentID = getCurrentSong()[0]
+    lastSongs = sp.current_user_recently_played(limit=2, after=None, before=None)
+    # previous = lastSongs['items']['track'][0]['id']
+    # previousprevious = lastSongs['items']['track'][1]['id']
+    #print(lastSong)
+
+    multiple = 0
+
+    for item in queue['items']:
+        if currentID == item['track']['id']:
+            multiple += 1
+    print(f"multiple: {multiple}")
+
+    """
+    create an empty dictionary
+    counter again 
+    first for loop (the one above)
+        keep track of prev and prevprev
+        if currenID == item track id
+            smaller counter = 0
+            if prev matches prev:
+                small counter += 1
+            if prev prev matches prev prev:
+                smaller counter += 1
+            add to dictionary with dict[counter again] = smaller counter
+    exit for loop
+    should have dictionary by now that looks like {1:2 2:0 3:1}
+    then sort dictionary by values (largest -> smallest)
+    take get key of first item in dictionary
+
+    then in the next for loop, if multiple = true,
+    choose the current song that matches based on key of first item in dictionary
+    by using another counter???
+    """
+
     for item in queue['items']:
         # get song name and artist
-        trackName = item['track']['name']
-        trackArtist = item['track']['artists'][0]['name']
-
-        # if song has multiple artists, add them to trackArtist
-        for artist_index in range(1, len(item['track']['artists'])):
-            trackArtist = trackArtist + ", " + item['track']['artists'][artist_index]['name']
+        trackID = item['track']['id']
+        # we found the current song in playlist 
+        if currentID == trackID:
+            found = True
         
-        output += str(counter) + ". " + trackName + " by " + trackArtist + "\n"
-        counter += 1
+        if found == True:
+
+            trackName = item['track']['name']
+            trackArtist = item['track']['artists'][0]['name']
+
+            # if song has multiple artists, add them to trackArtist
+            for artist_index in range(1, len(item['track']['artists'])):
+                trackArtist = trackArtist + ", " + item['track']['artists'][artist_index]['name']
+            
+            if counter == 1: # this if statement checks whether the first song is the one currently planning
+                output += str(counter) + ". " + trackName + " by " + trackArtist + "  🎶NOW PLAYING🎶 \n"
+            else:
+                output += str(counter) + ". " + trackName + " by " + trackArtist + "\n"
+                
+            counter += 1
 
     # TODO: finish this method (only display songs in the queue, not whole playlist)
     # helpful link?: https://github.com/spotify/web-api/issues/1288
-    # "you can combine the Get Current Playback with Get Recently Played which will
-    # give you the previous 50 tracks played (provided the user played at least 30
-    # seconds of the track). If you combine that with Get Playlists Tracks, you
-    # should be able to piece together what the active index is.
     
     return output
 
