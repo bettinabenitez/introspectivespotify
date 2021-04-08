@@ -26,6 +26,14 @@ queue = []
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private, playlist-modify-private, playlist-read-private, playlist-read-collaborative"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
+
+## things to fix about current implementation
+# TODO: ppl can't start if there is already a listening party
+# TODO: ppl can't add song/skip/etc if there is no listening party
+# TODO: remove doesn't say track artist oop. need to add error if song isn't in playlist
+# TODO: !current -> tells u current song 
+
+## functionality to add
 # TODO: figure out why strings dont fucking work!!!
 # TODO: Assign people to roles/groups -> those roles and those people in the listening party this is instead of using the database DEVIKA WILL HELP
 # TODO: Prepare for merge    
@@ -38,23 +46,22 @@ def getCurrentSong():
     :rtype: tuple
     :returns: current song (string) and current position (int)
     """
-    current_song = ""
-    current_pos = 0
     
     # get user's current song's ID
     results = sp.current_user_playing_track()
     trackID = results['item']['id']
+    trackName = results['item']['name']
+    duration = results['item']['duration_ms']
+    current_pos = results['progress_ms']
+    # trackArtist = results['item']['artist']
 
-    # check if there is a song playing and set global variables
-    if trackID != "": 
-        current_song = trackID
-        current_pos = results['progress_ms']
-
-    return (current_song, current_pos)
+    return (trackID, current_pos, trackName, duration)
 
 def display_queue():
     """ Displays songs added in the listening party’s playlist with
     the current song as the first item 
+
+    breaks ties by printing from earlier occurance of current song (earlier-optimal)
 
     :rtype: string 
     :returns a formatted string describing the queue 
@@ -62,59 +69,48 @@ def display_queue():
     # pass in playlist_id
     queue = sp.playlist_items(playlist_id=info[1])
 
-
     output = "Your songs in the queue are: \n \n" 
 
     # Iterate through the results specifically for tracks in items
     # grab track id, name, and artist(s) and add to our queue
     counter = 1
+    counter_prev = -1
     found = False 
     found_previous = False
 
     currentID = getCurrentSong()[0]
-    lastSongs = sp.current_user_recently_played(limit=2, after=None, before=None)
-    # previous = lastSongs['items']['track'][0]['id']
-    # previousprevious = lastSongs['items']['track'][1]['id']
-    #print(lastSong)
+    lastSongs = sp.current_user_recently_played(limit=1, after=None, before=None)
+    prevListenedTo = lastSongs['items'][0]['track']['name']
 
-    multiple = 0
-
-    for item in queue['items']:
-        if currentID == item['track']['id']:
-            multiple += 1
-    print(f"multiple: {multiple}")
-
-    """
-    create an empty dictionary
-    counter again 
-    first for loop (the one above)
-        keep track of prev and prevprev
-        if currenID == item track id
-            smaller counter = 0
-            if prev matches prev:
-                small counter += 1
-            if prev prev matches prev prev:
-                smaller counter += 1
-            add to dictionary with dict[counter again] = smaller counter
-    exit for loop
-    should have dictionary by now that looks like {1:2 2:0 3:1}
-    then sort dictionary by values (largest -> smallest)
-    take get key of first item in dictionary
-
-    then in the next for loop, if multiple = true,
-    choose the current song that matches based on key of first item in dictionary
-    by using another counter???
-    """
+    curr_offer = 0
+    old_offer = 0
+    prevInPlaylist = ""
 
     for item in queue['items']:
         # get song name and artist
         trackID = item['track']['id']
+        if (counter_prev) >= 0:
+            prevInPlaylist = queue['items'][(counter_prev)]['track']['name']
+        
+        counter_prev += 1
+                    
         # we found the current song in playlist 
         if currentID == trackID:
-            found = True
-        
-        if found == True:
 
+            # Checks if the previous in the playlist = the previous listened to only 
+            if prevInPlaylist == prevListenedTo:
+                curr_offer = 1
+
+            # multiple current songs in playlist 
+            if found == True:
+                if curr_offer > old_offer:
+                    output = "Your songs in the queue are: \n \n" 
+                    old_offer = curr_offer
+                    counter = 1
+            found = True
+           
+        # add song and artist name to output
+        if found == True:
             trackName = item['track']['name']
             trackArtist = item['track']['artists'][0]['name']
 
@@ -128,9 +124,6 @@ def display_queue():
                 output += str(counter) + ". " + trackName + " by " + trackArtist + "\n"
                 
             counter += 1
-
-    # TODO: finish this method (only display songs in the queue, not whole playlist)
-    # helpful link?: https://github.com/spotify/web-api/issues/1288
     
     return output
 
@@ -148,26 +141,15 @@ def play_party():
     return "Listening Party is playing"
 
 
-def pause_party():
-    """ pauses Spotify user's Spotify 
-
-    :rtype: string
-    :returns a notification to user 
-
-    TODO: currently only pauses for host. Need to fix by merging w William's branch
-    """
-    sp.pause_playback()
-
-    return "Listening Party is paused (only for host)"
-
-
 def skip_party(user):
     """ Skips the current song 
     
     :rtype: string
     :returns a notification to user 
     """
-    sp.next_track()
+    currentSong = getCurrentSong()
+    song_duration = currentSong[3]-1
+    sp.seek_track(song_duration)
 
     return user + " skipped to the next track"
 
@@ -240,7 +222,7 @@ def add_song(song):
     return trackName + " by " + trackArtist + " was added to the queue"
 
 
-def remove(song):
+def remove_song(song):
     """ removes a song from user's Spotify queue (the playlist)
     
     :param song: name of the song
@@ -254,21 +236,21 @@ def remove(song):
 
     for item in results['tracks']['items']:      
         trackID = item['id']
+        trackName = item['name']
     
-    if trackID not in q:
-        return song + "not in queue"
-    
-    # This the
-    q = q.remove(trackID)
-    return song + "was removed from queue"
+    queue = sp.playlist_items(playlist_id=info[1])
+    counter = 0
+    position = 0
+    for item in queue['items']:
+        curr_trackID = item['track']['id']
+        if curr_trackID == trackID:
+            position = counter
+        counter += 1
 
-    # TODO: write this method with new design
-    # playlist_remove_specific_occurrences_of_items(playlist_id, items, snapshot_id=None)
-        # Removes all occurrences of the given tracks from the given playlist
-        # Parameters:
-            # playlist_id - the id of the playlist
-            # items - an array of objects containing Spotify URIs of the
+    delete = [{"uri":trackID, "positions":[position]}]
+    sp.playlist_remove_specific_occurrences_of_items(info[1], delete, snapshot_id=None)
 
+    return trackName + " was removed from queue"
 
 def shuffle():
     """ Shuffles the listening party's playlist 
@@ -373,19 +355,14 @@ def delete_playlist():
 
 #     return user.name + " has left the listening party."
 
+# def pause_party():
+#     """ pauses Spotify user's Spotify 
 
-# def getQueue():
-#     """ get queue based on playlist
-#     returns a list
+#     :rtype: string
+#     :returns a notification to user 
 
-#     Acessor method that gets songs added in the listening party’s queue with the current song as the first item of the list. 
-#     This is done by selecting the songs from the list on the song database that are currently on the list of being played.
-
-    
-#     Returns:
-#         list: track songs of songs currently on the listening party’s queue
-
-
-#     TODO: fix comments is this needed?
+#     TODO: currently only pauses for host. Need to fix by merging w William's branch
 #     """
-#     return queue
+#     sp.pause_playback()
+
+#     return "Listening Party is paused (only for host)"

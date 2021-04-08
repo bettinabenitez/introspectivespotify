@@ -38,6 +38,7 @@ from SpotifyListen.SpotifyListen2 import rewind_party
 from SpotifyListen.SpotifyListen2 import display_queue
 from SpotifyListen.SpotifyListen2 import start_listening_party
 from SpotifyListen.SpotifyListen2 import delete_playlist
+from SpotifyListen.SpotifyListen2 import remove_song
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -315,6 +316,10 @@ class InputClass(commands.Cog):
         reply = delete_playlist()
         await ctx.send(reply)
 
+    @commands.command()
+    async def remove(self, ctx, *, arg):
+        reply = remove_song(arg)
+        await ctx.send(reply)
 
 def setup(bot):
     bot.add_cog(InputClass(bot))
