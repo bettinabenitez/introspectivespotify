@@ -188,11 +188,12 @@ def cover_graph(playlist_url, discord_user, filename):
                 to upload the new graphic, otherwise will just create a png image. 
     """
     returnTPL = cover_graphs_helper(playlist_url)
-    
+
     if returnTPL == None:
         return None
     
     name, user, user_id, tempo, dance, mood = returnTPL
+    
     # Divide tempo by 200 to scale values down. If not, give default val of 1.0.
     tempo_mean = np.mean(tempo)
     tempo = list(map(lambda x: x/tempo_mean, tempo))

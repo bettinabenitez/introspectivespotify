@@ -28,6 +28,7 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from Visualization.Visualization import personality_graphs
 from Visualization.Visualization import cover_graph
 from Visualization.Visualization import upload_cover
+from Modeling.data_collection import song_add
 
 # import MusicHistory
 
@@ -326,6 +327,12 @@ class InputClass(commands.Cog):
 
         # remove file
         os.remove(filename)
+
+    @commands.command()
+    async def cs181add(self, ctx, url, movie):
+        user = ctx.author
+        result = song_add(url, movie)
+        await ctx.send(result)
 
 def setup(bot):
     bot.add_cog(InputClass(bot))
