@@ -2,38 +2,14 @@ import os
 import spotipy
 import sys
 import csv
-import json
-import pandas as pd
-import seaborn as sns
-import cv2
-import matplotlib.pyplot as plt
-import numpy as np
-from glob import glob
-import textwrap
-import base64
-from PIL import ImageFont, ImageDraw, Image
 
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy import SpotifyException
 from dotenv import load_dotenv
 
-from MusicAnalytics.MusicTheory import get_tempo
-from MusicAnalytics.MusicTheory import get_key
-from MusicAnalytics.MusicTheory import get_instrumentalness
-from MusicAnalytics.MusicTheory import get_danceability
-from MusicAnalytics.MusicTheory import get_mode
-from MusicAnalytics.MusicTheory import get_time_signature
-from MusicAnalytics.MusicTheory import get_energy
-from MusicAnalytics.MusicTheory import get_acousticness
-from MusicAnalytics.MusicTheory import get_mood
-from MusicAnalytics.MusicTheory import reply_all_music_theory
-from MusicAnalytics.MusicTheory import audio_features_help
 from MusicAnalytics.MusicTheory import get_all_music_theory
 
 sys.path.append('../')
-from SpotifyAuth.SpotifyAuth import get_access_token
-from SpotifyAuth.SpotifyAuth import get_spotify_id
-
 load_dotenv()
 
 # CREATE SPOTIPY OBJECT
