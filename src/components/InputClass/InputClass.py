@@ -32,7 +32,7 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 # from SpotifyListen.SpotifyListen import display_queue
 from SpotifyListen.SpotifyListen2 import add_song
 from SpotifyListen.SpotifyListen2 import play_party
-from SpotifyListen.SpotifyListen2 import pause_party
+# from SpotifyListen.SpotifyListen2 import pause_party
 from SpotifyListen.SpotifyListen2 import skip_party
 from SpotifyListen.SpotifyListen2 import rewind_party
 from SpotifyListen.SpotifyListen2 import display_queue
@@ -275,10 +275,10 @@ class InputClass(commands.Cog):
         reply = play_party()
         await ctx.send(reply)
     
-    @commands.command()
-    async def pause(self, ctx):
-        reply = pause_party()
-        await ctx.send(reply)
+    # @commands.command()
+    # async def pause(self, ctx):
+    #     reply = pause_party()
+    #     await ctx.send(reply)
 
     @commands.command()
     async def skip(self, ctx):
@@ -303,7 +303,7 @@ class InputClass(commands.Cog):
     async def start(self, ctx, *args):
         playlist_name = ""
         if not args:
-            playlist_name = "default playlist name here"
+            playlist_name = "Introspotty Playlist"
         else:
             for word in args:
                 playlist_name += word + " "

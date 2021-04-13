@@ -32,6 +32,8 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
 # TODO: ppl can't add song/skip/etc if there is no listening party
 # TODO: remove doesn't say track artist oop. need to add error if song isn't in playlist
 # TODO: !current -> tells u current song 
+# TODO: Copy playlist: copy a playlist onto an existing playlist
+# TODO: can't find song in addSong should return error message to user
 
 ## functionality to add
 # TODO: figure out why strings dont fucking work!!!
@@ -286,6 +288,9 @@ def start_listening_party(playlist_name):
     """
     # store user ID
     info.append(getUserID())
+
+    try:
+        sp.playlist
     
     # create a playlist and store playlist ID 
     playlist = sp.user_playlist_create(info[0], playlist_name, public=False, collaborative=False, description= "This playlist was made by Introspective Spotify!")
