@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 DB_STRING = os.getenv("DB_STRING")
-
 Base = declarative_base()
 
 # user table
