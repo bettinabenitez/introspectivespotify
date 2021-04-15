@@ -1,4 +1,5 @@
 import os
+import time
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
@@ -231,6 +232,7 @@ async def test_all_auth(bot, user):
     test_string = "Testing Results for the Spotify Authentication Component:\n\n"
 
     # run all the tests, record output
+    start = int(time.time())
     test_string += await test_login_permissions(bot, user)
     test_string += await test_login(bot, user)
     test_string += await test_discord_username_change(bot, user)
@@ -239,7 +241,12 @@ async def test_all_auth(bot, user):
     test_string += test_refresh_token(user)
     test_string += test_logout(user)
 
+    total_time = int(time.time()) - start
+
+    test_string += "\nRan the Spotify Authentication tests in " + str(total_time) + " seconds.\n" 
     # write to a test result file
-    test_results = open("test_results.txt", "w")
+    test_results = open("auth_test_results.txt", "w")
     test_results.write(test_string)
     test_results.close()
+
+    await user.send("Testing complete, view the results in the file titled 'auth_test_results.txt'.")
