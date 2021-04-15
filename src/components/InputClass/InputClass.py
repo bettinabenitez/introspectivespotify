@@ -35,6 +35,7 @@ from SpotifyListen.SpotifyListen2 import start_listening_party
 from SpotifyListen.SpotifyListen2 import delete_playlist
 from SpotifyListen.SpotifyListen2 import remove_song
 from SpotifyListen.SpotifyListen2 import add_playlist
+from SpotifyListen.SpotifyListen2 import getCurrentSong
 from Visualization.Visualization import personality_graphs
 from Visualization.Visualization import cover_graph
 from Visualization.Visualization import upload_cover
@@ -266,11 +267,11 @@ class InputClass(commands.Cog):
         await test_all_auth(self.bot, user)
 
     @commands.command()
-    async def add(self, ctx, url):
-        if url[:5] == 'https':
-            reply = add_playlist(url)
+    async def add(self, ctx, *, arg):
+        if arg[:5] == 'https':
+            reply = add_playlist(arg)
         else:
-            reply = add_song(url)
+            reply = add_song(arg)
         await ctx.send(reply)
 
     @commands.command()
@@ -320,9 +321,24 @@ class InputClass(commands.Cog):
         await ctx.send(reply)
 
     @commands.command()
-    async def remove(self, ctx, *, arg):
-        reply = remove_song(arg)
+    async def remove(self, ctx, *args):       
+        if len(args) > 1:
+            nameOfSong = " ".join(args)
+            reply = remove_song(nameOfSong)
+        elif len(args) == 1:
+            if args[0].isDigit():
+                reply = remove_song_pos(args[0])
+        else:
+            nameOfSong = " ".join(args)
+            reply = remove_song(nameOfSong)
+    
         await ctx.send(reply)
+
+    @commands.command()
+    async def current(self, ctx):      
+        reply = getCurrentSong() 
+        await ctx.send(reply)
+
 
     ####### Visualization Commands #######
     @commands.command()
