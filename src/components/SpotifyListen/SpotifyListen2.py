@@ -309,7 +309,7 @@ def remove_song(song):
     delete = [{"uri":trackID, "positions":[position]}]
     sp.playlist_remove_specific_occurrences_of_items(info[1], delete, snapshot_id=None)
 
-    return trackName + " by " trackArtist " was removed from queue"
+    return trackName + " by " + trackArtist + " was removed from queue"
 
 def shuffle():
     """ Shuffles the listening party's playlist 
