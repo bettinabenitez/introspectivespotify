@@ -39,6 +39,7 @@ from SpotifyListen.SpotifyListen2 import display_queue
 from SpotifyListen.SpotifyListen2 import start_listening_party
 from SpotifyListen.SpotifyListen2 import delete_playlist
 from SpotifyListen.SpotifyListen2 import remove_song
+from SpotifyListen.SpotifyListen2 import add_playlist
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -266,8 +267,11 @@ class InputClass(commands.Cog):
         await test_all_auth(self.bot, user)
 
     @commands.command()
-    async def addSong(self, ctx, *, arg):
-        reply = add_song(arg)
+    async def add(self, ctx, url):
+        if url[:5] == 'https':
+            reply = add_playlist(url)
+        else:
+            reply = add_song(url)
         await ctx.send(reply)
 
     @commands.command()

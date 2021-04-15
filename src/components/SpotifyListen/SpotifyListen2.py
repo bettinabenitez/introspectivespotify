@@ -26,13 +26,18 @@ queue = []
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private, playlist-modify-private, playlist-read-private, playlist-read-collaborative"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
+#################
+# THINGS TO DO:
+#################
+
+# THINGS TO TRY WITH THE BOT
+# REMOVE: check if the trackArtists shows with one artist and multiple
+
 
 ## things to fix about current implementation
 # TODO: ppl can't start if there is already a listening party
 # TODO: ppl can't add song/skip/etc if there is no listening party
-# TODO: remove doesn't say track artist oop. need to add error if song isn't in playlist
 # TODO: !current -> tells u current song 
-# TODO: Copy playlist: copy a playlist onto an existing playlist
 # TODO: can't find song in addSong should return error message to user
 
 ## functionality to add
@@ -41,6 +46,10 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
 # TODO: Prepare for merge    
 # TODO: what if you call any of the methods when listening party has not started yet? :(
 ## another idea: get everyone's spotify ID and play the playlist for everyone. SO pause can finally work :)
+
+##functionality to add now that we have merged
+# TODO: do API calls for multiple users?
+
 
 def getCurrentSong():
     """ gets information about listening party's current song 
@@ -56,6 +65,9 @@ def getCurrentSong():
     duration = results['item']['duration_ms']
     current_pos = results['progress_ms']
     # trackArtist = results['item']['artist']
+    # trackArtist = item['artists'][0]['name']
+    #     for artist_index in range(1, len(item['artists'])):
+    #         trackArtist = trackArtist + ", " + item['artists'][artist_index]['name']
 
     return (trackID, current_pos, trackName, duration)
 
@@ -71,7 +83,7 @@ def display_queue():
     # pass in playlist_id
     queue = sp.playlist_items(playlist_id=info[1])
 
-    output = "Your songs in the queue are: \n \n" 
+    output = []
 
     # Iterate through the results specifically for tracks in items
     # grab track id, name, and artist(s) and add to our queue
@@ -106,7 +118,7 @@ def display_queue():
             # multiple current songs in playlist 
             if found == True:
                 if curr_offer > old_offer:
-                    output = "Your songs in the queue are: \n \n" 
+                    output = []
                     old_offer = curr_offer
                     counter = 1
             found = True
@@ -121,13 +133,21 @@ def display_queue():
                 trackArtist = trackArtist + ", " + item['track']['artists'][artist_index]['name']
             
             if counter == 1: # this if statement checks whether the first song is the one currently planning
-                output += str(counter) + ". " + trackName + " by " + trackArtist + "  🎶NOW PLAYING🎶 \n"
+                output.append(str(counter) + ". " + trackName + " by " + trackArtist + "  🎶NOW PLAYING🎶 \n")
             else:
-                output += str(counter) + ". " + trackName + " by " + trackArtist + "\n"
+                output.append(str(counter) + ". " + trackName + " by " + trackArtist + "\n")
                 
             counter += 1
     
-    return output
+    output_string = ""
+    
+    for i in range(min(15, len(output))):
+        output_string += output[i]
+    
+    if len(output) > 15:
+        output_string += "Additional songs not displayed."
+    
+    return "Your songs in the queue are: \n \n" + output_string
 
 
 def play_party():
@@ -173,6 +193,32 @@ def rewind_party(user):
     sp.previous_track()
     return user + " rewinded song to previous song"
 
+def add_playlist(playlist_url):
+    """
+    """
+    # get songs in queue playlist (before adding new playlist songs to our playlist)
+    playlist_items = sp.playlist_items(info[1], fields=None, limit=100, offset=0, market=None, additional_types=('track', 'episode'))
+
+    id_found = check_device()
+    if id_found == "":
+        return "No Device Found. Please check that one of your devices is active by playing a song."
+    
+    try:
+        results = sp.playlist(playlist_url)
+    except SpotifyException:
+        return "Invalid playlist link was given. Make sure you aren't passing in album, track, or podcast!"
+
+    num_tracks = len(results['tracks']['items'])
+    # For every item in the plalyist, grab track ID
+    for item in results['tracks']['items']:
+        song_id = item['track']['id']
+        sp.playlist_add_items(info[1], [song_id], position=None)
+
+    # ONLY RUNS IF WE JUST STARTED LISTENING PARTY. check if playlist was empty before adding current song. if so, play playlist 
+    if playlist_items['total'] == 0:
+        sp.start_playback(device_id = id_found, context_uri="spotify:playlist:" + info[1])
+    
+    return f"Added {num_tracks} songs from your playlist into the queue!"
 
 def add_song(song):
     """ add a song user's Spotify queue and to our own queue 
@@ -199,16 +245,7 @@ def add_song(song):
     playlist_items = sp.playlist_items(info[1], fields=None, limit=100, offset=0, market=None, additional_types=('track', 'episode'))
 
     # find device to play on
-    id_found = ""
-    devices = sp.devices()
-    for device in devices['devices']:
-
-        # active device was found, so get device ID 
-        if device['is_active'] == True:
-            id_found = device['id']
-            sp.shuffle(state = False, device_id=id_found)
-            sp.repeat(state = "context", device_id=id_found)
-            break
+    id_found = check_device()
     
     # no device was found. Send error message to discord chat. 
     if id_found == "":
@@ -223,6 +260,23 @@ def add_song(song):
 
     return trackName + " by " + trackArtist + " was added to the queue"
 
+def check_device():
+    """ returns the device ID. if no ID is found, return empty string
+    """
+    # find device to play on
+    id_found = ""
+    devices = sp.devices()
+    for device in devices['devices']:
+
+        # active device was found, so get device ID 
+        if device['is_active'] == True:
+            id_found = device['id']
+            sp.shuffle(state = False, device_id=id_found)
+            sp.repeat(state = "context", device_id=id_found)
+            break
+    
+    # no device was found. Send error message to discord chat. 
+    return id_found
 
 def remove_song(song):
     """ removes a song from user's Spotify queue (the playlist)
@@ -239,6 +293,9 @@ def remove_song(song):
     for item in results['tracks']['items']:      
         trackID = item['id']
         trackName = item['name']
+        trackArtist = item['artists'][0]['name']
+        for artist_index in range(1, len(item['artists'])):
+            trackArtist = trackArtist + ", " + item['artists'][artist_index]['name']
     
     queue = sp.playlist_items(playlist_id=info[1])
     counter = 0
@@ -252,7 +309,7 @@ def remove_song(song):
     delete = [{"uri":trackID, "positions":[position]}]
     sp.playlist_remove_specific_occurrences_of_items(info[1], delete, snapshot_id=None)
 
-    return trackName + " was removed from queue"
+    return trackName + " by " trackArtist " was removed from queue"
 
 def shuffle():
     """ Shuffles the listening party's playlist 
@@ -289,9 +346,6 @@ def start_listening_party(playlist_name):
     # store user ID
     info.append(getUserID())
 
-    try:
-        sp.playlist
-    
     # create a playlist and store playlist ID 
     playlist = sp.user_playlist_create(info[0], playlist_name, public=False, collaborative=False, description= "This playlist was made by Introspective Spotify!")
     info.append(playlist['id']) 
