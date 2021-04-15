@@ -7,7 +7,7 @@ load_dotenv()
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
-scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private"
+scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, playlist-modify-private, user-read-private, ugc-image-upload"
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
@@ -45,6 +45,22 @@ def audio_features_help(song):
     #####################
     ## Phase Two Code ##
     ####################
+def get_all_music_theory(song):
+    audioFeatures = audio_features_help(song)
+
+    if audioFeatures == "None":
+        return 'None'
+    
+    all_theory = {}
+    wanted_features = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness',
+                       'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']
+    for feature, value in audioFeatures[0].items():
+        if feature in wanted_features:
+            all_theory[feature] = value
+
+    return all_theory
+
+
 
 def get_tempo(song):
     """

@@ -1,12 +1,13 @@
 import os
 import sys
 import discord
+import asyncio
 from discord.ext import commands
 sys.path.append('../')
 
-# from SpotifyAuth.SpotifyAuth import spotify_login
-# from SpotifyAuth.SpotifyAuth import spotify_logout
-# from SpotifyAuth.auth_test import test_all_auth
+from SpotifyAuth.SpotifyAuth import spotify_login
+from SpotifyAuth.SpotifyAuth import spotify_logout
+from SpotifyAuth.auth_test import test_all_auth
 from MusicAnalytics.MusicTheory import reply_all_music_theory
 from MusicAnalytics.MusicTheory import reply_get_tempo 
 from MusicAnalytics.MusicTheory import reply_get_key 
@@ -24,12 +25,6 @@ from MusicAnalytics.MusicHistory import reply_top_songs_theory
 from MusicAnalytics.MusicHistory import reply_top_songs
 from MusicAnalytics.MusicHistory import reply_top_artists
 from MusicAnalytics.MusicHistory import reply_top_songs_theory
-# from SpotifyListen.SpotifyListen import add_song
-# from SpotifyListen.SpotifyListen import play_party
-# from SpotifyListen.SpotifyListen import pause_party
-# from SpotifyListen.SpotifyListen import skip_party
-# from SpotifyListen.SpotifyListen import rewind_party
-# from SpotifyListen.SpotifyListen import display_queue
 from SpotifyListen.SpotifyListen2 import add_song
 from SpotifyListen.SpotifyListen2 import play_party
 # from SpotifyListen.SpotifyListen2 import pause_party
@@ -40,6 +35,10 @@ from SpotifyListen.SpotifyListen2 import start_listening_party
 from SpotifyListen.SpotifyListen2 import delete_playlist
 from SpotifyListen.SpotifyListen2 import remove_song
 from SpotifyListen.SpotifyListen2 import add_playlist
+from Visualization.Visualization import personality_graphs
+from Visualization.Visualization import cover_graph
+from Visualization.Visualization import upload_cover
+from Modeling.data_collection import song_add
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -150,7 +149,7 @@ class InputClass(commands.Cog):
             
             # If a runtime error occurs, send a short sorry message to the user.
             try:
-                reply = reply_top_genres(time_range, limit)
+                reply = reply_top_genres(user, time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top genres. Sorry about that :( We'll try to fix this issue ASAP"
         
@@ -185,7 +184,7 @@ class InputClass(commands.Cog):
 
             # If a runtime error occurs, send a short sorry message to the user.
             try:
-                reply = reply_top_songs(time_range, limit)
+                reply = reply_top_songs(user, time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top songs. Sorry about that :( We'll try to fix this issue ASAP"
             
@@ -220,7 +219,7 @@ class InputClass(commands.Cog):
 
             # If a runtime error occurs, send a short sorry message to the user.
             try:
-                reply = reply_top_artists(time_range, limit)
+                reply = reply_top_artists(user, time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top artists. Sorry about that :( We'll try to fix this issue ASAP"
             
@@ -255,7 +254,7 @@ class InputClass(commands.Cog):
 
             # If a runtime error occurs, send a short sorry message to the user.
             try:
-                reply = reply_top_songs_theory(time_range, limit)
+                reply = reply_top_songs_theory(user, time_range, limit)
             except RuntimeError:
                 reply = "Uh oh! We couldn't get your top artists. Sorry about that :( We'll try to fix this issue ASAP"
 
@@ -324,6 +323,87 @@ class InputClass(commands.Cog):
     async def remove(self, ctx, *, arg):
         reply = remove_song(arg)
         await ctx.send(reply)
+
+    ####### Visualization Commands #######
+    @commands.command()
+    async def personality(self, ctx, url):
+        user = ctx.author
+
+        # create filename using playlist url
+        if url[:5] == 'https':
+            filename = "personality_" + url[34:56] + ".jpg"
+        elif url[:7] == 'spotify':  
+            filename = "personality_" + url[17:] + ".jpg"
+        else:
+            await ctx.send("Please provide a valid playlist URL.")
+            return
+        
+        async with ctx.typing():
+            successful = personality_graphs(url, filename)
+            if successful == None:
+                await ctx.send("An unexpected error occurred :(")
+                return
+            await ctx.send(file=discord.File(filename))
+
+        os.remove(filename)
+
+    @commands.command()
+    async def cover(self, ctx, url):
+        user = ctx.author
+
+        # create filename using playlist url
+        if url[:5] == 'https':
+            filename = "cover_" + url[34:56] + ".jpg"
+        elif url[:7] == 'spotify':  
+            filename = "cover_" + url[17:] + ".jpg"
+        else:
+            await ctx.send("Please provide a valid playlist URL.")
+            return
+
+        async with ctx.typing():
+            owner = cover_graph(url, user, filename)
+            if owner == None:
+                await ctx.send("An unexpected error occurred :(")
+                return
+                
+            await ctx.send("Here is the cover art for your playlist!")
+            await ctx.send(file=discord.File(filename))
+
+            # if user owns the playlist, ask them if they want to update the playlist cover
+            if owner:
+                msg = await ctx.send("Would you like me to replace your current playlist cover with this masterpiece?\n" \
+                                    "React with the 🖌 emoji to confirm.\n" \
+                                    " \n"\
+                                    " 🚨 !! Warning this will replace your current playlist cover !! 🚨\n ")
+                reactions = ["🖌"]
+                # For the specific approved emojis, add an emoji to the bot's message
+                for emoji in reactions: 
+                    await msg.add_reaction(emoji)
+
+                # Check that command calling author reacts to the bot's message with the specified emoji.
+                def check(reaction, user):
+                    return user == ctx.author and str(reaction.emoji) in ["🖌"] and reaction.message == msg
+                
+                # If the user reacts, upload the generated image as the new playlist image and send a confirmation. 
+                # otherwise, if the bot times out after 15 seconds, send a timeout message and end. 
+                try:
+                    confirmation = await self.bot.wait_for("reaction_add", check=check, timeout = 15)
+                    if confirmation:
+                        rtn_msg = upload_cover(url, user, filename)
+                        await msg.edit(content=rtn_msg)
+                except asyncio.TimeoutError:
+                    await msg.edit(content="You kept me on my toes! I timed out... 😴")
+
+        # remove file
+        os.remove(filename)
+
+
+    ####### Modeling Commands #######
+    @commands.command()
+    async def cs181add(self, ctx, url, movie):
+        user = ctx.author
+        result = song_add(url, movie)
+        await ctx.send(result)
 
 def setup(bot):
     bot.add_cog(InputClass(bot))
