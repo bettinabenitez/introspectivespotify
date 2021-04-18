@@ -3,6 +3,7 @@ import sys
 import discord
 import asyncio
 from discord.ext import commands
+from discord.utils import get
 sys.path.append('../')
 
 from SpotifyAuth.SpotifyAuth import spotify_login
@@ -61,53 +62,53 @@ class InputClass(commands.Cog):
 
     ##### MUSIC THEORY COMMANDS ##### 
     @commands.command()
-    async def musictheory(self, ctx, song):
-        reply = reply_all_music_theory(song)
+    async def musictheory(self, ctx, *, arg):
+        reply = reply_all_music_theory(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def tempo(self, ctx, song):
-        reply = reply_get_tempo(song)
+    async def tempo(self, ctx, *, arg):
+        reply = reply_get_tempo(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def key(self, ctx, song):
-        reply = reply_get_key(song)
+    async def key(self, ctx, * , arg):
+        reply = reply_get_key(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def timesignature(self, ctx, song):
-        reply = reply_get_time_signature(song)
+    async def timesignature(self, ctx, * , arg):
+        reply = reply_get_time_signature(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def mode(self, ctx, song):
-        reply = reply_get_mode(song)
+    async def mode(self, ctx, * , arg):
+        reply = reply_get_mode(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def mood(self, ctx, song):
-        reply = reply_get_mood(song)
+    async def mood(self, ctx, *, arg):
+        reply = reply_get_mood(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def danceability(self, ctx, song):
-        reply = reply_get_danceability(song)
+    async def danceability(self, ctx, *, arg):
+        reply = reply_get_danceability(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def acousticness(self, ctx, song):
-        reply = reply_get_acousticness(song)
+    async def acousticness(self, ctx, *, arg):
+        reply = reply_get_acousticness(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def energy(self, ctx, song):
-        reply = reply_get_energy(song)
+    async def energy(self, ctx, *, arg):
+        reply = reply_get_energy(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def instrumentalness(self, ctx, song):
-        reply = reply_get_instrumentalness(song)
+    async def instrumentalness(self, ctx, *, arg):
+        reply = reply_get_instrumentalness(arg)
         await ctx.send(reply)
     
     @commands.command()
@@ -420,6 +421,27 @@ class InputClass(commands.Cog):
         user = ctx.author
         result = song_add(url, movie)
         await ctx.send(result)
+
+
+    ####### Discord API Testing Commands #######\
+    @commands.command(pass_context=True)
+    async def role(self, ctx):
+        member = ctx.message.author
+        role_name = "Listening Party Member"
+        # Get the roles of the guild 
+        role = discord.utils.get(member.guild.roles, name=role_name)
+        await member.add_roles(role)
+        await ctx.send(f"I gave {member.mention} the role {role.mention}, check out <#833213974627352637> to jam out")
+
+    @commands.command(pass_context=True)
+    async def removerole(self, ctx):
+        member = ctx.message.author
+        role_name = "Listening Party Member"
+        # Get the roles of the guild 
+        role = discord.utils.get(member.guild.roles, name=role_name)
+        await member.remove_roles(role)
+        await ctx.send(f" {member.mention} I took away the role {role_name}, thanks for jamming with us!")
+        
 
 def setup(bot):
     bot.add_cog(InputClass(bot))
