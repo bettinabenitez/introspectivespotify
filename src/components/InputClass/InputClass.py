@@ -3,7 +3,9 @@ import sys
 import discord
 import asyncio
 from discord.ext import commands
+from discord.ext.commands import has_role
 from discord.utils import get
+
 sys.path.append('../')
 
 from SpotifyAuth.SpotifyAuth import spotify_login
@@ -425,13 +427,43 @@ class InputClass(commands.Cog):
 
     ####### Discord API Testing Commands #######\
     @commands.command(pass_context=True)
+    # @has_role("Listening Party Member") < - HOW TO MAKE IT SO SPECIFIC ROLE CAN ONLY CALL CMNDS!! IMPORTANT
     async def role(self, ctx):
         member = ctx.message.author
         role_name = "Listening Party Member"
+
+        # todo: CHECK IF THERES A LISTENING PARTY!!!
+
         # Get the roles of the guild 
         role = discord.utils.get(member.guild.roles, name=role_name)
-        await member.add_roles(role)
-        await ctx.send(f"I gave {member.mention} the role {role.mention}, check out <#833213974627352637> to jam out")
+        message = await ctx.send(f"Looks like a listening party has started here! Would you like to join?")
+        reactions = ["✅"]
+        # For the specific approved emojis, add an emoji to the bot's message
+        for emoji in reactions: 
+            await message.add_reaction(emoji)
+
+        # Check that command calling author reacts to the bot's message with the specified emoji.
+        def check(reaction, user):
+            return user == ctx.author and str(reaction.emoji) in ["✅"] and reaction.message == message
+                    
+                
+        # If the user reacts, check to make sure the user isn't already ranked as the role, 
+        # otherwise, add the role and send a confirmation 
+        try:
+            confirmation = await self.bot.wait_for("reaction_add", check=check, timeout = 15)
+            if confirmation:
+                if role in ctx.author.roles: 
+                    print("HI?")               
+                    await ctx.send(f"{member.mention} Hey! You're already jamming out with us 💃 ")
+                else:
+                    await member.add_roles(role)
+                    await ctx.send(f"I gave {member.mention} the role {role_name}, check out <#833213974627352637> to jam out")
+        except asyncio.TimeoutError:
+            await message.edit(content="You kept me on my toes! I timed out... 😴")
+
+
+      
+        
 
     @commands.command(pass_context=True)
     async def removerole(self, ctx):
