@@ -35,7 +35,7 @@ from SpotifyListen.SpotifyListen2 import start_listening_party
 from SpotifyListen.SpotifyListen2 import delete_playlist
 from SpotifyListen.SpotifyListen2 import remove_song
 from SpotifyListen.SpotifyListen2 import add_playlist
-from SpotifyListen.SpotifyListen2 import getCurrentSong
+from SpotifyListen.SpotifyListen2 import reply_current_song
 from Visualization.Visualization import personality_graphs
 from Visualization.Visualization import cover_graph
 from Visualization.Visualization import upload_cover
@@ -336,7 +336,7 @@ class InputClass(commands.Cog):
 
     @commands.command()
     async def current(self, ctx):      
-        reply = getCurrentSong() 
+        reply = reply_current_song() 
         await ctx.send(reply)
 
 

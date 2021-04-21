@@ -33,6 +33,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
 ## MUST FIX: things to fix about current implementation
 # TODO: can't find song in addSong should return error message to user
 # TODO: fix remove POSITION !!
+# TODO: fix get current song in the input class
 
 ## MUST FIX/HAVE: ALL THE MERGE RELATED TASKS :OOOO
 # TODO: do API calls for multiple users?
@@ -52,12 +53,37 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secre
 # TODO: vote to confirm removing
 # TODO: EMOJI REPLIES
 
+# def func(param_1: type, param_2: type):
+#     """
+#     [Function Description]
+#     (Optional for any important information) NOTE:
+    
+#     Argument(s) 
+#     -----------------------
+#         param_1: [param_1 description] in [parameter type] format. Example (Optional Example Description): 
+#                  [param_1 Example]
+#                  (Optional) NOTE: 
+#         param_2: [param_2 description] in [parameter type] format. Example (Optional Example Description): 
+#                  [param_2 Example]
+#                  (Optional) NOTE: 
+    
+#     Output
+#     -----------------------
+#     [Output] in [output type] format. Example:
+#         [Example] 
+#         (Optional) NOTE: 
+#     """
 
-def setCurrentSong():
+def get_current_song():
     """ gets information about listening party's current song 
 
-    :rtype: tuple
-    :returns: current song (string) and current position (int)
+    Output
+    -----------------------
+    Current song info as dictionary. Example:
+        {"trackID": "0124u1dnfl", "trackName": "pov", 
+         "trackArtist": "Ariana Grande", 
+         "duration": "14000", "currentPos": "12000"
+         }
     """
     
     # get user's current song's ID
@@ -65,20 +91,36 @@ def setCurrentSong():
 
     trackID = results['item']['id']
     trackName = results['item']['name']
-    duration = results['item']['duration_ms']
-    current_pos = results['progress_ms']
     trackArtist = results['item']['artists'][0]['name']
+    duration = results['item']['duration_ms']
+    currentPos = results['progress_ms']
+    
     for artist_index in range(1, len(results['item']['artists'])):
         trackArtist = trackArtist + ", " + results['item']['artists'][artist_index]['name']
-    return (trackID, current_pos, trackName, duration, trackArtist)
 
-def getCurrentSong():
+    print({"trackID": trackID, "trackName": trackName, 
+            "trackArtist": trackArtist, 
+            "duration": duration, "currentPos": currentPos})
+    
+    return {"trackID": trackID, "trackName": trackName, 
+            "trackArtist": trackArtist, 
+            "duration": duration, "currentPos": currentPos}
+
+def reply_current_song():
+    """
+    formats a reply message containing current song for discord
+
+    Output
+    -----------------------
+    "Your current song is {trackName} by {trackArtist}!" Example:
+        "Your current song is pov by Ariana Grande!"
+    """
     if not listening_party[0]:
         return start_bot_message
 
-    results = setCurrentSong() 
-    trackName = results[2]
-    trackArtist = results[4]
+    songInfo = getCurrentSong() 
+    trackName = songInfo["trackName"]
+    trackArtist = songInfo["trackArtist"]
     return f"Your current song is {trackName} by {trackArtist}!"
 
 def display_queue():
@@ -105,7 +147,7 @@ def display_queue():
     found = False 
     found_previous = False
 
-    currentID = setCurrentSong()[0]
+    currentID = getCurrentSong()[0]
     lastSongs = sp.current_user_recently_played(limit=1, after=None, before=None)
     prevListenedTo = lastSongs['items'][0]['track']['name']
 
@@ -188,7 +230,7 @@ def skip_party(user):
     if not listening_party[0]:
         return start_bot_message
 
-    currentSong = setCurrentSong()
+    currentSong = getCurrentSong()
     song_duration = currentSong[3]-1
     sp.seek_track(song_duration)
 
@@ -204,7 +246,7 @@ def rewind_party(user):
     if not listening_party[0]:
         return start_bot_message
         
-    current_song = setCurrentSong()
+    current_song = getCurrentSong()
 
     # rewind to beginning if we have played over 5 seconds of the current song
     if current_song[1] >= 5000:  # 5 seconds
