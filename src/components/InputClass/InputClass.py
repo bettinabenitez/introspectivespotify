@@ -3,6 +3,9 @@ import sys
 import discord
 import asyncio
 from discord.ext import commands
+from discord.ext.commands import has_role
+from discord.utils import get
+
 sys.path.append('../')
 
 from SpotifyAuth.SpotifyAuth import spotify_login
@@ -61,53 +64,53 @@ class InputClass(commands.Cog):
 
     ##### MUSIC THEORY COMMANDS ##### 
     @commands.command()
-    async def musictheory(self, ctx, song):
-        reply = reply_all_music_theory(song)
+    async def musictheory(self, ctx, *, arg):
+        reply = reply_all_music_theory(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def tempo(self, ctx, song):
-        reply = reply_get_tempo(song)
+    async def tempo(self, ctx, *, arg):
+        reply = reply_get_tempo(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def key(self, ctx, song):
-        reply = reply_get_key(song)
+    async def key(self, ctx, * , arg):
+        reply = reply_get_key(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def timesignature(self, ctx, song):
-        reply = reply_get_time_signature(song)
+    async def timesignature(self, ctx, * , arg):
+        reply = reply_get_time_signature(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def mode(self, ctx, song):
-        reply = reply_get_mode(song)
+    async def mode(self, ctx, * , arg):
+        reply = reply_get_mode(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def mood(self, ctx, song):
-        reply = reply_get_mood(song)
+    async def mood(self, ctx, *, arg):
+        reply = reply_get_mood(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def danceability(self, ctx, song):
-        reply = reply_get_danceability(song)
+    async def danceability(self, ctx, *, arg):
+        reply = reply_get_danceability(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def acousticness(self, ctx, song):
-        reply = reply_get_acousticness(song)
+    async def acousticness(self, ctx, *, arg):
+        reply = reply_get_acousticness(arg)
         await ctx.send(reply)
     
     @commands.command()
-    async def energy(self, ctx, song):
-        reply = reply_get_energy(song)
+    async def energy(self, ctx, *, arg):
+        reply = reply_get_energy(arg)
         await ctx.send(reply)
 
     @commands.command()
-    async def instrumentalness(self, ctx, song):
-        reply = reply_get_instrumentalness(song)
+    async def instrumentalness(self, ctx, *, arg):
+        reply = reply_get_instrumentalness(arg)
         await ctx.send(reply)
     
     @commands.command()
@@ -420,6 +423,57 @@ class InputClass(commands.Cog):
         user = ctx.author
         result = song_add(url, movie)
         await ctx.send(result)
+
+
+    ####### Discord API Testing Commands #######\
+    @commands.command(pass_context=True)
+    # @has_role("Listening Party Member") < - HOW TO MAKE IT SO SPECIFIC ROLE CAN ONLY CALL CMNDS!! IMPORTANT
+    async def role(self, ctx):
+        member = ctx.message.author
+        role_name = "Listening Party Member"
+
+        # todo: CHECK IF THERES A LISTENING PARTY!!!
+
+        # Get the roles of the guild 
+        role = discord.utils.get(member.guild.roles, name=role_name)
+        message = await ctx.send(f"Looks like a listening party has started here! Would you like to join?")
+        reactions = ["✅"]
+        # For the specific approved emojis, add an emoji to the bot's message
+        for emoji in reactions: 
+            await message.add_reaction(emoji)
+
+        # Check that command calling author reacts to the bot's message with the specified emoji.
+        def check(reaction, user):
+            return user == ctx.author and str(reaction.emoji) in ["✅"] and reaction.message == message
+                    
+                
+        # If the user reacts, check to make sure the user isn't already ranked as the role, 
+        # otherwise, add the role and send a confirmation 
+        try:
+            confirmation = await self.bot.wait_for("reaction_add", check=check, timeout = 15)
+            if confirmation:
+                if role in ctx.author.roles: 
+                    print("HI?")               
+                    await ctx.send(f"{member.mention} Hey! You're already jamming out with us 💃 ")
+                else:
+                    await member.add_roles(role)
+                    await ctx.send(f"I gave {member.mention} the role {role_name}, check out <#833213974627352637> to jam out")
+        except asyncio.TimeoutError:
+            await message.edit(content="You kept me on my toes! I timed out... 😴")
+
+
+      
+        
+
+    @commands.command(pass_context=True)
+    async def removerole(self, ctx):
+        member = ctx.message.author
+        role_name = "Listening Party Member"
+        # Get the roles of the guild 
+        role = discord.utils.get(member.guild.roles, name=role_name)
+        await member.remove_roles(role)
+        await ctx.send(f" {member.mention} I took away the role {role_name}, thanks for jamming with us!")
+        
 
 def setup(bot):
     bot.add_cog(InputClass(bot))
