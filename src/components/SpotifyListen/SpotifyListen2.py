@@ -23,7 +23,7 @@ listening_party = False
 start_bot_message =  "Looks like you haven't started a listening party. Run !start to get started ;)"
 
 ### TODO: update for all the other thigs whe we merge
-scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private, playlist-modify-private, playlist-read-private, playlist-read-collaborative"
+scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, playlist-modify-private, user-read-private, playlist-read-private, playlist-read-collaborative, ugc-image-upload"
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
 #################
