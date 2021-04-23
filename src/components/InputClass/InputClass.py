@@ -37,6 +37,7 @@ from SpotifyListen.SpotifyListen2 import display_queue
 from SpotifyListen.SpotifyListen2 import start_listening_party
 from SpotifyListen.SpotifyListen2 import delete_playlist
 from SpotifyListen.SpotifyListen2 import remove_song
+from SpotifyListen.SpotifyListen2 import remove_song_pos
 from SpotifyListen.SpotifyListen2 import add_playlist
 from SpotifyListen.SpotifyListen2 import reply_current_song
 from Visualization.Visualization import personality_graphs
@@ -269,12 +270,14 @@ class InputClass(commands.Cog):
         user = ctx.author
         await test_all_auth(self.bot, user)
 
+    ####### spotify listening commands #######
     @commands.command()
     async def add(self, ctx, *, arg):
+        user = ctx.author.name
         if arg[:5] == 'https':
-            reply = add_playlist(arg)
+            reply = add_playlist(arg, user)
         else:
-            reply = add_song(arg)
+            reply = add_song(arg, user)
         await ctx.send(reply)
 
     @commands.command()
@@ -305,7 +308,6 @@ class InputClass(commands.Cog):
         reply = display_queue()
         await ctx.send(reply)
 
-    ####### new spotify listening commands here #######
     @commands.command()
     async def start(self, ctx, *args):
         playlist_name = ""
@@ -324,16 +326,16 @@ class InputClass(commands.Cog):
         await ctx.send(reply)
 
     @commands.command()
-    async def remove(self, ctx, *args):       
+    async def remove(self, ctx, *args):   
+        user = ctx.author.name    
         if len(args) > 1:
             nameOfSong = " ".join(args)
-            reply = remove_song(nameOfSong)
-        elif len(args) == 1:
-            if args[0].isDigit():
-                reply = remove_song_pos(args[0])
+            reply = remove_song(nameOfSong, user)
+        elif len(args) == 1 and args[0].isdigit():
+            reply = remove_song_pos(args[0], user)
         else:
             nameOfSong = " ".join(args)
-            reply = remove_song(nameOfSong)
+            reply = remove_song(nameOfSong, user)
     
         await ctx.send(reply)
 
