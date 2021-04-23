@@ -17,10 +17,10 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 # current_song = ""
 # current_pos = 0
 
-info = ["", "", ""]  # info[0] = spotify user, info[1] = playlist_id, info[2] = playlist_link
-listening_party = [False]
-queue = []
-start_bot_message = "Looks like you haven't started a listening party. Run !start to get started ;)"
+info = ["", "", ""]  # info[0] = spotify user id, info[1] = playlist_id, info[2] = playlist_link
+global listening_party
+listening_party = False
+start_bot_message =  "Looks like you haven't started a listening party. Run !start to get started ;)"
 
 ### TODO: update for all the other thigs whe we merge
 scope = "user-read-recently-played, user-top-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, user-read-private, playlist-modify-private, playlist-read-private, playlist-read-collaborative"
@@ -80,10 +80,9 @@ def get_current_song():
     Output
     -----------------------
     Current song info as dictionary. Example:
-        {"trackID": "0124u1dnfl", "trackName": "pov", 
-         "trackArtist": "Ariana Grande", 
-         "duration": "14000", "currentPos": "12000"
-         }
+        {'trackID': '3UoULw70kMsiVXxW0L3A33', 'trackName': 'pov',
+        'trackArtist': 'Ariana Grande', 'duration': 201882,
+        'currentPos': 4194}
     """
     
     # get user's current song's ID
@@ -98,10 +97,6 @@ def get_current_song():
     for artist_index in range(1, len(results['item']['artists'])):
         trackArtist = trackArtist + ", " + results['item']['artists'][artist_index]['name']
 
-    print({"trackID": trackID, "trackName": trackName, 
-            "trackArtist": trackArtist, 
-            "duration": duration, "currentPos": currentPos})
-    
     return {"trackID": trackID, "trackName": trackName, 
             "trackArtist": trackArtist, 
             "duration": duration, "currentPos": currentPos}
@@ -115,10 +110,10 @@ def reply_current_song():
     "Your current song is {trackName} by {trackArtist}!" Example:
         "Your current song is pov by Ariana Grande!"
     """
-    if not listening_party[0]:
+    if not listening_party:
         return start_bot_message
 
-    songInfo = getCurrentSong() 
+    songInfo = get_current_song() 
     trackName = songInfo["trackName"]
     trackArtist = songInfo["trackArtist"]
     return f"Your current song is {trackName} by {trackArtist}!"
@@ -128,11 +123,20 @@ def display_queue():
     the current song as the first item 
 
     breaks ties by printing from earlier occurance of current song (earlier-optimal)
+    NOTE: Must have started listening party
 
-    :rtype: string 
-    :returns a formatted string describing the queue 
+    Output
+    -----------------------
+    Current formatted song queue as string. Example:
+        Your songs in the queue are:
+
+        1. pov by Ariana Grande 🎶NOW PLAYING🎶 
+        2. Candy Paint by Post Malone
+        3. Candy by Doja Cat
+        
+    NOTE: Returns "Looks like you haven't started a listening party. Run !start to get started ;)" if no listening party
     """
-    if not listening_party[0]:
+    if not listening_party:
         return start_bot_message
         
     # pass in playlist_id
@@ -147,7 +151,7 @@ def display_queue():
     found = False 
     found_previous = False
 
-    currentID = getCurrentSong()[0]
+    currentID = get_current_song()[0]
     lastSongs = sp.current_user_recently_played(limit=1, after=None, before=None)
     prevListenedTo = lastSongs['items'][0]['track']['name']
 
@@ -206,14 +210,15 @@ def display_queue():
 
 
 def play_party():
-    """ plays Spotify user's Spotify 
-
-    :rtype: string
-    :returns a notification to user  
-
-    TODO: add play song? what happens if you say play before start listening party? 
     """
-    if not listening_party[0]:
+    Play listening party
+    
+    Output
+    -----------------------
+    "Listening Party is playing" Example:
+        NOTE: returns start_bot_message if listening party has not started 
+    """
+    if not listening_party:
         return start_bot_message
 
     sp.start_playback()
@@ -222,31 +227,43 @@ def play_party():
 
 
 def skip_party(user):
-    """ Skips the current song 
+    """ 
+    Skips the current song 
     
-    :rtype: string
-    :returns a notification to user 
+    Argument(s) 
+    -----------------------
+        user: Discord user's spotify token in string format.
+    
+    Output
+    -----------------------
+    user + " skipped to the next track" in string format. Example:
+        "Bettina skipped to the next track"
     """
-    if not listening_party[0]:
+    if not listening_party:
         return start_bot_message
 
-    currentSong = getCurrentSong()
-    song_duration = currentSong[3]-1
+    currentSong = get_current_song()
+    song_duration = currentSong["duration"]-1
     sp.seek_track(song_duration)
 
     return user + " skipped to the next track"
 
 
 def rewind_party(user):
-    """ Rewinds to beginning of song OR previous song on the queue
-    
-    rtype: string
-    returns a notification to user 
     """
-    if not listening_party[0]:
+    Rewinds to beginning of song OR previous song on the queue
+    
+    Output
+    -----------------------
+    user + " rewinded song to beginning" if we have played over 5 seconds of the current song or
+    user + " rewinded song to previous song" Example:
+        "Emily rewinded song to beginning"
+        "Bettina rewinded song to previous song"
+    """
+    if not listening_party:
         return start_bot_message
         
-    current_song = getCurrentSong()
+    current_song = get_current_song()
 
     # rewind to beginning if we have played over 5 seconds of the current song
     if current_song[1] >= 5000:  # 5 seconds
@@ -259,8 +276,19 @@ def rewind_party(user):
 
 def add_playlist(playlist_url):
     """
+    add songs in input playlist into the queue (our playlist)
+
+    Argument
+    -----------------------
+        playlist_url: link to playlist with songs to add. Example: 
+            https://open.spotify.com/playlist/0r5XFy0zalKHt1pTfy2AEP?si=vKSIWXSrS9mhHbL11lbe4A
+
+    Output
+    -----------------------
+    "Added {num_tracks} songs from your playlist into the queue!"
+    NOTE: if playlist link doesn't work, returns "Invalid playlist link was given. Make sure you aren't passing in album, track, or podcast!"
     """
-    if not listening_party[0]:
+    if not listening_party:
         return start_bot_message
 
     # get songs in queue playlist (before adding new playlist songs to our playlist)
@@ -288,15 +316,21 @@ def add_playlist(playlist_url):
     return f"Added {num_tracks} songs from your playlist into the queue!"
 
 def add_song(song):
-    """ add a song user's Spotify queue and to our own queue 
-    :param song: name of the song
-    :type song: string
-    
-    :rtype: string
-    :returns a notification to user letting them know a song was added 
-    or that no active device was found
     """
-    if not listening_party[0]:
+    add a song user's Spotify queue and to our own queue 
+
+    Argument
+    -----------------------
+        song: song name and/or artist name in string format. Example: 
+            "pov by Ariana Grande"
+            "pov"
+            "Ariana Grande"
+
+    Output
+    -----------------------
+    "{trackName} by {trackArtist} was added to the queue"
+    """
+    if not listening_party:
         return start_bot_message
 
     results = sp.search(q= song, type="track", limit=1)
@@ -309,7 +343,7 @@ def add_song(song):
         trackArtist = item['artists'][0]['name']
         for artist_index in range(1, len(item['artists'])):
             trackArtist = trackArtist + ", " + item['artists'][artist_index]['name']
-    queue.append((trackID, trackName, trackArtist))
+    
 
     # get songs in playlist (before adding song to playlist)
     playlist_items = sp.playlist_items(info[1], fields=None, limit=100, offset=0, market=None, additional_types=('track', 'episode'))
@@ -331,7 +365,13 @@ def add_song(song):
     return trackName + " by " + trackArtist + " was added to the queue"
 
 def check_device():
-    """ returns the device ID. if no ID is found, return empty string
+    """
+    returns the device ID. if no ID is found, return empty string
+
+    Output
+    -----------------------
+    spotify user's device ID in string format. 
+    NOTE: if no active ID's found, return empty string. 
     """
     # find device to play on
     id_found = ""
@@ -350,7 +390,7 @@ def check_device():
 def remove_song_pos(position):
     """ removes a song at position
     """
-    if not listening_party[0]:
+    if not listening_party:
         return start_bot_message
 
     delete = [{"uri":trackID, "positions":[position]}]
@@ -365,7 +405,7 @@ def remove_song(song):
     
     # questions: remove all occurences or just one?  do we remove from our queue too? 
     """
-    if not listening_party[0]:
+    if not listening_party:
         return start_bot_message
 
     results = sp.search(q= song, type="track", limit=1)
@@ -431,7 +471,8 @@ def start_listening_party(playlist_name):
     :rtype: string
     :returns a notification to user saying we started the listening party 
     """
-    if listening_party[0]:
+    global listening_party
+    if listening_party:
         return "You already have a listening party started! :D"
 
     # store user ID
@@ -440,9 +481,11 @@ def start_listening_party(playlist_name):
     # create a playlist and store playlist ID 
     playlist = sp.user_playlist_create(info[0], playlist_name, public=False, collaborative=False, description= "This playlist was made by Introspective Spotify!")
     info[1] = playlist['id']
-
-    listening_party[0] = True
+    
+    listening_party= True
     # return link of spotify playlist
+
+    
     info[2] = playlist['external_urls']['spotify'] # playlist link
     return f"We created a playlist for you! Here is the link: {info[2]}"
 
@@ -456,7 +499,7 @@ def delete_playlist():
     # pass in spotify user and playlist id 
     sp.user_playlist_unfollow(info[0], info[1])
 
-    listening_party[0] = False
+    listening_party = False
 
     return f"Here's the link to the playlist: {info[2]} but we've removed it from your account. See you next time!"
 
@@ -476,7 +519,7 @@ def delete_playlist():
 
 #     """
 #     if not listening_party:
-#         listening_party = True
+#         listening_party= True
 #         listeningParty()
 
 #     if users[user.id] is None:
@@ -503,7 +546,7 @@ def delete_playlist():
 #     del users[user.id]
 
 #     if len(users) == 0:
-#         listening_party = False
+#         listening_party= False
 #         return user.name + " has left the listening party and the listening party is over. :("
 
 #     return user.name + " has left the listening party."
