@@ -11,6 +11,7 @@ sys.path.append('../')
 from SpotifyAuth.SpotifyAuth import spotify_login
 from SpotifyAuth.SpotifyAuth import spotify_logout
 from SpotifyAuth.auth_test import test_all_auth
+from MusicAnalytics.MusicTheory import track_info
 from MusicAnalytics.MusicTheory import reply_all_music_theory
 from MusicAnalytics.MusicTheory import reply_get_tempo 
 from MusicAnalytics.MusicTheory import reply_get_key 
