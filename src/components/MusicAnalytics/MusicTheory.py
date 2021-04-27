@@ -12,6 +12,23 @@ scope = "user-read-recently-played, user-top-read, user-read-playback-position, 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=scope, cache_path=".oAuthCache"))
 
     #####################
+    ## CS189 Sring Sem ##
+    ####################
+def track_info(song):
+    # For some reason my docstrings are causing errors....regardless 
+    # this function grabs the requested track's name, artist name, and 
+    # Spotify image url! 
+
+    results = sp.search(q= song, type="track", limit=1)
+    for item in results['tracks']['items']:   
+        trackName = item['name']   
+        artist  = item['artists'][0]['name']
+        albumImageUrl = item['album']['images'][0]['url']
+        if trackName != " ":
+            return trackName, artist, albumImageUrl
+        return "None"
+
+    #####################
     ## Phase One Code ##
     ####################
 def audio_features_help(song):
@@ -32,21 +49,22 @@ def audio_features_help(song):
     """
     # Get the JSON List of results from Spotipy Object
     results = sp.search(q= song, type="track", limit=1)
-    
+
     # Iterate through the results specifically for tracks in items and grab
     # track ID. Call the audio_features function on the track id and return. 
-    for  item in results['tracks']['items']:      
+    for item in results['tracks']['items']:      
         trackID = item['id']
+        trackName = item['name']   
         if trackID != " ":
             audioFeatures = sp.audio_features(trackID)
-            return audioFeatures
+            return audioFeatures, trackName
     return "None"
 
     #####################
     ## Phase Two Code ##
     ####################
 def get_all_music_theory(song):
-    audioFeatures = audio_features_help(song)
+    audioFeatures,trackName  = audio_features_help(song)
 
     if audioFeatures == "None":
         return 'None'
@@ -58,7 +76,7 @@ def get_all_music_theory(song):
         if feature in wanted_features:
             all_theory[feature] = value
 
-    return all_theory
+    return all_theory, trackName
 
 
 
@@ -78,12 +96,12 @@ def get_tempo(song):
     """
     # Get the audio features of a specific song, 
     # key into the tempo and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         tempo = feature['tempo']
-        return str(tempo)
+        return str(tempo), trackName
 
 def get_key(song):
     """
@@ -103,12 +121,12 @@ def get_key(song):
     """
     # Get the audio features of a specific song, 
     # key into the key and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         key = feature['key']
-        return str(key)
+        return str(key), trackName
 
 
 def get_time_signature(song):
@@ -127,12 +145,12 @@ def get_time_signature(song):
     """
     # Get the audio features of a specific song, 
     # key into the time_sig and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         timeSig = feature['time_signature']
-        return str(timeSig)
+        return str(timeSig), trackName
 
 
 def get_mode(song):
@@ -151,12 +169,12 @@ def get_mode(song):
     """
     # Get the audio features of a specific song, 
     # key into the mode and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         mode = feature['mode']
-        return str(mode)
+        return str(mode), trackName
 
 
 def get_mood(song):
@@ -179,12 +197,12 @@ def get_mood(song):
     """
     # Get the audio features of a specific song, 
     # key into the valence and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         mood = feature['valence']
-        return str(mood)
+        return str(mood), trackName
 
 
 def get_danceability(song):
@@ -206,12 +224,12 @@ def get_danceability(song):
     """
     # Get the audio features of a specific song, 
     # key into the danceability and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         dance = feature["danceability"]
-        return str(dance)
+        return str(dance), trackName
 
 def get_acousticness(song):
     """
@@ -231,12 +249,12 @@ def get_acousticness(song):
     """
     # Get the audio features of a specific song, 
     # key into the acousticness and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         acous = feature['acousticness']
-        return str(acous)
+        return str(acous), trackName
 
 
 def get_energy(song):
@@ -256,12 +274,12 @@ def get_energy(song):
     """
     # Get the audio features of a specific song, 
     # key into the energy and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         energy = feature['energy']
-        return str(energy)
+        return str(energy), trackName
 
 
 def get_instrumentalness(song):
@@ -282,12 +300,12 @@ def get_instrumentalness(song):
     """
     # Get the audio features of a specific song, 
     # key into the instrumentalness and return the tempo.
-    audioFeatures = audio_features_help(song)
+    audioFeatures, trackName = audio_features_help(song)
     if audioFeatures == "None":
         return audioFeatures
     for feature in audioFeatures:
         instrumental = feature['instrumentalness']
-        return str(instrumental)
+        return str(instrumental), trackName
 
     ######################
     ## Phase Three Code ##
@@ -307,11 +325,11 @@ def reply_get_tempo(song):
     TDD: Forgot BPM at the end of the reply string.
     """
     # Get the tempo and return as string.
-    tempo = get_tempo(song)
+    tempo, trackName = get_tempo(song)
     if tempo == "None":
         return "Sorry! This song does not exist."
     else: 
-        return song + " has a tempo of" + " " + tempo + " BPM!"
+        return trackName + " has a tempo of" + " " + tempo + " BPM!"
 
 def reply_get_key(song):
     """
@@ -330,7 +348,7 @@ def reply_get_key(song):
 
     """
     # Get the key and convert to correct string format. 
-    key = get_key(song)
+    key, trackName = get_key(song)
     key_dict = {"0": "C",
                 "1": "C#/D♭",
                 "2": "D",
@@ -344,7 +362,7 @@ def reply_get_key(song):
                 "10": "A#/B♭",
                 "11": "B",
                 "-1": "Sorry! This song does not exist."}
-    return song + " has a key of " + key_dict[key] + "!"
+    return trackName + " has a key of " + key_dict[key] + "!"
 
 def reply_get_time_signature(song):
     """
@@ -360,11 +378,11 @@ def reply_get_time_signature(song):
     TDD: Forgot to change variable name to "timeSig" from tempo.
     """
     # Get the time sig and convert. 
-    timeSig = get_time_signature(song)
+    timeSig, trackName = get_time_signature(song)
     if timeSig == "None":
         return "Sorry! This song does not exist."
     else: 
-        return song + " has a time signature of" + " " + timeSig + " beats per bar!"
+        return trackName + " has a time signature of" + " " + timeSig + " beats per bar!"
 
 def reply_get_mode(song):
     """
@@ -379,13 +397,13 @@ def reply_get_mode(song):
 
     """
     # Get the mode and convert, and reply. 
-    mode = get_mode(song)
+    mode, trackName = get_mode(song)
     if mode == "None":
         return "Sorry! This song does not exist."
     elif mode == "1": 
-        return song + " is in the Major modality!"
+        return trackName + " is in the Major modality!"
     else:
-        return song + " is in the Minor modality!"
+        return trackName + " is in the Minor modality!"
 
 def reply_get_mood(song):
     """
@@ -404,13 +422,13 @@ def reply_get_mood(song):
     """
     # Change into a float to compare values, set correct string for
     # specific value.
-    mood = get_mood(song)
+    mood, trackName = get_mood(song)
     if mood == "None":
         return "Sorry! This song does not exist."
     elif float(mood) >= 0.0 and float(mood) < 0.5: 
-        return song + " is generally sad, depressed, or angry :("
+        return trackName + " is generally sad, depressed, or angry :("
     else:
-        return song + " is generally happy, cheerful, euphoric :)"
+        return trackName + " is generally happy, cheerful, euphoric :)"
 
 def reply_get_danceability(song):
     """
@@ -427,15 +445,15 @@ def reply_get_danceability(song):
     """
     # Change into a float to compare values, set correct string for
     # specific value.
-    dance = get_danceability(song)
+    dance, trackName = get_danceability(song)
     if dance == "None":
         return "Sorry! This song does not exist."
     elif float(dance) >= 0.0 and float(dance) < 0.4: 
-        return song + " has low danceability!"
+        return trackName + " has low danceability!"
     elif float(dance) >= 0.4 and float(dance) < 0.6: 
-        return song + " has medium danceability!"
+        return trackName + " has medium danceability!"
     else:
-        return song + " has high danceability!"
+        return trackName + " has high danceability!"
 
 def reply_get_acousticness(song):
     """
@@ -452,15 +470,15 @@ def reply_get_acousticness(song):
     """
     # Change into a float to compare values, set correct string for
     # specific value.
-    acoustics = get_acousticness(song)
+    acoustics, trackName = get_acousticness(song)
     if acoustics == "None":
         return "Sorry! This song does not exist."
     elif float(acoustics) >= 0.0 and float(acoustics) < 0.4: 
-        return song + " has low acoustics!"
+        return trackName + " has low acoustics!"
     elif float(acoustics) >= 0.4 and float(acoustics) < 0.6: 
-        return song + " has medium acoustics!"
+        return trackName + " has medium acoustics!"
     else:
-        return song + " has high acoustics!"
+        return trackName + " has high acoustics!"
 
 def reply_get_energy(song):
     """
@@ -476,15 +494,15 @@ def reply_get_energy(song):
     """
     # Change into a float to compare values, set correct string for
     # specific value.
-    energy = get_energy(song)
+    energy, trackName = get_energy(song)
     if energy == "None":
         return "Sorry! This song does not exist."
     elif float(energy) >= 0.0 and float(energy) < 0.4: 
-        return song + " has low energy!"
+        return trackName + " has low energy!"
     elif float(energy) >= 0.4 and float(energy) < 0.6: 
-        return song + " has medium energy!"
+        return trackName + " has medium energy!"
     else:
-        return song + " has high energy!"
+        return trackName + " has high energy!"
 
 def reply_get_instrumentalness(song):
     """
@@ -503,15 +521,15 @@ def reply_get_instrumentalness(song):
     """
     # Change into a float to compare values, set correct string for
     # specific value.
-    instrumentals = get_instrumentalness(song)
+    instrumentals, trackName = get_instrumentalness(song)
     if instrumentals == "None":
         return "Sorry! This song does not exist."
     elif float(instrumentals) >= 0.0 and float(instrumentals) < 0.4: 
-        return song + " has low instrumentals!"
+        return trackName + " has low instrumentals!"
     elif float(instrumentals) >= 0.4 and float(instrumentals) < 0.6: 
-        return song + " has medium instrumentals!"
+        return trackName + " has medium instrumentals!"
     else:
-        return song + " has high instrumentals!"
+        return trackName + " has high instrumentals!"
 
 def reply_all_music_theory(song):
     """
@@ -529,7 +547,7 @@ def reply_all_music_theory(song):
     """
     # Grab the total theory for a song, call each getter 
     # and format the string properly. 
-    allTheory = audio_features_help(song)
+    allTheory, trackName = audio_features_help(song)
     if allTheory == "None":
         return "Sorry! This song does not exist."
     else: 
@@ -560,8 +578,10 @@ def compare_theory(song, song_compare):
     """
     # Get the audio features of the specific song, grab the dictionary.
     similaritiesList = []
-    songA_features = audio_features_help(song)[0]
-    songB_features = audio_features_help(song_compare)[0]
+    songA, trackName = audio_features_help(song)
+    songA_features = songA[0]
+    songB, trackName = audio_features_help(song_compare)
+    songB_features = songB[0]
 
     if songA_features == "None" or songB_features == "None":
         return similaritiesList

@@ -49,6 +49,8 @@ from Modeling.data_collection import song_add
 class InputClass(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        # removes the default help
+        self.bot.remove_command('help')
 
     ##### SPOTIFY AUTH COMMANDS ##### 
     @commands.command()
@@ -66,8 +68,16 @@ class InputClass(commands.Cog):
     ##### MUSIC THEORY COMMANDS ##### 
     @commands.command()
     async def musictheory(self, ctx, *, arg):
+        # Grab the theory info
         reply = reply_all_music_theory(arg)
-        await ctx.send(reply)
+        # Grab the track's name, artist name, and spotify URL
+        track_name , artist, image_url = track_info(arg)
+        title_message = track_name  + " - " + artist
+        # Create an embed with all the informaiton
+        embed = discord.Embed(title= title_message, description=reply, color= 0x2ecc71) 
+        # Set up the image URL thumbnail
+        embed.set_thumbnail(url=image_url)
+        await ctx.send(embed=embed)
     
     @commands.command()
     async def tempo(self, ctx, *, arg):
@@ -476,6 +486,47 @@ class InputClass(commands.Cog):
         await member.remove_roles(role)
         await ctx.send(f" {member.mention} I took away the role {role_name}, thanks for jamming with us!")
         
+    @commands.command()
+    # REPLACES THE DEFAULT HELP COMMAND
+    async def help(self,ctx):
 
+        # Generate the strings needed, including, the description of bot and component specific commands.
+        description_string = "Introspective Spotify is a Discord Bot that interacts with your Spotify \
+                              to intergrate the Spotify experience onto Discord! To get started try the \
+                              !login command to get all set up!\n"
+
+        theory_commands = "!musictheory \"song\" \n" \
+                           "!compare \"song\" \"song\" \n" \
+                           "!suggest \"song\" \"song\" \n"
+
+        history_commands = "!topsongs  \n" \
+                           "!topgenre  \n" \
+                           "!topartist \n" \
+                           "!topsongstheory"
+
+        listen_commands = "!start \"playlist name\"  \n" \
+                           "!add \"song\" \n" \
+                           "!display \n" \
+                           "!skip \n" \
+                           "!rewind \n" \
+                           "!current \n" \
+                           "!delete"
+
+        visu_commands = "!cover \"playlist link\" \n" \
+                        "!personality \"playlist name\" "
+
+
+        login_commands = "!login  \n" \
+                           "!logout " 
+        # Create an embed with Discord green color, add fields inline, set a footer, and send the embed!                    
+        embed = discord.Embed(title="Helpful Commands", description=description_string, color= 0x2ecc71) 
+        embed.add_field(name="Login Commands", value=login_commands, inline=True)
+        embed.add_field(name="Listen Commands", value=listen_commands, inline=True)
+        embed.add_field(name="History Commands", value=history_commands, inline=True)
+        embed.add_field(name="Theory Commands", value=theory_commands, inline=True)
+        embed.add_field(name="Visualization Commands", value=visu_commands, inline=True)
+        embed.set_footer(text="enjoy") 
+        await ctx.send(embed=embed)
+        
 def setup(bot):
     bot.add_cog(InputClass(bot))
