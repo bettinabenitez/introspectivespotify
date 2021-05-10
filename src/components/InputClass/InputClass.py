@@ -45,6 +45,7 @@ from Visualization.Visualization import personality_graphs
 from Visualization.Visualization import cover_graph
 from Visualization.Visualization import upload_cover
 from Modeling.data_collection import song_add
+from Modeling.data_collection import which_bending
 # import MusicHistory
 
 class InputClass(commands.Cog):
@@ -437,6 +438,11 @@ class InputClass(commands.Cog):
         result = song_add(url, movie)
         await ctx.send(result)
 
+    @commands.command()
+    async def bending(self, ctx, url):
+        user = ctx.author
+        result = await which_bending(url, ctx)
+        await ctx.send(result)
 
     ####### Discord API Testing Commands #######\
     @commands.command(pass_context=True)
