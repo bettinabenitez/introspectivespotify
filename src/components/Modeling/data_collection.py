@@ -37,7 +37,7 @@ def song_add(url, classification):
         return "Unsuccessful Add"
 
     fieldnames = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness',
-                       'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'movie']
+                       'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'class']
     # For every item in the plalyist, grab the track name, features, 
     # and add the results to a features dictionary.
     with open(r'bending_songs.csv', 'a', newline='') as f:
@@ -45,12 +45,12 @@ def song_add(url, classification):
 
         for item in results['tracks']['items']:
             fields = {}
-            song_name = item['name']
-            song_features = get_all_music_theory(song_name)
-            if results == 'None':
+            song_name = item['track']['name']
+            music_theory_results = get_all_music_theory(song_name)
+            if music_theory_results == 'None':
                 print(f"Song {song_name} was not added.")
                 continue
-
+            song_features, _ = music_theory_results
             if len(song_features) != 11:
                 print(f"{song_name} did not have 11 Audio Features!")
 

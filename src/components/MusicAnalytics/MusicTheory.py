@@ -64,11 +64,12 @@ def audio_features_help(song):
     ## Phase Two Code ##
     ####################
 def get_all_music_theory(song):
-    audioFeatures,trackName  = audio_features_help(song)
-
-    if audioFeatures == "None":
-        return 'None'
     
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     all_theory = {}
     wanted_features = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness',
                        'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']
@@ -96,9 +97,12 @@ def get_tempo(song):
     """
     # Get the audio features of a specific song, 
     # key into the tempo and return the tempo.
-    audioFeatures, trackName = audio_features_help(song)
-    if audioFeatures == "None":
-        return audioFeatures
+
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     for feature in audioFeatures:
         tempo = feature['tempo']
         return str(tempo), trackName
@@ -121,9 +125,12 @@ def get_key(song):
     """
     # Get the audio features of a specific song, 
     # key into the key and return the tempo.
-    audioFeatures, trackName = audio_features_help(song)
-    if audioFeatures == "None":
-        return audioFeatures
+    
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     for feature in audioFeatures:
         key = feature['key']
         return str(key), trackName
@@ -145,9 +152,12 @@ def get_time_signature(song):
     """
     # Get the audio features of a specific song, 
     # key into the time_sig and return the tempo.
-    audioFeatures, trackName = audio_features_help(song)
-    if audioFeatures == "None":
-        return audioFeatures
+    
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     for feature in audioFeatures:
         timeSig = feature['time_signature']
         return str(timeSig), trackName
@@ -169,9 +179,12 @@ def get_mode(song):
     """
     # Get the audio features of a specific song, 
     # key into the mode and return the tempo.
-    audioFeatures, trackName = audio_features_help(song)
-    if audioFeatures == "None":
-        return audioFeatures
+    
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     for feature in audioFeatures:
         mode = feature['mode']
         return str(mode), trackName
@@ -197,9 +210,12 @@ def get_mood(song):
     """
     # Get the audio features of a specific song, 
     # key into the valence and return the tempo.
-    audioFeatures, trackName = audio_features_help(song)
-    if audioFeatures == "None":
-        return audioFeatures
+    
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     for feature in audioFeatures:
         mood = feature['valence']
         return str(mood), trackName
@@ -249,9 +265,12 @@ def get_acousticness(song):
     """
     # Get the audio features of a specific song, 
     # key into the acousticness and return the tempo.
-    audioFeatures, trackName = audio_features_help(song)
-    if audioFeatures == "None":
-        return audioFeatures
+    
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     for feature in audioFeatures:
         acous = feature['acousticness']
         return str(acous), trackName
@@ -274,9 +293,12 @@ def get_energy(song):
     """
     # Get the audio features of a specific song, 
     # key into the energy and return the tempo.
-    audioFeatures, trackName = audio_features_help(song)
-    if audioFeatures == "None":
-        return audioFeatures
+    
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     for feature in audioFeatures:
         energy = feature['energy']
         return str(energy), trackName
@@ -300,9 +322,12 @@ def get_instrumentalness(song):
     """
     # Get the audio features of a specific song, 
     # key into the instrumentalness and return the tempo.
-    audioFeatures, trackName = audio_features_help(song)
-    if audioFeatures == "None":
-        return audioFeatures
+    
+    audio_features_results = audio_features_help(song)
+    if audio_features_results == "None":
+        return 'None'
+    audioFeatures, trackName = audio_features_results
+
     for feature in audioFeatures:
         instrumental = feature['instrumentalness']
         return str(instrumental), trackName
