@@ -5,3 +5,4 @@ __pycache__
 .vscode
 auth_test_results.txt
 *.csv
+*.jpg

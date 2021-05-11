@@ -23,16 +23,16 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
                             redirect_uri=REDIRECT_URI,
                             scope=scope, cache_path=".oAuthCache"))
 
-def song_add(url, movie):
+def song_add(url, classification):
     """
-    Takes in a album url and gets the audio features of the songs in the album
+    Takes in a playlist url and gets the audio features of the songs in the album
 
     Inputs:
-     - Search: song (and artist) to search on spotify
-     - Movie: name of the movie the song is part of
+     - url: a url to a spotify playlist
+     - classification: name of the classification the songs are part of
     """
     try:
-        results = sp.album(url)
+        results = sp.playlist(url)
     except SpotifyException:
         return "Unsuccessful Add"
 
@@ -40,7 +40,7 @@ def song_add(url, movie):
                        'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'movie']
     # For every item in the plalyist, grab the track name, features, 
     # and add the results to a features dictionary.
-    with open(r'movie_songs.csv', 'a', newline='') as f:
+    with open(r'bending_songs.csv', 'a', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
 
         for item in results['tracks']['items']:
@@ -63,11 +63,12 @@ def song_add(url, movie):
                     else: 
                         fields[key] = value
 
-            fields['movie'] = movie
+            fields['class'] = classification
 
             writer.writerow(fields)
 
-    return f"Successfully added the {movie} soundtrack"
+    return f"Successfully added the {classification} playlist."
+
 
 def playlist_stats_helper(playlist_url):
     """
@@ -106,7 +107,7 @@ def bending_helper(features):
         Input: a dictionary of audio features
         Output: A string containing the element
     """
-    return
+    pass
 
 async def which_bending(playlist_url, ctx):
     """
