@@ -3,6 +3,9 @@ import spotipy
 import sys
 import csv
 import discord
+import pandas as pd
+import numpy as np
+from sklearn import ensemble  # for random forests
 
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy import SpotifyException
@@ -107,7 +110,41 @@ def bending_helper(features):
         Input: a dictionary of audio features
         Output: A string containing the element
     """
-    pass
+    # DATA CLEANING
+    filename = 'bending_songs.csv'
+    df = pd.read_csv(filename, header=0)
+    df_filled = df.fillna(0)
+    COLUMNS = df_filled.columns    
+    COL_INDEX = {}
+    for i, name in enumerate(COLUMNS):
+        COL_INDEX[name] = i
+    
+    ELEMENT = ['Fire', 'Water', 'Earth', 'Air']
+    ELEMENT_INDEX = {k: v for v, k in enumerate(ELEMENT)}
+
+    def convert_species(element):
+        """ return the species index (a unique integer/category) """
+        return ELEMENT_INDEX[element]
+    
+    df_filled['class'] = df_filled['class'].apply(convert_species)
+    A = df_filled.values 
+    A = A.astype('float64') 
+
+    # DATA DEFINITIONS
+    X_all = A[:,0:11] 
+    y_all = A[:,11]
+
+    # PREDICTIVE MODEL
+    rforest_model_final = ensemble.RandomForestClassifier(max_depth=9, n_estimators=100)
+
+    rforest_model_final.fit(X_all, y_all)              # yay!  trained!
+    our_features = np.asarray([features])                 # extra brackets needed
+    predicted_element = rforest_model_final.predict(our_features)
+    
+    predicted_element = int(round(predicted_element[0]))  # unpack one element
+    name = ELEMENT[predicted_element]
+
+    return f"{name}"
 
 async def which_bending(playlist_url, ctx):
     """
