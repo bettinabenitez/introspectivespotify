@@ -26,6 +26,8 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
                             redirect_uri=REDIRECT_URI,
                             scope=scope, cache_path=".oAuthCache"))
 
+rforest_model_final = None
+
 def song_add(url, classification):
     """
     Takes in a playlist url and gets the audio features of the songs in the album
@@ -93,9 +95,13 @@ def playlist_stats_helper(playlist_url):
     # and add the results to a features dictionary.
     for item in results['tracks']['items']:
         song_name = item['track']['name']
-        song_features = get_all_music_theory(song_name)
-        if song_features == 'None':
+
+        music_theory_results = get_all_music_theory(song_name)
+        if music_theory_results == 'None':
+            print(f"Song {song_name} was not added.")
             continue
+        song_features, _ = music_theory_results
+        
         for key, value in song_features.items():
             # value/num_tracks is the contribution from one song to the entire average
             features[key] = features.get(key, 0.0) + (value/num_tracks)
@@ -103,13 +109,7 @@ def playlist_stats_helper(playlist_url):
     return (results['name'], features)
 
 
-def bending_helper(features):
-    """
-        match the dictionary of average audio features to an ATLA element
-        using ML predictor
-        Input: a dictionary of audio features
-        Output: A string containing the element
-    """
+def train_bending():
     # DATA CLEANING
     filename = 'bending_songs.csv'
     df = pd.read_csv(filename, header=0)
@@ -135,10 +135,27 @@ def bending_helper(features):
     y_all = A[:,11]
 
     # PREDICTIVE MODEL
-    rforest_model_final = ensemble.RandomForestClassifier(max_depth=9, n_estimators=100)
+    # parameters from jupyter notebook
+    DEPTH = 14
+    ESTIMATORS = 100
+    global rforest_model_final
+    rforest_model_final = ensemble.RandomForestClassifier(max_depth=DEPTH, n_estimators=ESTIMATORS)
 
     rforest_model_final.fit(X_all, y_all)              # yay!  trained!
-    our_features = np.asarray([features])                 # extra brackets needed
+    
+    return "Model successfully trained."
+
+def bending_helper(features):
+    """
+        match the dictionary of average audio features to an ATLA element
+        using ML predictor
+        Input: a dictionary of audio features
+        Output: A string containing the element
+    """
+    
+    ELEMENT = ['Fire', 'Water', 'Earth', 'Air']
+    feats = [x for x in features.values()]
+    our_features = np.asarray([feats])                 # extra brackets needed
     predicted_element = rforest_model_final.predict(our_features)
     
     predicted_element = int(round(predicted_element[0]))  # unpack one element
@@ -177,4 +194,5 @@ async def which_bending(playlist_url, ctx):
     # Set up the image URL thumbnail
     embed.set_thumbnail(url="attachment://" + image)
     await ctx.send(file=image_file, embed=embed)
-    return "Here's the personality of your playlist!"
+
+    return "Successfully matched playlist!"

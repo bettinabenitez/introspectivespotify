@@ -45,6 +45,7 @@ from Visualization.Visualization import personality_graphs
 from Visualization.Visualization import cover_graph
 from Visualization.Visualization import upload_cover
 from Modeling.data_collection import song_add
+from Modeling.data_collection import train_bending
 from Modeling.data_collection import which_bending
 # import MusicHistory
 
@@ -436,6 +437,12 @@ class InputClass(commands.Cog):
     async def cs181add(self, ctx, url, movie):
         user = ctx.author
         result = song_add(url, movie)
+        await ctx.send(result)
+
+    @commands.command()
+    async def train(self, ctx):
+        user = ctx.author
+        result = train_bending()
         await ctx.send(result)
 
     @commands.command()
